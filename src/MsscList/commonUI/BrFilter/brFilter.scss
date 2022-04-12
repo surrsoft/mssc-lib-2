@@ -1,0 +1,17 @@
+.br-input {
+  border: 1px solid silver;
+  border-radius: 8px;
+  padding: 0 8px;
+  display: inline-flex;
+  column-gap: 8px;
+  align-items: center;
+
+  .br-input__input {
+    width: 140px;
+
+    &:focus-visible {
+      outline: unset;
+    }
+
+  }
+}

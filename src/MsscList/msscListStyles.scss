@@ -1,0 +1,151 @@
+.mssc-base {
+  --color1: white;
+
+  background-color: var(--color1);
+
+  .mssc-base__error {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    border: 1px solid red;
+    border-radius: 8px;
+    color: red;
+    padding: 8px 16px;
+    background-color: white;
+  }
+
+  .mssc-list-paginator {
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .mssc-base__infos {
+    border: 1px solid silver;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    column-gap: 12px;
+  }
+
+  .mssc-infos-b {
+    display: inline-flex;
+    column-gap: 6px;
+    font-size: 11px;
+    border: 1px solid silver;
+    border-radius: 8px;
+    padding: 0 8px;
+    align-items: center;
+    justify-content: center;
+
+    .mssc-infos-b__value {
+      cursor: help;
+    }
+
+    .mssc-infos-b__divider {
+    }
+  }
+
+  .mssc-base__list {
+    border: 1px solid silver;
+    border-radius: 8px;
+    padding: 4px 8px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+
+    .mssc-base__body {
+      display: flex;
+      column-gap: 32px;
+    }
+  }
+
+  .mssc-body__buttons {
+    display: flex;
+    column-gap: 16px;
+  }
+
+  .mssc-body__sort-filter-container {
+    display: flex;
+    column-gap: 8px;
+  }
+
+  .mssc-list-block {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    overflow: auto;
+    height: calc(100vh - 280px);
+    border: 1px solid silver;
+    border-radius: 8px;
+    padding: 16px 0;
+
+    .mssc-list-elem {
+      border: 1px solid transparent;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      flex-shrink: 0;
+
+      &_active {
+        border-color: rgba(255, 0, 0, 0.63);
+        border-style: dashed;
+      }
+
+    }
+  }
+
+  .mssc-list-elem__checkbox {
+    padding: 0 8px 0 8px;
+  }
+
+  .mssc-list-elem__body {
+    flex-grow: 1;
+  }
+
+  .mssc-list-elem__menu {
+    padding: 0 8px 0 8px;
+  }
+
+  .mssc-paginator {
+    display: flex;
+    width: max-content;
+    column-gap: 8px;
+    font-family: monospace;
+    align-items: center;
+
+    .mssc-paginator__select {
+      border: 1px solid silver;
+      border-radius: 8px;
+      background-color: transparent;
+      padding: 1px 4px;
+    }
+
+    .mssc-paginator__btn-m-step {
+      border: 1px solid silver;
+      border-radius: 6px;
+      width: 36px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mssc-paginator__btn-one-step {
+      border: 1px solid silver;
+      border-radius: 6px;
+      font-family: monospace;
+      width: 36px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+  }
+
+}
+
+
+

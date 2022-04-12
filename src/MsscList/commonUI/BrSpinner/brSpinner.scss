@@ -1,0 +1,19 @@
+
+.brspinner-block {
+  --color2140: rgba(222, 222, 220, 0.67);
+
+  top: 0;
+  left: 0;
+  background-color: var(--color2140);
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  z-index: 9999;
+  border: 1px solid silver;
+  border-radius: 8px;
+
+  .brspinner-block_svg {
+    display: inline-block;
+  }
+}
+
