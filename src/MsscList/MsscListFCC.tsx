@@ -31,7 +31,12 @@ import MsscPaginatorFCC from './msscComponents/MsscPaginatorFCC/MsscPaginatorFCC
 import classNames from 'classnames';
 import BrMultiselect from './commonUI/BrMultiselect/BrMultiselect';
 
+/**
+ * Параметры для *г-билдера
+ */
 export interface MsscJsxExternal {
+  /** главный элемент - непосредственно сам список элементов */
+  listJsx?: JSX.Element
   infosJsx?: JSX.Element
   paginator1Jsx?: JSX.Element
   paginator2Jsx?: JSX.Element
@@ -42,7 +47,6 @@ export interface MsscJsxExternal {
     btnDice?: JSX.Element,
   }
   sortJsx?: JSX.Element
-  listJsx?: JSX.Element
   searchJsx?: JSX.Element
   multiselectJsxArr?: JSX.Element[]
 }

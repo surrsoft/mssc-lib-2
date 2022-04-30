@@ -31,8 +31,17 @@ type Ty2130 = { index: number, tuple: HoggTupleNT }
 type Ty2214 = { field: string; direction: "desc" | "asc" }
 
 export class AirSourceParams<T> {
+  /**
+   * Ключ БД Airtable, например `appSoHaX1a5tRLJlv` (не путать с Airtable API key)
+   */
   dbKey: string = ''
+  /**
+   * Имя таблицы
+   */
   tableName: string = ''
+  /**
+   * Имена колонок таблицы
+   */
   columns: string[] = []
   /**
    * Должен вернуть JSX.Element для элемента списка.
