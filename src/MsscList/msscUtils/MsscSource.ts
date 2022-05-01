@@ -10,6 +10,9 @@ import { MsscElem } from './MsscElem';
 import { MsscFilter } from './MsscFilter';
 import { MsscTag } from './MsscTag';
 
+/**
+ * Интерфейс *источника. Через него *библиотека получает почти всю нужную ему информацию
+ */
 export interface MsscSource<TModel> {
 
   /**

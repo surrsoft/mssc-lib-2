@@ -57,6 +57,7 @@ export enum MsscEnMenuAction {
   DELETE = 'delete'
 }
 
+/** представляет *е-объект */
 export type MsscElemStruct = { isActive?: boolean, checkboxJsx?: JSX.Element, bodyJsx?: JSX.Element, menuJsx?: JSX.Element }
 
 interface MsscListProps {

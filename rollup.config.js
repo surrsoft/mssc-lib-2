@@ -37,13 +37,5 @@ export default [
 		output: [{ file: "dist/index.d.ts", format: "esm" }],
 		plugins: [dts()],
 		external: [/\.(less|scss|css)$/],
-	},
-	{
-		input: "src/index.scss",
-		plugins: [
-			postcss({
-				extract: false
-			})
-		]
 	}
 ];
