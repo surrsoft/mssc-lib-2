@@ -1,2 +1,2 @@
-export { default as MsscListFCC, MsscJsxExternal } from './MsscList/MsscListFCC';
+export { default as MsscListFCC, MsscJsxExternal, MsscElemStruct } from './MsscList/MsscListFCC';
 export { AirSource, AirSourceParams } from './MsscList/commonUtils/AirSource';

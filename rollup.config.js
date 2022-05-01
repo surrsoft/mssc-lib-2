@@ -5,6 +5,7 @@ import dts from "rollup-plugin-dts";
 import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+
 const packageJson = require("./package.json");
 
 export default [
@@ -35,6 +36,14 @@ export default [
 		input: "dist/esm/types/index.d.ts",
 		output: [{ file: "dist/index.d.ts", format: "esm" }],
 		plugins: [dts()],
-		external: [/\.(scss|css)$/],
+		external: [/\.(less|scss|css)$/],
 	},
+	{
+		input: "src/index.scss",
+		plugins: [
+			postcss({
+				extract: false
+			})
+		]
+	}
 ];
