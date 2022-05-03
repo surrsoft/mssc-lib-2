@@ -6,6 +6,7 @@ import MsscListFCC from '../../MsscList/MsscListFCC';
 import { airSource } from './source/source';
 import { listStructBuilder } from './listStructBuilder/listStructBuilder';
 import { elemStructBuilder } from './elemStructBuilder';
+import { sortDataSTA } from './sort';
 
 //👇 Этот экспорт по умолчанию определяет, куда попадет ваша история в списке историй
 export default {
@@ -20,10 +21,11 @@ export default {
 //👇 Мы создаём “template” того как args мапится на рендеринг
 const Template: ComponentStory<typeof MsscListFCC> = (args) => <MsscListFCC {...args} />;
 
-export const FirstStory = Template.bind({});
+export const StoryAirSource = Template.bind({});
 
-FirstStory.args = {
+StoryAirSource.args = {
   source: airSource,
   listElemStruct: elemStructBuilder,
-  children: listStructBuilder
+  children: listStructBuilder,
+  sortData: sortDataSTA
 };

@@ -1,6 +1,7 @@
 import { RsuvEnSort } from 'rsuv-lib';
 import { EnField } from './EnField';
-import { BrSelectSortData, MsscColumnName } from '@surrsoft/mssc-lib-2';
+import { BrSelectSortData } from '../../MsscList/commonUI/BrSelect/brSelectUtils';
+import { MsscColumnName } from '../../MsscList/msscUtils/msscUtils';
 
 export const sortDataSTA = {
   selectedId: 'date-create_desc',
