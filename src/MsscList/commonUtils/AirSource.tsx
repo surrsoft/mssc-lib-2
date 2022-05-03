@@ -101,8 +101,10 @@ function msscFiltersToVuscFilter(filters: MsscFilter[]) {
 export class AirSource<T> implements MsscSource<T> {
 
   private connector: HoggConnectorNT;
+  private readonly thParams: AirSourceParams<T>
 
-  constructor(public params: AirSourceParams<T>) {
+  constructor(params: AirSourceParams<T>) {
+    this.thParams = params;
     const air = new HoggConnectorAirtable()
     air.init({apiKey: process.env.REACT_APP_AIRTABLE_KEY || ''})
     this.connector = air
@@ -112,9 +114,9 @@ export class AirSource<T> implements MsscSource<T> {
   }
 
   dialogCreateOrEdit(cbOk: (model: T) => void, cbCancel: () => void, initialValues?: object): Promise<JSX.Element> {
-    if (this.params.dialogCreateEditJsx) {
+    if (this.thParams.dialogCreateEditJsx) {
       const initialValues0 = this.dialogMiddleware(initialValues as any)
-      return this.params.dialogCreateEditJsx(cbOk, cbCancel, initialValues0 as any)
+      return this.thParams.dialogCreateEditJsx(cbOk, cbCancel, initialValues0 as any)
     }
     return Promise.resolve(<div>no realised</div>)
   }
@@ -194,7 +196,7 @@ export class AirSource<T> implements MsscSource<T> {
     return objs.map((elObj: any) => {
       return {
         id: new RsuvTxStringAB(elObj.tid),
-        elem: this.params.elemJsx ? this.params.elemJsx(elObj) : (<div>elObj.id</div>),
+        elem: this.thParams?.elemJsx ? this.thParams.elemJsx(elObj) : (<div>{elObj.id} warn-[[220503114824]]</div>),
         elemModel: elObj
       } as MsscElem
     });
@@ -288,8 +290,8 @@ export class AirSource<T> implements MsscSource<T> {
 
   dialogMiddleware(obj?: T): object | T | null {
     if (obj) {
-      if (this.params.dialogMiddleware) {
-        return this.params.dialogMiddleware(obj)
+      if (this.thParams.dialogMiddleware) {
+        return this.thParams.dialogMiddleware(obj)
       }
       const obj0: any = _.cloneDeep(obj)
       obj0.id = obj0.tid;
@@ -300,14 +302,14 @@ export class AirSource<T> implements MsscSource<T> {
 
   filterFromSearchText(searchText: string): MsscFilter[] | null {
     if (searchText) {
-      return this.params.cbFilterFromSearchText?.(searchText) || null
+      return this.thParams.cbFilterFromSearchText?.(searchText) || null
     }
     return null
   }
 
   filterFromTags(tags: string[], fieldName: string): MsscFilter[] | null {
     if (tags && tags.length > 0) {
-      return this.params.cbFilterFromTags?.(tags, fieldName) || null
+      return this.thParams.cbFilterFromTags?.(tags, fieldName) || null
     }
     return null;
   }

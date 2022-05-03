@@ -60,7 +60,7 @@ export enum MsscEnMenuAction {
 /** представляет *е-объект */
 export type MsscElemStruct = { isActive?: boolean, checkboxJsx?: JSX.Element, bodyJsx?: JSX.Element, menuJsx?: JSX.Element }
 
-interface MsscListProps {
+export interface MsscListProps {
   /**
    *
    */
@@ -844,6 +844,8 @@ const MsscListFCC = ({source, sortData, children, listElemStruct, tagsFieldNameA
   return (
     <div className="mssc-base">
       {$isError ? <div className="mssc-base__error">ошибка</div> : null}
+
+      { source ? '' : (<div>MsscListFCC-info: source not found</div>)}
 
       {
         !$loading && children?.({

@@ -8,3 +8,6 @@ publish:
 # build & publish
 bp:
 	npm run rollup && npm publish
+
+story:
+	npm run storybook
