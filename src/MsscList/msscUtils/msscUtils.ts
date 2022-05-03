@@ -7,11 +7,6 @@ export async function fnWait(duration: number) {
 }
 
 /**
- * имя колонки таблицы БД
- */
-export type MsscColumnName = string
-
-/**
  *
  */
 export class SquareBrackets {

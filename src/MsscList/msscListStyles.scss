@@ -6,6 +6,8 @@
 
 .mssc-base {
   --color1: white;
+  --mssc-height-correct-value: 280px;
+  --mssc-list-area-height: 780px;
 
   background-color: var(--color1);
 
@@ -81,7 +83,7 @@
     flex-direction: column;
     row-gap: 8px;
     overflow: auto;
-    height: calc(100vh - 280px);
+    height: calc(100vh - var(--mssc-height-correct-value));
     border: 1px solid silver;
     border-radius: 8px;
     padding: 16px 0;

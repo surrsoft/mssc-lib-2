@@ -25,48 +25,11 @@ import _ from 'lodash';
 import { PElemAsau66, RsuvAsau67 } from 'rsuv-lib/dist/RsuvTuPromiseAllSettled';
 import { MsscTag } from '../msscUtils/MsscTag';
 import React from 'react';
+import { AirSourceParams } from './AirSourceParams';
 
 type Ty2130 = { index: number, tuple: HoggTupleNT }
 
 type Ty2214 = { field: string; direction: "desc" | "asc" }
-
-export class AirSourceParams<T> {
-  /**
-   * Ключ БД Airtable, например `appSoHaX1a5tRLJlv` (не путать с Airtable API key)
-   */
-  dbKey: string = ''
-  /**
-   * Имя таблицы
-   */
-  tableName: string = ''
-  /**
-   * Имена колонок таблицы
-   */
-  columns: string[] = []
-  /**
-   * Должен вернуть JSX.Element для элемента списка.
-   * Если не указан - возвращается дефолтный JSX.Element вида <div>```id```</div>
-   * @param obj (1) -- модель данных для формирования JSX.Element
-   */
-  elemJsx?: (obj: object) => JSX.Element
-  /**
-   * Диалог создания/редактирования элемента. Будет ретранслирован *клиенту
-   */
-  dialogCreateEditJsx?: (cbOk: (model: T) => void, cbCancel: () => void, initialValues?: object) => Promise<JSX.Element>
-  /**
-   * см. [220129122002]
-   * если указан, будет исползован вместо прописанного в текущем классе дефолтного
-   */
-  dialogMiddleware?: (obj: T) => object | T | null
-  /**
-   * на базе (1) нужно сформировать MsscFilter
-   */
-  cbFilterFromSearchText?: (searchText: string) => MsscFilter[] | null
-  /**
-   * на базе тегов (1) нужно сформировать MsscFilter
-   */
-  cbFilterFromTags?: (tags: string[], fieldName: string) => MsscFilter[] | null
-}
 
 function msscFiltersToVuscFilter(filters: MsscFilter[]) {
   if (filters && filters.length > 0) {
@@ -85,9 +48,13 @@ function msscFiltersToVuscFilter(filters: MsscFilter[]) {
       }
       return acc
     }, []);
+    // ---
     const rr2 = rrTags.join(',')
     const rr3 = `AND(${rr2})`
-    rr0.push(rr3)
+    if(rr2) {
+      rr0.push(rr3)
+    }
+    // ---
     const rr = rr0.join(',');
     // ---
     return `SUM(${rr})`
@@ -121,7 +88,13 @@ export class AirSource<T> implements MsscSource<T> {
     return Promise.resolve(<div>no realised</div>)
   }
 
-  private fnFilterSort(filters: MsscFilter[], sorts: RsuvTxSort[]) {
+  /**
+   * Для (1) и (2) возвращает соответствующие адаптации под Airtable API
+   * @param filters
+   * @param sorts
+   * @private
+   */
+  private fnFilterAndSort(filters: MsscFilter[], sorts: RsuvTxSort[]) {
     const filterVusc = msscFiltersToVuscFilter(filters)
     let sortArrObj: Array<Ty2214> = []
     if (sorts.length > 0) {
@@ -135,7 +108,7 @@ export class AirSource<T> implements MsscSource<T> {
 
   async idsAll(filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<string[]> {
     // ---
-    let {filterVusc, sortArrObj} = this.fnFilterSort(filters, sorts);
+    let {filterVusc, sortArrObj} = this.fnFilterAndSort(filters, sorts);
     // ---
     const hoggOffset = new HoggOffsetCount(true);
     this.connector.sort(sortArrObj)
@@ -172,7 +145,7 @@ export class AirSource<T> implements MsscSource<T> {
   }
 
   async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<MsscElem[]> {
-    let {filterVusc, sortArrObj} = this.fnFilterSort(filters, sorts);
+    let {filterVusc, sortArrObj} = this.fnFilterAndSort(filters, sorts);
     // ---
     const indexStart = indexDiap.indexStart.val;
     const indexEnd = indexDiap.indexEnd.val;
@@ -316,7 +289,7 @@ export class AirSource<T> implements MsscSource<T> {
 
 
   async tags(filters: MsscFilter[], fieldName: string): Promise<MsscTag[]> {
-    let {filterVusc} = this.fnFilterSort(filters, []);
+    let {filterVusc} = this.fnFilterAndSort(filters, []);
     // ---
     const hoggOffset = new HoggOffsetCount(true);
     // --- QUERY

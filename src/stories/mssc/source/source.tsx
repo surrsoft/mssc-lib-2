@@ -3,8 +3,12 @@ import _ from 'lodash';
 import './source-styles.scss';
 import { EnField } from '../EnField';
 import { SquareBrackets } from '../../../MsscList/msscUtils/msscUtils';
-import { AirSource, AirSourceParams } from '../../../MsscList/commonUtils/AirSource';
-
+import { AirSource} from '../../../MsscList/commonUtils/AirSource';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import * as Yup from 'yup'
+import { AirSourceParams } from '../../../MsscList/commonUtils/AirSourceParams';
+import { MsscFilter } from '../../../MsscList/msscUtils/MsscFilter';
+import { RsuvTxStringAC } from 'rsuv-lib';
 
 const airSourceParams = {
   dbKey: 'appZoHaX4a5tRLJlv', // mssc-training-3
@@ -59,6 +63,89 @@ const airSourceParams = {
         <div className="list-elem__id">{elObj.tid}</div>
       </div>
     )
+  },
+  dialogCreateEditJsx: async (cbOk: (newElemData: any) => void, cbCancel: () => void, initialValues) => {
+    const isEditMode = !!initialValues
+    const isCreateMode = !isEditMode
+
+    const btnHandlers = {
+      cancel: () => {
+        cbCancel?.()
+      },
+      ok: async (model: any) => {
+        const obj = Object.assign({}, {id: ''}, model)
+        if (isEditMode) {
+          obj.id = (initialValues as any).id
+        }
+        cbOk?.(obj)
+      }
+    }
+
+    const fieldNames = [EnField.TITLE, EnField.COMM, EnField.URL]
+    const initialValues0 = fieldNames.reduce((acc: any, elFieldName) => {
+      acc[elFieldName] = initialValues ? ((initialValues as any)[elFieldName] || '') : '';
+      return acc;
+    }, {})
+
+    return (
+      <div className="cls2326FormContainer">
+        <Formik
+          initialValues={initialValues0}
+          validationSchema={Yup.object({
+            [EnField.TITLE]: Yup.string().required('обязательное поле')
+          })}
+          onSubmit={async (values) => {
+            return btnHandlers.ok(values)
+          }}
+        >
+          {({errors}) => (<Form className="cls2326Form">
+            <div className="cls2326Title">{isCreateMode ? 'Создание' : 'Редактирование'} элемента</div>
+            <div className="cls2326ELem">
+              <label>{EnField.TITLE}</label>
+              <Field type="text" name={EnField.TITLE}/>
+              <ErrorMessage className="cls2326FieldError" name={EnField.TITLE} component="div"/>
+            </div>
+            <div className="cls2326ELem">
+              <label>{EnField.COMM}</label>
+              <Field type="text" name={EnField.COMM}/>
+            </div>
+            <div className="cls2326ELem">
+              <label>{EnField.URL}</label>
+              <Field type="text" name={EnField.URL}/>
+            </div>
+            <div className="cls2326Buttons">
+              <button onClick={btnHandlers.cancel}>Отмена</button>
+              <button type="submit">OK</button>
+            </div>
+          </Form>)}
+        </Formik>
+      </div>
+    )
+  },
+  cbFilterFromSearchText: (searchText: string): MsscFilter[] | null => {
+    if (searchText) {
+      const fieldNameTitle = new RsuvTxStringAC(EnField.TITLE)
+      const fieldNameComm = new RsuvTxStringAC(EnField.COMM)
+      const fieldNameUrl = new RsuvTxStringAC(EnField.URL)
+      return [
+        {paramId: fieldNameTitle, filterValue: searchText} as MsscFilter,
+        {paramId: fieldNameComm, filterValue: searchText} as MsscFilter,
+        {paramId: fieldNameUrl, filterValue: searchText} as MsscFilter,
+      ];
+    }
+    return null
+  },
+  cbFilterFromTags: (tags: string[], fieldName: string): MsscFilter[] | null => {
+    if (tags && tags.length > 0) {
+      const filters: MsscFilter[] = []
+      tags.map(elTag => {
+        const fieldNameTags = new RsuvTxStringAC(fieldName)
+        const filter = {paramId: fieldNameTags, filterValue: elTag, isArrElemFind: true} as MsscFilter
+        filters.push(filter)
+      })
+      return filters;
+    }
+    return null;
   }
 } as AirSourceParams<any>
 

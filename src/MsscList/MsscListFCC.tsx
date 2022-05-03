@@ -1,126 +1,57 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import _ from 'lodash';
 import './msscListStyles.scss';
 import { MsscIdObject, MsscSource } from './msscUtils/MsscSource';
 import {
   RsuvEnResultCrudSet,
   RsuvEnSort,
-  RsuvPaginationGyth, RsuvTxChecked,
+  RsuvPaginationGyth,
+  RsuvTxChecked,
   RsuvTxNumIntAB,
   RsuvTxNumIntDiap,
   RsuvTxSort,
   RsuvTxStringAC
 } from 'rsuv-lib';
-import { MsscElem } from './msscUtils/MsscElem';
-import MenuAsau54FCC, { DataAtAsau54, ItemAtAsau54, SelectResultAtAsau54 } from './commonUI/MenuFCC/MenuAsau54FCC';
+import { useScrollFix } from 'ueur-lib';
 import MsscDialogFCC from './msscComponents/MsscDialogFCC/MsscDialogFCC';
+import MsscPaginatorFCC from './msscComponents/MsscPaginatorFCC/MsscPaginatorFCC';
 import ListModelAsau59 from './commonUtils/ListModelAsau59';
 import SvgIconTrash from './commonIcons/SvgIconTrash/SvgIconTrash';
 import SvgIconPlus from './commonIcons/SvgIconPlus/SvgIconPlus';
 import SvgIconUnckecked from './commonIcons/SvgIconUnchecked/SvgIconUnckecked';
 import { ColorsAsau61 } from './commonIcons/utils/ColorsAsau61';
-import { useScrollFix } from 'ueur-lib';
-import BrSpinner from './commonUI/BrSpinner/BrSpinner';
-import { BrSelectId, BrSelectItem, BrSelectSortData } from './commonUI/BrSelect/brSelectUtils';
-import BrSelect from './commonUI/BrSelect/BrSelect';
-import { MsscColumnName, SquareBrackets } from './msscUtils/msscUtils';
-import BrInput, { BrInputEnIcon } from './commonUI/BrFilter/BrInput';
-import { MsscFilter } from './msscUtils/MsscFilter';
 import SvgIconDice from './commonIcons/SvgIconDice/SvgIconDice';
-import MsscPaginatorFCC from './msscComponents/MsscPaginatorFCC/MsscPaginatorFCC';
+import MenuAsau54FCC, { DataAtAsau54, ItemAtAsau54, SelectResultAtAsau54 } from './commonUI/MenuFCC/MenuAsau54FCC';
+import BrInput, { BrInputEnIcon } from './commonUI/BrFilter/BrInput';
+import BrSpinner from './commonUI/BrSpinner/BrSpinner';
+import { BrSelectId, BrSelectItem } from './commonUI/BrSelect/brSelectUtils';
+import BrSelect from './commonUI/BrSelect/BrSelect';
 import classNames from 'classnames';
 import BrMultiselect from './commonUI/BrMultiselect/BrMultiselect';
-
-/**
- * Параметры для *г-билдера
- */
-export interface MsscJsxExternal {
-  /** главный элемент - непосредственно сам список элементов */
-  listJsx?: JSX.Element
-  infosJsx?: JSX.Element
-  paginator1Jsx?: JSX.Element
-  paginator2Jsx?: JSX.Element
-  buttonsJsx?: {
-    btnDelete?: JSX.Element,
-    btnCreate?: JSX.Element,
-    btnDeselectAll?: JSX.Element,
-    btnDice?: JSX.Element,
-  }
-  sortJsx?: JSX.Element
-  searchJsx?: JSX.Element
-  multiselectJsxArr?: JSX.Element[]
-}
-
-export enum MsscEnMenuAction {
-  EDIT = 'edit',
-  SELECT = 'select',
-  DELETE = 'delete'
-}
-
-/** представляет *е-объект */
-export type MsscElemStruct = { isActive?: boolean, checkboxJsx?: JSX.Element, bodyJsx?: JSX.Element, menuJsx?: JSX.Element }
-
-export interface MsscListProps {
-  /**
-   *
-   */
-  source: MsscSource<any> | null
-  sortData?: BrSelectSortData<MsscColumnName>
-  /**
-   * *клиент определяет как должны распологаться элементы отдельного элемента списка
-   * @param checkboxJsx
-   * @param bodyJsx
-   * @param menuJsx
-   */
-  listElemStruct?: ({
-                      checkboxJsx,
-                      bodyJsx,
-                      menuJsx
-                    }: MsscElemStruct) => JSX.Element
-  children?: any
-  tagsFieldNameArr?: MsscMultFields[]
-}
-
-/**
- * идентификатор группы тегов
- */
-type MsscTagsID = string
-
-/**
- * Представляет *группу-тегов всех
- */
-type MsscTagGroup = {
-  id: MsscTagsID
-  /**
-   * сами теги
-   */
-  elems: RsuvTxChecked[]
-  /**
-   *
-   */
-  visibleName: string
-}
-
-/**
- * Представляет *группу-тегов выбранных
- */
-type MsscTagGroupSelected = {
-  id: MsscTagsID
-  /**
-   * сами теги
-   */
-  elems: RsuvTxChecked[]
-}
-
-export type MsscMultFields = {
-  id: MsscTagsID
-  fieldName: string
-  visibleName: string
-}
+import { MsscElem } from './msscUtils/MsscElem';
+import { MsscFilter } from './msscUtils/MsscFilter';
+import { SquareBrackets } from './msscUtils/msscUtils';
+import { MsscJsxExternal } from './msscUtils/MsscJsxExternal';
+import { MsscEnMenuAction } from './msscUtils/MsscEnMenuAction';
+import { MsscListProps } from './msscUtils/MsscListProps';
+import { MsscTagsID } from './msscUtils/MsscTagsID';
+import { MsscTagGroup } from './msscUtils/MsscTagGroup';
+import { MsscTagGroupSelected } from './msscUtils/MsscTagGroupSelected';
+import { MsscColumnName } from './msscUtils/MsscColumnName';
+import { MsscListAreaHeight } from './msscUtils/MsscListAreaHeight';
+import { MsscEnListAreaHeightMode } from './msscUtils/MsscEnListAreaHeightMode';
 
 let scrollTop = 0;
 
-const MsscListFCC = ({source, sortData, children, listElemStruct, tagsFieldNameArr}: MsscListProps): JSX.Element => {
+const MsscListFCC = ({
+                       source,
+                       sortData,
+                       children,
+                       listElemStruct,
+                       tagsFieldNameArr,
+                       listAreaHeight = new MsscListAreaHeight
+                     }: MsscListProps
+): JSX.Element => {
 
   const config = {
     // записей на странице
@@ -793,8 +724,21 @@ const MsscListFCC = ({source, sortData, children, listElemStruct, tagsFieldNameA
       node.scrollTo(0, scrollTop)
     });
 
+    const listAreaHeightCssObj = useMemo(() => {
+      if (listAreaHeight?.mode === MsscEnListAreaHeightMode.FIXED) {
+        return {height: listAreaHeight.value}
+      } else if (listAreaHeight.mode === MsscEnListAreaHeightMode.STICKY_DOWN) {
+        return {height: `calc(100vh - ${listAreaHeight.value}px)`}
+      }
+    }, [listAreaHeight, listAreaHeight?.mode, listAreaHeight?.value]) as CSSProperties || {}
+
     return (
-      <div ref={refDivScroll} className="mssc-list-block" style={{position: 'relative'}} onScroll={onScrollHandler}>
+      <div
+        ref={refDivScroll}
+        className="mssc-list-block"
+        style={Object.assign({}, {position: 'relative'}, listAreaHeightCssObj)}
+        onScroll={onScrollHandler}
+      >
         <BrSpinner show={$loadingB} fullscreen={false}/>
         {
           $elems.map((elObj: MsscElem) => {
@@ -845,7 +789,7 @@ const MsscListFCC = ({source, sortData, children, listElemStruct, tagsFieldNameA
     <div className="mssc-base">
       {$isError ? <div className="mssc-base__error">ошибка</div> : null}
 
-      { source ? '' : (<div>MsscListFCC-info: source not found</div>)}
+      {source ? '' : (<div>MsscListFCC-info: source is empty</div>)}
 
       {
         !$loading && children?.({
