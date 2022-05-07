@@ -24,3 +24,14 @@
   justify-content: center;
   margin-bottom: 8px;
 }
+
+.block1722, .blk-tags, .blk0921-pagination {
+  & button {
+    background: transparent;
+    border: 0;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

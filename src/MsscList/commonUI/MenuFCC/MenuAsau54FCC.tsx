@@ -45,6 +45,12 @@ export class PropsAtAsau54 {
   cbOnSelected?: (el: SelectResultAtAsau54) => void
 }
 
+/**
+ * Реализация списка пунктов меню
+ * @param data
+ * @param cbOnSelected
+ * @constructor
+ */
 function MenuAsau54FCC({data, cbOnSelected}: PropsAtAsau54) {
   const [$isListShowed, $isListShowedSet] = useState(false);
   const refBtnDropdown = useRef(null)

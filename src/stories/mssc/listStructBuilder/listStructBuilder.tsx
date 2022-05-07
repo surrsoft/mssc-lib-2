@@ -14,7 +14,9 @@ export const listStructBuilder = ({
                    }: MsscJsxExternal) => {
   return (
     <>
-      {paginator1Jsx}
+      <div className="blk0921-pagination">
+        {paginator1Jsx}
+      </div>
       <div className="block1722">
         <div className="block1722__buttons">
           {buttonsJsx?.btnCreate}
