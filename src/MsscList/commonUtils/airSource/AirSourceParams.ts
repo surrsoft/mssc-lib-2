@@ -1,4 +1,4 @@
-import { MsscFilter } from '../msscUtils/MsscFilter';
+import { MsscFilter } from '../../msscUtils/MsscFilter';
 
 export class AirSourceParams<T> {
   /**

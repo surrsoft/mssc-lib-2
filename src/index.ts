@@ -1,5 +1,5 @@
 export { default as MsscListFCC} from './MsscList/MsscListFCC';
-export { AirSource} from './MsscList/commonUtils/AirSource';
+export { AirSource} from './MsscList/commonUtils/airSource/AirSource';
 export {
   default as MsscPaginatorFCC, MsscPaginatorProps
 } from './MsscList/msscComponents/MsscPaginatorFCC/MsscPaginatorFCC';
@@ -11,4 +11,4 @@ export { BrSelectSortData } from './MsscList/commonUI/BrSelect/brSelectUtils';
 export { MsscJsxExternal } from './MsscList/msscUtils/MsscJsxExternal';
 export { MsscElemStruct } from './MsscList/msscUtils/MsscElemStruct';
 export { MsscColumnName } from './MsscList/msscUtils/MsscColumnName';
-export { AirSourceParams } from './MsscList/commonUtils/AirSourceParams';
+export { AirSourceParams } from './MsscList/commonUtils/airSource/AirSourceParams';

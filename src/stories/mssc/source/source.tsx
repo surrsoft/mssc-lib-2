@@ -3,10 +3,10 @@ import _ from 'lodash';
 import './source-styles.scss';
 import { EnField } from '../EnField';
 import { SquareBrackets } from '../../../MsscList/msscUtils/msscUtils';
-import { AirSource} from '../../../MsscList/commonUtils/AirSource';
+import { AirSource} from '../../../MsscList/commonUtils/airSource/AirSource';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup'
-import { AirSourceParams } from '../../../MsscList/commonUtils/AirSourceParams';
+import { AirSourceParams } from '../../../MsscList/commonUtils/airSource/AirSourceParams';
 import { MsscFilter } from '../../../MsscList/msscUtils/MsscFilter';
 import { RsuvTxStringAC } from 'rsuv-lib';
 
