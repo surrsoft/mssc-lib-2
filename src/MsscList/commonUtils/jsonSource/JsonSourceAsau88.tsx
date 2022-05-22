@@ -17,6 +17,7 @@ import { MsscElem } from '../../msscUtils/MsscElem';
 import { MsscTag } from '../../msscUtils/MsscTag';
 import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
 import _ from 'lodash';
+import fp from 'lodash/fp';
 import { RsuvAsau89 } from 'rsuv-lib/src/RsuvTuTree';
 
 /*
@@ -74,13 +75,10 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
       const elemsAll = await jsonServer.elemsGetAll()
       if (elemsAll && elemsAll.length > 0) {
         // --- elemsFilteredAll - все элементы хранилища соответствующие фильтрам 'filters'
-        debugger; // del+
         const elemsFilteredAll = this.elemsFiltered(elemsAll, filters);
-        console.log('!!-!!-!! 1149- elemsFilteredAll {220514115117}\n', elemsFilteredAll); // del+
         // --- извлекаем диапазон из elemsFilteredAll
         const ixEnd2 = ixEnd < elemsFilteredAll.length ? ixEnd : elemsFilteredAll.length - 1;
         const elemsFilteredRes = RsuvTuArray.elemsDiap(elemsFilteredAll, ixStart, ixEnd2)
-        console.log('!!-!!-!! 1149- elemsFilteredRes {220514115211}\n', elemsFilteredRes); // del+
         if (elemsFilteredRes.success) {
           return this.elemsToMsscElems(elemsFilteredRes.value)
         }
@@ -90,66 +88,62 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
   }
 
   /**
-   * Отбор из массива объектов (1) объектов удовлетворяющих фильтрам (2)
+   * Отбор из массива объектов (1) объектов удовлетворяющих фильтрам (2).
+   * Видео-объяснение: https://www.notion.so/surr/video-220522-1353-4ddd18b05a85422fa9855c8afa836f73 .
    * @param elemsAll (1) -- массив объектов
    * @param filters (2) -- фильтры. Если пустой массив, возвращает элементы из (1) в виде нового массива
    * @private
    */
   private elemsFiltered(elemsAll: any[], filters: MsscFilter[]) {
-    console.log('!!-!!-!! filters {220522001225}\n', filters); // del+
     if (filters.length < 1) {
       return [...elemsAll]
     }
     // ---
     // фильтры означающие поиск просто по строке
-    const filtersByOne = _.chain(filters).filter(el => !el.isArrElemFind).value()
+    const filtersByOne = _.filter(filters, el => !el.isArrElemFind)
     // фильтры означающие поиск по массиву строк
-    const filtersByArrObj = _.chain(filters).filter(el => !!el.isArrElemFind).groupBy('paramIdB').value()
+    const filtersByArrPairs = fp.pipe([
+      fp.filter(fp.property('isArrElemFind')),
+      fp.groupBy('paramIdB'),
+      fp.mapValues(fp.map('filterValue')), // {roles: ['admin', 'guest'], ...}
+      fp.toPairs // [ ['roles', ['admin', 'guest']], ...]
+    ])(filters)
     // ---
-    const elemsFilteredAll: any[] = []
-    elemsAll.map((loopElem: any) => {
-      // здесь будет TRUE если элемент соответствует хотя бы одному из фильтров filtersByOne
-      let isNeedPush1 = false;
-      // здесь будет TRUE если loopElem соответствует всем фильтрам из filtersByArrObj
-      let isNeedPush2 = false;
+    const retElemsFiltered: any[] = []
+    elemsAll.map((elElem: any) => {
       // --- поиск совпадений для filtersByOne
-      if (filtersByOne.length < 1) {
-        isNeedPush1 = true;
-      } else {
-        isNeedPush1 = filtersByOne.some((loopFilter: MsscFilter) => {
-          if (loopFilter.filterValue) {
-            const val = _.get(loopElem, loopFilter.paramIdB || '')
+      // здесь будет TRUE если элемент соответствует хотя бы одному из фильтров filtersByOne
+      const isFindedByString = fp.anyPass([
+        fp.isEmpty,
+        fp.some((elFilter: MsscFilter) => {
+          if (elFilter.filterValue) {
+            const val = _.get(elElem, elFilter.paramIdB || '')
             if (_.isString(val)) {
-              const res = RsuvTuString.substrIndexes(val, loopFilter.filterValue, true)
+              const res = RsuvTuString.substrIndexes(val, elFilter.filterValue, true)
               return res.length > 0
             }
           }
           return false;
         })
-      }
-      // --- поиск совпадений для filtersByArrObj
-      if (Object.values(filtersByArrObj).length <= 0) {
-        isNeedPush2 = true
-      } else {
-        _.chain(filtersByArrObj).toPairs().forEach(pair => {
-          const pairKey = pair[0]
-          const pairFilters = pair[1]
-          const elFieldValues = _.get(loopElem, pairKey, '')
-          if (_.isArray(elFieldValues) && elFieldValues.length > 0) {
-            const reduced = pairFilters.reduce((acc: any[], pairFilter) => {
-              elFieldValues.includes(pairFilter.filterValue) && acc.push(true)
-              return acc;
-            }, [])
-            isNeedPush2 = reduced.length === pairFilters.length
-          }
-        }).value()
-      }
+      ])(filtersByOne)
+      // --- поиск совпадений для filtersByArrPairs
+      // здесь будет TRUE если elElem соответствует всем фильтрам из filtersByArrPairs
+      const isFindedByTags = fp.anyPass([
+        fp.isEmpty,
+        fp.every((elFilterPair: any) => {
+          const fieldName = elFilterPair[0]
+          const filterValues = elFilterPair[1]
+          const elemValues = _.get(elElem, fieldName, [])
+          // TRUE если в elemValues содержаться все значения из filterValues, при условии что filterValues не пустой
+          return RsuvTuArray.containsAll(elemValues, filterValues)
+        })
+      ])(filtersByArrPairs)
       // ---
-      if (isNeedPush1 && isNeedPush2) {
-        elemsFilteredAll.push(loopElem);
+      if (isFindedByString && isFindedByTags) {
+        retElemsFiltered.push(elElem);
       }
     })
-    return elemsFilteredAll;
+    return retElemsFiltered;
   }
 
   elemsAdd(elems: T[]): Promise<Array<RsuvResultBoolPknz | T>> {
@@ -203,10 +197,7 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
 
   async tags(filters: MsscFilter[], fieldName: string): Promise<MsscTag[]> {
     const elems = await Cls1941.elemsAll(jsonServer)
-    console.log('!!-!!-!! 0846- elems {220521084734}\n', elems); // del+
-    console.log('!!-!!-!! 0846- filters {220521084745}\n', filters); // del+
     const elemsFiltered = this.elemsFiltered(elems, filters)
-    console.log('!!-!!-!! 0846- elemsFiltered {220521084653}\n', elemsFiltered); // del+
     // ---
     const tibo: RsuvResultTibo<RsuvAsau89[]> = RsuvTuTree.accum(elemsFiltered, fieldName, 'id', true)
     const msscTags: MsscTag[] = []

@@ -14,3 +14,6 @@ storybook_start:
 
 json-server-start:
 	npm run json-server-start
+
+rsuv-update:
+	npm i rsuv-lib@latest
