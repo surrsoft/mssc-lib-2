@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import './source-styles.scss';
-import { EnField } from '../EnField';
+import { EnAirField } from './EnAirField';
 import { SquareBrackets } from '../../../MsscList/msscUtils/msscUtils';
 import { AirSource} from '../../../MsscList/commonUtils/airSource/AirSource';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
@@ -18,24 +18,24 @@ const airSourceParams = {
   tableName: 'main',
   columns: [
     'id',
-    EnField.URL,
-    EnField.TITLE,
-    EnField.COMM,
+    EnAirField.URL,
+    EnAirField.TITLE,
+    EnAirField.COMM,
     'body',
     'trans_count',
     'trans_date_last',
     'show_date_last',
-    EnField.TIME_CREATED,
-    EnField.TIME_LAST_MODIFIED,
-    EnField.TAGS,
-    EnField.TAGS2,
+    EnAirField.TIME_CREATED,
+    EnAirField.TIME_LAST_MODIFIED,
+    EnAirField.TAGS,
+    EnAirField.TAGS2,
   ],
   elemJsx: (elObj: any) => {
     return (
       <div className="list-elem" key={elObj.tid}>
         <div className="list-elem__title">{elObj.title}</div>
         <div><a className="list-elem__url" href={elObj.url} target="_blank">{elObj.url}</a></div>
-        <div className="list-elem__comm">{elObj[EnField.COMM] || ''}</div>
+        <div className="list-elem__comm">{elObj[EnAirField.COMM] || ''}</div>
         <div className="list-elem__tags-con">
           {(!elObj.tags || elObj.tags.length < 0) ? null : <div className="list-elem__tags">
             {
@@ -46,18 +46,18 @@ const airSourceParams = {
               })
             }
           </div>}
-          {_.isEmpty(elObj[EnField.TAGS2]) ? null : <div className="list-elem__tags2">
-            {elObj[EnField.TAGS2].map((elTag: string) => {
+          {_.isEmpty(elObj[EnAirField.TAGS2]) ? null : <div className="list-elem__tags2">
+            {elObj[EnAirField.TAGS2].map((elTag: string) => {
               return (<div key={elTag} className="list-elem__tag2">{SquareBrackets.bracketsRemove(elTag)}</div>)
             })}
           </div>}
         </div>
         <div className="list-elem__times">
           <div className="list-elem__time-lastmodif">
-            <span className="list-elem__name">last modif:</span> {elObj[EnField.TIME_LAST_MODIFIED] || ''}
+            <span className="list-elem__name">last modif:</span> {elObj[EnAirField.TIME_LAST_MODIFIED] || ''}
           </div>
           <div className="list-elem__time-created">
-            <span className="list-elem__name">created:</span> {elObj[EnField.TIME_CREATED] || ''}
+            <span className="list-elem__name">created:</span> {elObj[EnAirField.TIME_CREATED] || ''}
           </div>
         </div>
         <div className="list-elem__id">{elObj.tid}</div>
@@ -81,7 +81,7 @@ const airSourceParams = {
       }
     }
 
-    const fieldNames = [EnField.TITLE, EnField.COMM, EnField.URL]
+    const fieldNames = [EnAirField.TITLE, EnAirField.COMM, EnAirField.URL]
     const initialValues0 = fieldNames.reduce((acc: any, elFieldName) => {
       acc[elFieldName] = initialValues ? ((initialValues as any)[elFieldName] || '') : '';
       return acc;
@@ -92,7 +92,7 @@ const airSourceParams = {
         <Formik
           initialValues={initialValues0}
           validationSchema={Yup.object({
-            [EnField.TITLE]: Yup.string().required('обязательное поле')
+            [EnAirField.TITLE]: Yup.string().required('обязательное поле')
           })}
           onSubmit={async (values) => {
             return btnHandlers.ok(values)
@@ -101,17 +101,17 @@ const airSourceParams = {
           {({errors}) => (<Form className="cls2326Form">
             <div className="cls2326Title">{isCreateMode ? 'Создание' : 'Редактирование'} элемента</div>
             <div className="cls2326ELem">
-              <label>{EnField.TITLE}</label>
-              <Field type="text" name={EnField.TITLE}/>
-              <ErrorMessage className="cls2326FieldError" name={EnField.TITLE} component="div"/>
+              <label>{EnAirField.TITLE}</label>
+              <Field type="text" name={EnAirField.TITLE}/>
+              <ErrorMessage className="cls2326FieldError" name={EnAirField.TITLE} component="div"/>
             </div>
             <div className="cls2326ELem">
-              <label>{EnField.COMM}</label>
-              <Field type="text" name={EnField.COMM}/>
+              <label>{EnAirField.COMM}</label>
+              <Field type="text" name={EnAirField.COMM}/>
             </div>
             <div className="cls2326ELem">
-              <label>{EnField.URL}</label>
-              <Field type="text" name={EnField.URL}/>
+              <label>{EnAirField.URL}</label>
+              <Field type="text" name={EnAirField.URL}/>
             </div>
             <div className="cls2326Buttons">
               <button onClick={btnHandlers.cancel}>Отмена</button>
@@ -124,9 +124,9 @@ const airSourceParams = {
   },
   cbFilterFromSearchText: (searchText: string): MsscFilter[] | null => {
     if (searchText) {
-      const fieldNameTitle = new RsuvTxStringAC(EnField.TITLE)
-      const fieldNameComm = new RsuvTxStringAC(EnField.COMM)
-      const fieldNameUrl = new RsuvTxStringAC(EnField.URL)
+      const fieldNameTitle = new RsuvTxStringAC(EnAirField.TITLE)
+      const fieldNameComm = new RsuvTxStringAC(EnAirField.COMM)
+      const fieldNameUrl = new RsuvTxStringAC(EnAirField.URL)
       return [
         {paramId: fieldNameTitle, filterValue: searchText} as MsscFilter,
         {paramId: fieldNameComm, filterValue: searchText} as MsscFilter,

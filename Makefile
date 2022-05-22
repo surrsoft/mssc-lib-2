@@ -9,5 +9,8 @@ publish:
 bp:
 	npm run rollup && npm publish
 
-story:
+storybook_start:
 	npm run storybook
+
+json-server-start:
+	npm run json-server-start

@@ -25,7 +25,7 @@ export interface MsscListProps {
                     }: MsscElemStruct) => JSX.Element
   children?: any
   /**
-   * Имя полей содержащих теги
+   * Описание полей содержащих теги. Сколько здесь будет элементов, столько будет показываться выпадающих списков
    */
   tagsFieldNameArr?: MsscMultFields[],
   /**

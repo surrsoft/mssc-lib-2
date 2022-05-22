@@ -103,15 +103,15 @@ export interface MsscSource<TModel> {
   dialogMiddleware(obj?: TModel): object | TModel | null;
 
   /**
-   * *С-компонент вызывает эту функцию чтобы *клиент на базе (1) подготовил {@link MsscFilter[]}
+   * [[220509113255]] *С-компонент вызывает эту функцию чтобы *клиент на базе (1) подготовил {@link MsscFilter[]}
    * @param searchText
    */
   filterFromSearchText(searchText: string): MsscFilter[] | null
 
   /**
-   * *С-компонент вызывает эту функцию чтобы *клиент на базе тегов (1) подготовил {@link MsscFilter[]}
+   * [[220514092623]] *С-компонент вызывает эту функцию чтобы *клиент на базе тегов (1) подготовил {@link MsscFilter[]}
    * @param tags (1) --
-   * @param fieldName (2) --
+   * @param fieldName (2) -- поле в котором нужно искать теги (1)
    */
   filterFromTags(tags: string[], fieldName: string): MsscFilter[] | null
 
@@ -123,9 +123,9 @@ export interface MsscSource<TModel> {
   idsAll(filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<string[]>
 
   /**
-   * возвращает теги (значения поля (2)) для виджета тегов
+   * Возвращает теги (значения поля (2)) для виджета тегов, после фильтрации всех данных по (1)
    * @param filters (1) --
-   * @param fieldName (2) --
+   * @param fieldName (2) -- поле в котором нужно искать теги
    */
   tags(filters: MsscFilter[], fieldName: string): Promise<MsscTag[]>
 }

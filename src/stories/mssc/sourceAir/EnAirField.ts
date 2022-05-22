@@ -1,4 +1,4 @@
-export enum EnField {
+export enum EnAirField {
   TITLE = 'title',
   COMM = 'comm',
   URL = 'url',

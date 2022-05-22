@@ -3,13 +3,15 @@ import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import MsscListFCC from '../../MsscList/MsscListFCC';
-import { airSource } from './source/source';
+import { airSource } from './sourceAir/sourceAir';
 import { listStructBuilder } from './listStructBuilder/listStructBuilder';
 import { elemStructBuilder } from './elemStructBuilder';
 import { sortDataSTA } from './sort';
 import { MsscListAreaHeight } from '../../MsscList/msscUtils/MsscListAreaHeight';
 import { MsscEnListAreaHeightMode } from '../../MsscList/msscUtils/MsscEnListAreaHeightMode';
-import { tagsFieldNameArr } from './tagsFieldNameArr';
+import { airTagsFieldNameArr } from './sourceAir/airTagsFieldNameArr';
+import { jsonSource } from './sourceJson/jsonSource';
+import { jsonTagsFieldNameArr } from './sourceJson/jsonTagsFieldNameArr';
 
 //👇 Этот экспорт по умолчанию определяет, куда попадет ваша история в списке историй
 export default {
@@ -31,6 +33,17 @@ StoryAirSource.args = {
   listElemStruct: elemStructBuilder,
   children: listStructBuilder,
   sortData: sortDataSTA,
-  tagsFieldNameArr: tagsFieldNameArr,
+  tagsFieldNameArr: airTagsFieldNameArr,
+  listAreaHeight: {mode: MsscEnListAreaHeightMode.STICKY_DOWN, value: 150} as MsscListAreaHeight
+};
+
+export const StoryArraySource = Template.bind({});
+
+StoryArraySource.args = {
+  source: jsonSource,
+  listElemStruct: elemStructBuilder,
+  children: listStructBuilder,
+  sortData: sortDataSTA,
+  tagsFieldNameArr: jsonTagsFieldNameArr,
   listAreaHeight: {mode: MsscEnListAreaHeightMode.STICKY_DOWN, value: 150} as MsscListAreaHeight
 };
