@@ -68,6 +68,9 @@ const MsscListFCC = ({
     ]
   } as DataAtAsau54
 
+  const vnczCallId = Date.now() + ''
+  Vncz.cwrcGroupAdd(null, '220604154320', 'component MsscListFCC', vnczCallId);
+
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
   // номер страницы который был перед тем как изменить его на новый
@@ -183,49 +186,49 @@ const MsscListFCC = ({
    */
   const requestFirst = async (source: MsscSource<any>) => {
 
-    Vncz.cwrcGroupAdd(null, '220604110751', 'requestFirst()')
+    Vncz.cwrcGroupAdd('220604154320', '220604110751', 'requestFirst()', vnczCallId)
     try {
       // --- общее кол-во элементов без учета фильтра
-      Vncz.cwrcLog('220604110751', `сбрасываем общее кол-во элементов`)
+      Vncz.cwrcLog('220604110751', `сбрасываем общее кол-во элементов`, vnczCallId)
       $elemsCountAllSet(-1)
-      Vncz.cwrcGroupAdd('220604110751', '220604111335', `async - ищем сколько всего элементов`)
+      Vncz.cwrcGroupAdd('220604110751', '220604111335', `async - ищем сколько всего элементов`, vnczCallId)
       source?.elemsCountByFilter([]).then((result) => {
-        Vncz.cwrcLog('220604111335', `найдено ${result.val}`)
+        Vncz.cwrcLog('220604111335', `найдено ${result.val}`, vnczCallId)
         $elemsCountAllSet(result.val)
       }).catch((err) => {
-        Vncz.cwrcLog('220604111335', `ОШИБКА`)
+        Vncz.cwrcLog('220604111335', `ОШИБКА`, vnczCallId)
         console.log('!!-!!-!! err {220130133850}\n', err)
       })
       // ---
       $loadingSet(true)
       // --- получение общего количества элементов с учетом фильтров
-      Vncz.cwrcLog('220604110751', `получение общего количества эементов с учётом фильтров`)
       const filters: MsscFilter[] = fnFiltersCreate(source);
-      Vncz.cwrcLog('220604110751', `подготовка фильтров - кол-во фильтров [${filters?.length}]`)
+      Vncz.cwrcLog('220604110751', `кол-во элементов с учётом фильтров [${filters?.length}]`, vnczCallId)
       let elemsCountByFilter: number = 0;
       if ($randomEnabled) {
-        Vncz.cwrcLog('220604110751', `1-2 рандом включен`)
+        Vncz.cwrcLog('220604110751', `1-2 рандом включен`, vnczCallId)
         const sorts = fnSorts()
-        Vncz.cwrcGroupAdd('220604110751', '220604111712', `async - делаем запрос всех ids`)
+        Vncz.cwrcGroupAdd('220604110751', '220604111712', `async - делаем запрос всех ids`, vnczCallId)
         const ids = await source?.idsAll(filters, sorts) // AWAIT
-        Vncz.cwrcLog('220604111712', `найдено - ${ids?.length}`)
+        Vncz.cwrcLog('220604111712', `найдено - ${ids?.length}`, vnczCallId)
         if (ids) {
           elemsCountByFilter = ids.length
           const idsShuffled = _.shuffle(ids)
           $idsShuffledSet(idsShuffled)
         }
       } else {
-        Vncz.cwrcLog('220604110751', `2-2 random отключен`)
-        Vncz.cwrcGroupAdd('220604110751', '220604111932', `async - запрашиваем у *источника количество элементов с учётом фильтров`)
+        Vncz.cwrcLog('220604110751', `2-2 random отключен`, vnczCallId)
+        Vncz.cwrcGroupAdd('220604110751', '220604111932', `async - запрашиваем у *источника количество элементов с учётом фильтров`, vnczCallId)
         const elemsCount: RsuvTxNumIntAB = await source?.elemsCountByFilter(filters)
         if (elemsCount) {
           elemsCountByFilter = elemsCount.val;
-          Vncz.cwrcLog('220604111932', `2036-2 количество ${elemsCountByFilter}`)
+          Vncz.cwrcLog('220604111932', `количество ${elemsCountByFilter}`, vnczCallId)
         }
       }
       // --- получение тегов
       if (tagsFieldNameArr && tagsFieldNameArr.length > 0) {
-        const rr0: MsscTagGroup[] = []
+        Vncz.cwrcLog('220604110751', `1-2 есть метаинформация о тегах - обрабатываем в цикле`, vnczCallId)
+        const tagsTotal: MsscTagGroup[] = []
         for (let elTg of tagsFieldNameArr) { // LOOP
           let tags = await source?.tags(filters, elTg.fieldName)
           // --- sort
@@ -244,12 +247,16 @@ const MsscListFCC = ({
           })
           // ---
           const rr = {id: elTg.id, elems: tags0, visibleName: elTg.visibleName} as MsscTagGroup
-          rr0.push(rr)
+          tagsTotal.push(rr)
         } // LOOP
-        $tagGroupArrSet(rr0)
+        Vncz.cwrcLog('220604110751', ` - итого элементов метаинформации - ${tagsTotal.length}`, vnczCallId)
+        $tagGroupArrSet(tagsTotal)
+      } else {
+        Vncz.cwrcLog('220604110751', `2-2 нет метаинформации о тегах`, vnczCallId)
       }
       // --- pagination - pageCountAll
       const pagination = new RsuvPaginationGyth(elemsCountByFilter, config.elemsOnPage)
+      Vncz.cwrcLog('220604110751', `пагинация`, vnczCallId)
       // ---
       $pageCountAllSet(pagination.pageCount)
       $elemsCountByFilterSet(elemsCountByFilter)
@@ -266,6 +273,7 @@ const MsscListFCC = ({
    * @param source
    */
   const requestTwo = async (source: MsscSource<any>) => {
+    Vncz.cwrcGroupAdd('220604154320', '220604160304', 'requestTwo()', vnczCallId)
     try {
       $loadingBSet(true)
       // await fnWait(3000)

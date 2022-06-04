@@ -11,52 +11,36 @@ export class Vncz {
     return !!VNCZ_ENABLED
   }
 
-  static groupStart(groupId: string) {
-    if (VNCZ_ENABLED) {
-      console.group(`${VNCZ_PREFIX} ${groupId}`)
-    }
-  }
-
-  static groupEnd(groupId: string) {
-    if (VNCZ_ENABLED) {
-      console.groupEnd()
-    }
-  }
-
-  static log(id: string, text: string, level: number = 0) {
-    this.fnLogIf(id, text, level)
-  }
-
-  private static fnLogIf(id: string, text: string, level: number = 0) {
-    if (VNCZ_ENABLED) {
-      console.log(`${_.repeat(VNCZ_PAD, level)} ${VNCZ_PREFIX} ${text} id-${id} [${Date.now()}]`)
-    }
-  }
-
   /**
    * *накопитель
    */
   static cwrcStore: CwrcGroupOrLogElem[] = []
 
-  static cwrcGroupAdd(groupIdParent: CwrcGroupId | null, groupId: CwrcGroupId, name?: CwrcGroupName) {
+  static cwrcGroupAdd(
+    groupIdParent: CwrcGroupId | null,
+    groupId: CwrcGroupId,
+    name?: CwrcGroupName,
+    callId?: CwrcCallId
+  ) {
     if (VNCZ_ENABLED && groupId) {
-      const groupNew = {[groupId]: {groupElems: [], groupName: name}} as CwrcGroup
+      const groupNew = {groupId: groupId, groupElems: [], callId} as CwrcGroup
       if (groupIdParent) {
-        const groupParent = Vncz.cwrcGroupFind(groupIdParent)
+        const groupParent = Vncz.cwrcGroupFind(groupIdParent, callId)
         if (groupParent) {
-          groupParent[groupIdParent].groupElems.push(groupNew)
+          groupParent.groupElems.push(groupNew)
         }
       } else {
         Vncz.cwrcStore.push(groupNew)
       }
+      Vncz.cwrcLog(groupNew.groupId, 'GROUP MSG: ' + name, callId)
     }
   }
 
-  static cwrcLog(groupId: CwrcGroupId, message: string) {
+  static cwrcLog(groupId: CwrcGroupId, message?: string, callId?: CwrcCallId) {
     if (VNCZ_ENABLED && groupId) {
-      const group = Vncz.cwrcGroupFind(groupId)
+      const group = Vncz.cwrcGroupFind(groupId, callId)
       if (group) {
-        group[groupId].groupElems.push({logElemMessage: message} as CwrcLogElem)
+        group.groupElems.push(message)
       }
     }
   }
@@ -80,14 +64,15 @@ export class Vncz {
   /**
    * Рекурсивно ищет cwrc-группу (1). Если находит, возвращает её, если нет - возвращает null
    * @param groupId (1) -- id cwrc-группы
+   * @param callId
    * @private
    */
-  private static cwrcGroupFind(groupId: CwrcGroupId): CwrcGroup | null {
-    const res = RsuvTuTree.findDeepBy(Vncz.cwrcStore, (key, value) => {
-      return key === groupId
+  private static cwrcGroupFind(groupId: CwrcGroupId, callId?: CwrcCallId): CwrcGroup | null {
+    const res = RsuvTuTree.findDeepByB(Vncz.cwrcStore, (key, value, parent) => {
+      return key === 'groupId' && value === groupId && (callId ? parent?.callId === callId : true)
     }, false)
     if (res?.length === 1) {
-      return res[0]
+      return res[0].parent
     }
     return null
   }
@@ -96,13 +81,14 @@ export class Vncz {
 
 type CwrcGroupId = string;
 type CwrcGroupName = string;
+type CwrcCallId = string;
 
-interface CwrcGroupR {
-  groupElems: CwrcGroupOrLogElem[]
-  groupName?: CwrcGroupName
+interface CwrcGroup {
+  groupId: CwrcGroupId
+  groupElems: any[]
+  callId?: CwrcCallId
 }
 
-type CwrcGroup = Record<CwrcGroupId, CwrcGroupR>
 
 interface CwrcLogElem {
   logElemMessage: string;
