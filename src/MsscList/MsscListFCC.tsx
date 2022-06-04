@@ -40,6 +40,7 @@ import { MsscTagGroupSelected } from './msscUtils/MsscTagGroupSelected';
 import { MsscColumnName } from './msscUtils/MsscColumnName';
 import { MsscListAreaHeight } from './msscUtils/MsscListAreaHeight';
 import { MsscEnListAreaHeightMode } from './msscUtils/MsscEnListAreaHeightMode';
+import { Vncz } from '../vncz-lib';
 
 let scrollTop = 0;
 
@@ -182,31 +183,44 @@ const MsscListFCC = ({
    */
   const requestFirst = async (source: MsscSource<any>) => {
 
+    Vncz.cwrcGroupAdd(null, '220604110751', 'requestFirst()')
     try {
       // --- общее кол-во элементов без учета фильтра
+      Vncz.cwrcLog('220604110751', `сбрасываем общее кол-во элементов`)
       $elemsCountAllSet(-1)
+      Vncz.cwrcGroupAdd('220604110751', '220604111335', `async - ищем сколько всего элементов`)
       source?.elemsCountByFilter([]).then((result) => {
+        Vncz.cwrcLog('220604111335', `найдено ${result.val}`)
         $elemsCountAllSet(result.val)
       }).catch((err) => {
+        Vncz.cwrcLog('220604111335', `ОШИБКА`)
         console.log('!!-!!-!! err {220130133850}\n', err)
       })
       // ---
       $loadingSet(true)
-      // --- получение общего количества элементов с учетом фильтра
+      // --- получение общего количества элементов с учетом фильтров
+      Vncz.cwrcLog('220604110751', `получение общего количества эементов с учётом фильтров`)
       const filters: MsscFilter[] = fnFiltersCreate(source);
+      Vncz.cwrcLog('220604110751', `подготовка фильтров - кол-во фильтров [${filters?.length}]`)
       let elemsCountByFilter: number = 0;
       if ($randomEnabled) {
+        Vncz.cwrcLog('220604110751', `1-2 рандом включен`)
         const sorts = fnSorts()
+        Vncz.cwrcGroupAdd('220604110751', '220604111712', `async - делаем запрос всех ids`)
         const ids = await source?.idsAll(filters, sorts) // AWAIT
+        Vncz.cwrcLog('220604111712', `найдено - ${ids?.length}`)
         if (ids) {
           elemsCountByFilter = ids.length
           const idsShuffled = _.shuffle(ids)
           $idsShuffledSet(idsShuffled)
         }
       } else {
-        const rr: RsuvTxNumIntAB = await source?.elemsCountByFilter(filters)
-        if (rr) {
-          elemsCountByFilter = rr.val;
+        Vncz.cwrcLog('220604110751', `2-2 random отключен`)
+        Vncz.cwrcGroupAdd('220604110751', '220604111932', `async - запрашиваем у *источника количество элементов с учётом фильтров`)
+        const elemsCount: RsuvTxNumIntAB = await source?.elemsCountByFilter(filters)
+        if (elemsCount) {
+          elemsCountByFilter = elemsCount.val;
+          Vncz.cwrcLog('220604111932', `2036-2 количество ${elemsCountByFilter}`)
         }
       }
       // --- получение тегов
@@ -784,9 +798,14 @@ const MsscListFCC = ({
     )
   }
 
+  const handleLogsShow = () => {
+    Vncz.cwrcStoreToConsole()
+  }
+
   // --- === ---
   return (
     <div className="mssc-base">
+      {Vncz.isEnabled() ? <button onClick={handleLogsShow}>logs show</button> : null}
       {$isError ? <div className="mssc-base__error">ошибка</div> : null}
 
       {source ? '' : (<div>MsscListFCC-info: source is empty</div>)}

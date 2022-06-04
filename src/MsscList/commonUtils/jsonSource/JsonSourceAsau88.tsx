@@ -56,11 +56,11 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
 
   /**
    * Преобразование (1) к формату MsscElem[]
-   * @param datas
+   * @param data
    * @private
    */
-  private elemsToMsscElems(datas: any[]): MsscElem[] {
-    return datas.map((el: any) => {
+  private elemsToMsscElems(data: any[]): MsscElem[] {
+    return data.map((el: any) => {
       const rr = this.thParams.elemJsx?.(el) || (<div>BR err [[220508132145]]</div>);
       return {id: el.id, elemModel: el, elem: rr} as MsscElem
     })
@@ -69,8 +69,8 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
   async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<MsscElem[]> {
     const {indexStart: {val: ixStart}, indexEnd: {val: ixEnd}} = indexDiap;
     if (filters.length < 1) {
-      const datas = await jsonServer?.elemsGet(ixStart, ixEnd - ixStart + 1);
-      return this.elemsToMsscElems(datas)
+      const data = await jsonServer?.elemsGet(ixStart, ixEnd - ixStart + 1);
+      return this.elemsToMsscElems(data)
     } else {
       const elemsAll = await jsonServer.elemsGetAll()
       if (elemsAll && elemsAll.length > 0) {
