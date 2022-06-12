@@ -30,17 +30,17 @@ import classNames from 'classnames';
 import BrMultiselect from './commonUI/BrMultiselect/BrMultiselect';
 import { MsscElem } from './msscUtils/MsscElem';
 import { MsscFilter } from './msscUtils/MsscFilter';
-import { SquareBrackets } from './msscUtils/msscUtils';
+import { fnFiltersCreate, SquareBrackets } from './msscUtils/msscUtils';
 import { MsscJsxExternal } from './msscUtils/MsscJsxExternal';
 import { MsscEnMenuAction } from './msscUtils/MsscEnMenuAction';
 import { MsscListProps } from './msscUtils/MsscListProps';
-import { MsscTagsID } from './msscUtils/MsscTagsID';
 import { MsscTagGroup } from './msscUtils/MsscTagGroup';
 import { MsscTagGroupSelected } from './msscUtils/MsscTagGroupSelected';
 import { MsscColumnName } from './msscUtils/MsscColumnName';
 import { MsscListAreaHeight } from './msscUtils/MsscListAreaHeight';
 import { MsscEnListAreaHeightMode } from './msscUtils/MsscEnListAreaHeightMode';
 import { Vncz } from '../vncz-lib';
+import { MsscTagsGroupID } from './msscUtils/MsscTagsGroupIdPMT';
 
 let scrollTop = 0;
 
@@ -54,7 +54,7 @@ const MsscListFCC = ({
                      }: MsscListProps
 ): JSX.Element => {
 
-  const config = {
+  const configSTA = {
     // записей на странице
     elemsOnPage: 10
   }
@@ -84,13 +84,13 @@ const MsscListFCC = ({
   // общее количество элементов хранилища по фильтру
   const [$elemsCountByFilter, $elemsCountByFilterSet] = useState(0);
   // сколько отображается элементов сейчас на текущей странице
-  const [$elemsOnCurrPage, $elemsOnCurrPageSet] = useState(0);
+  const [$elemsCountOnCurrPage, $elemsCountOnCurrPageSet] = useState(0);
   // для показа спиннера при первоначальной загрузке
-  const [$loading, $loadingSet] = useState(false);
+  const [$loadingInitial, $loadingInitialSet] = useState(false);
   // для показа спиннера при запросе данных страницы (пагинация страниц)
-  const [$loadingB, $loadingBSet] = useState(false);
+  const [$loadingPage, $loadingPageSet] = useState(false);
   // показ спиннера для диалогов
-  const [$loadingAtDialog, $loadingAtDialogSet] = useState(false);
+  const [$loadingDialog, $loadingDialogSet] = useState(false);
   // для того чтобы содержимое второго useEffect отрабатывало строго после содержимого первого
   const [$fdone, $fdoneSet] = useState(false);
   // для инициации полного перезапроса данных, например после удаления/добавления элемента(ов)
@@ -115,6 +115,7 @@ const MsscListFCC = ({
   const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectId | undefined>(sortData?.selectedId);
   const [$searchText, $searchTextSet] = useState('');
   const [$randomEnabled, $randomEnabledSet] = useState(false);
+  // ids элементов в случайном порядке
   const [$idsShuffled, $idsShuffledSet] = useState<string[]>([]);
   // --- теги (мультивыбор)
   // все *группы-тегов
@@ -143,23 +144,7 @@ const MsscListFCC = ({
     }, 2000);
   }
 
-  function fnFiltersCreate(source: MsscSource<any>): MsscFilter[] {
-    let filterTags: MsscFilter[] = []
-    if (!_.isEmpty(tagsFieldNameArr)) {
-      $tagGroupSelectedArr.map((elTagGroup: MsscTagGroupSelected) => {
-        const tags = elTagGroup.elems.map((el: RsuvTxChecked) => {
-          return el.id
-        })
-        const filters: MsscFilter[] = source?.filterFromTags(tags, elTagGroup.id) || []
-        filterTags.push(...filters)
-      })
-    }
-    const filterSearchText = source?.filterFromSearchText($searchText) || []
-    // ---
-    return [...filterTags, ...filterSearchText];
-  }
-
-  function fnSorts() {
+  function fnSorts(): RsuvTxSort[] {
     function fnRsuvTxSort(sortItem: BrSelectItem<string>) {
       if (!sortItem.payload) {
         return null;
@@ -180,6 +165,10 @@ const MsscListFCC = ({
     return rsuvTxSort0 ? [rsuvTxSort0] : [];
   }
 
+  // function useSome(){
+  //
+  // }
+
   /**
    * получение всех основных данных
    * @param source
@@ -191,7 +180,7 @@ const MsscListFCC = ({
       // --- общее кол-во элементов без учета фильтра
       Vncz.cwrcLog('220604110751', `сбрасываем общее кол-во элементов`, vnczCallId)
       $elemsCountAllSet(-1)
-      Vncz.cwrcGroupAdd('220604110751', '220604111335', `async - ищем сколько всего элементов`, vnczCallId)
+      Vncz.cwrcGroupAdd('220604110751', '220604111335', `async - получаем из source сколько всего элементов (без учёта фильтров)`, vnczCallId)
       source?.elemsCountByFilter([]).then((result) => {
         Vncz.cwrcLog('220604111335', `найдено ${result.val}`, vnczCallId)
         $elemsCountAllSet(result.val)
@@ -200,9 +189,9 @@ const MsscListFCC = ({
         console.log('!!-!!-!! err {220130133850}\n', err)
       })
       // ---
-      $loadingSet(true)
+      $loadingInitialSet(true)
       // --- получение общего количества элементов с учетом фильтров
-      const filters: MsscFilter[] = fnFiltersCreate(source);
+      const filters: MsscFilter[] = fnFiltersCreate(source, $tagGroupSelectedArr, $searchText, tagsFieldNameArr);
       Vncz.cwrcLog('220604110751', `кол-во элементов с учётом фильтров [${filters?.length}]`, vnczCallId)
       let elemsCountByFilter: number = 0;
       if ($randomEnabled) {
@@ -255,7 +244,7 @@ const MsscListFCC = ({
         Vncz.cwrcLog('220604110751', `2-2 нет метаинформации о тегах`, vnczCallId)
       }
       // --- pagination - pageCountAll
-      const pagination = new RsuvPaginationGyth(elemsCountByFilter, config.elemsOnPage)
+      const pagination = new RsuvPaginationGyth(elemsCountByFilter, configSTA.elemsOnPage)
       Vncz.cwrcLog('220604110751', `пагинация`, vnczCallId)
       // ---
       $pageCountAllSet(pagination.pageCount)
@@ -264,7 +253,7 @@ const MsscListFCC = ({
       console.log('!!-!!-!! err {220119120755}\n', err)
       fnError()
     } finally {
-      $loadingSet(false)
+      $loadingInitialSet(false)
     }
   };
 
@@ -275,10 +264,10 @@ const MsscListFCC = ({
   const requestTwo = async (source: MsscSource<any>) => {
     Vncz.cwrcGroupAdd('220604154320', '220604160304', 'requestTwo()', vnczCallId)
     try {
-      $loadingBSet(true)
+      $loadingPageSet(true)
       // await fnWait(3000)
       // --- pagination - ixStart, ixEnd
-      const pagination = new RsuvPaginationGyth($elemsCountByFilter, config.elemsOnPage)
+      const pagination = new RsuvPaginationGyth($elemsCountByFilter, configSTA.elemsOnPage)
       if ($pageNumCurrent > pagination.pageCount) {
         // если в результате удаления элементов, страниц стало меньше чем было раньше
         $pageNumCurrentSet(pagination.pageCount)
@@ -288,9 +277,9 @@ const MsscListFCC = ({
       const ixEnd = indexes.indexLast
       // --- --- получение элементов из source
       // --- сортировка
-      const sorts = fnSorts();
+      const sorts: RsuvTxSort[] = fnSorts();
       // --- filters
-      const filter0 = fnFiltersCreate(source);
+      const filter0 = fnFiltersCreate(source, $tagGroupSelectedArr, $searchText, tagsFieldNameArr);
       // ---
       let elemsResult: MsscElem[]
       if (!$randomEnabled) {
@@ -304,7 +293,7 @@ const MsscListFCC = ({
         elemsResult = (await source?.elemsById(idObjs)) || []
       }
       // --- ---
-      $elemsOnCurrPageSet(elemsResult.length)
+      $elemsCountOnCurrPageSet(elemsResult.length)
       // ---
       $elemsSet(elemsResult)
     } catch (err) {
@@ -313,7 +302,7 @@ const MsscListFCC = ({
       $pageNumCurrentSet($pageNumBeforChange)
       fnError()
     } finally {
-      $loadingBSet(false)
+      $loadingPageSet(false)
     }
   }
 
@@ -374,7 +363,7 @@ const MsscListFCC = ({
     ok: async (model: any) => {
       let success = false;
       try {
-        $loadingAtDialogSet(true)
+        $loadingDialogSet(true)
         if (!model.id) {
           // ^ создание нового элемента
           const result = await source?.elemsAdd([model])
@@ -403,7 +392,7 @@ const MsscListFCC = ({
       } catch (err) {
         console.log('!!-!!-!! err {220126221404}\n', err)
       } finally {
-        $loadingAtDialogSet(false)
+        $loadingDialogSet(false)
         scrollFixFn(false)
         if (success) {
           $dialogCreateEditShowedSet(false)
@@ -598,7 +587,7 @@ const MsscListFCC = ({
           pageCurrNum={$pageNumCurrent}
           pageAllCountNum={$pageCountAll}
           cbChange={fnPaginationHandle}
-          disabled={$loadingB}
+          disabled={$loadingPage}
         />
       </div>
     )
@@ -686,7 +675,7 @@ const MsscListFCC = ({
         if ($listModel.selectElemsCount() > 0) {
           const ids: MsscIdObject[] = $listModel.selectElems().map(el => ({id: el}))
           try {
-            $loadingAtDialogSet(true)
+            $loadingDialogSet(true)
             const noDeletedElems = await source?.elemsDelete(ids)
             if (noDeletedElems) {
               if (noDeletedElems.length === 0) {
@@ -702,7 +691,7 @@ const MsscListFCC = ({
           } catch (err) {
             console.log('!!-!!-!! err {220128215806}\n', err)
           } finally {
-            $loadingAtDialogSet(false)
+            $loadingDialogSet(false)
           }
         }
       }
@@ -722,7 +711,7 @@ const MsscListFCC = ({
   function InfosLocalFCC_B() {
     return (
       <div className="mssc-infos-b">
-        <ParamUiLocalFCC_B str1="элементов на текущ. странице" str2={$elemsOnCurrPage}/>
+        <ParamUiLocalFCC_B str1="элементов на текущ. странице" str2={$elemsCountOnCurrPage}/>
         <span className="mssc-infos-b__divider">/</span>
         <ParamUiLocalFCC_B str1="элементов всего по фильтру" str2={$elemsCountByFilter}/>
         <span className="mssc-infos-b__divider">/</span>
@@ -761,7 +750,7 @@ const MsscListFCC = ({
         style={Object.assign({}, {position: 'relative'}, listAreaHeightCssObj)}
         onScroll={onScrollHandler}
       >
-        <BrSpinner show={$loadingB} fullscreen={false}/>
+        <BrSpinner show={$loadingPage} fullscreen={false}/>
         {
           $elems.map((elObj: MsscElem) => {
             return (<ListElemLocalFCC key={elObj.id.val} elem={elObj}/>)
@@ -771,27 +760,28 @@ const MsscListFCC = ({
     )
   }
 
-  function MultiselectLocalFCC({tagsId}: { tagsId: MsscTagsID }) {
+  function MultiselectLocalFCC({tagsGroupId}: { tagsGroupId: MsscTagsGroupID }) {
 
     /**
+     * Обработчик выбора тега
      * [[220211130543]]
      * @param checkedElems
      */
     const onChangeHandle = (checkedElems: RsuvTxChecked[]) => {
       const tagGroups = _.cloneDeep($tagGroupSelectedArr)
-      const group = tagGroups.find((el: MsscTagGroupSelected) => el.id === tagsId)
+      const group = tagGroups.find((el: MsscTagGroupSelected) => el.id === tagsGroupId)
       if (group) {
         group.elems = checkedElems;
       } else {
-        const newGroup = {id: tagsId, elems: checkedElems} as MsscTagGroupSelected
+        const newGroup = {id: tagsGroupId, elems: checkedElems} as MsscTagGroupSelected
         tagGroups.push(newGroup)
       }
       $tagGroupSelectedArrSet(tagGroups)
       refreshes.whole()
     }
 
-    const rr: MsscTagGroup | undefined = $tagGroupArr.find((ell: MsscTagGroup) => ell.id === tagsId)
-    const tagGroup = $tagGroupSelectedArr.find(el => el.id === tagsId)
+    const rr: MsscTagGroup | undefined = $tagGroupArr.find((ell: MsscTagGroup) => ell.id === tagsGroupId)
+    const tagGroup = $tagGroupSelectedArr.find(el => el.id === tagsGroupId)
     rr?.elems.forEach((el: RsuvTxChecked) => {
       const b1 = tagGroup?.elems.find(el0 => el0.id === el.id)
       if (b1) {
@@ -819,7 +809,7 @@ const MsscListFCC = ({
       {source ? '' : (<div>MsscListFCC-info: source is empty</div>)}
 
       {
-        !$loading && children?.({
+        !$loadingInitial && children?.({
           infosJsx: <InfosLocalFCC_B/>,
           paginator1Jsx: <PaginatorLocalFCC/>,
           paginator2Jsx: <PaginatorLocalFCC/>,
@@ -832,7 +822,7 @@ const MsscListFCC = ({
           sortJsx: <SortLocalFCC/>,
           searchJsx: <SearchLocalFCC/>,
           listJsx: <ListLocalFCC/>,
-          multiselectJsxArr: tagsFieldNameArr?.map(el => (<MultiselectLocalFCC tagsId={el.id}/>))
+          multiselectJsxArr: tagsFieldNameArr?.map(el => (<MultiselectLocalFCC tagsGroupId={el.id}/>))
         } as MsscJsxExternal)
       }
 
@@ -841,7 +831,7 @@ const MsscListFCC = ({
       {/* ^^dialog create/edit ^^ */}
       {$dialogCreateEditShowed && $dialogCreateEditJsx}
       {/* spinner */}
-      <BrSpinner show={$loading || $loadingAtDialog}/>
+      <BrSpinner show={$loadingInitial || $loadingDialog}/>
     </div>
   )
 }

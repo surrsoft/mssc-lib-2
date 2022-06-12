@@ -1,7 +1,7 @@
-import { MsscTagsID } from './MsscTagsID';
+import { MsscTagsGroupID } from './MsscTagsGroupID';
 
 export type MsscMultFields = {
-  id: MsscTagsID
+  id: MsscTagsGroupID
   fieldName: string
   visibleName: string
 }

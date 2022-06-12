@@ -1,4 +1,4 @@
 /**
  * идентификатор группы тегов
  */
-export type MsscTagsID = string
+export type MsscTagsGroupID = string

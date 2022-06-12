@@ -1,11 +1,11 @@
-import { MsscTagsID } from './MsscTagsID';
+import { MsscTagsGroupID } from './MsscTagsGroupID';
 import { RsuvTxChecked } from 'rsuv-lib';
 
 /**
  * Представляет *группу-тегов выбранных
  */
 export type MsscTagGroupSelected = {
-  id: MsscTagsID
+  id: MsscTagsGroupID
   /**
    * сами теги
    */
