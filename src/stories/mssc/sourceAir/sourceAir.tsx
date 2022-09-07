@@ -7,8 +7,8 @@ import { AirSource} from '../../../MsscList/commonUtils/airSource/AirSource';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup'
 import { AirSourceParams } from '../../../MsscList/commonUtils/airSource/AirSourceParams';
-import { MsscFilter } from '../../../MsscList/msscUtils/MsscFilter';
 import { RsuvTxStringAC } from 'rsuv-lib';
+import { MsscFilterType } from '../../../MsscList/types/types';
 
 const airSourceParams = {
   dbKey: 'appZoHaX4a5tRLJlv', // mssc-training-3
@@ -122,25 +122,25 @@ const airSourceParams = {
       </div>
     )
   },
-  cbFilterFromSearchText: (searchText: string): MsscFilter[] | null => {
+  cbFilterFromSearchText: (searchText: string): MsscFilterType[] | null => {
     if (searchText) {
       const fieldNameTitle = new RsuvTxStringAC(EnAirField.TITLE)
       const fieldNameComm = new RsuvTxStringAC(EnAirField.COMM)
       const fieldNameUrl = new RsuvTxStringAC(EnAirField.URL)
       return [
-        {paramId: fieldNameTitle, filterValue: searchText} as MsscFilter,
-        {paramId: fieldNameComm, filterValue: searchText} as MsscFilter,
-        {paramId: fieldNameUrl, filterValue: searchText} as MsscFilter,
+        {paramId: fieldNameTitle, filterValue: searchText} as MsscFilterType,
+        {paramId: fieldNameComm, filterValue: searchText} as MsscFilterType,
+        {paramId: fieldNameUrl, filterValue: searchText} as MsscFilterType,
       ];
     }
     return null
   },
-  cbFilterFromTags: (tags: string[], fieldName: string): MsscFilter[] | null => {
+  cbFilterFromTags: (tags: string[], fieldName: string): MsscFilterType[] | null => {
     if (tags && tags.length > 0) {
-      const filters: MsscFilter[] = []
+      const filters: MsscFilterType[] = []
       tags.map(elTag => {
         const fieldNameTags = new RsuvTxStringAC(fieldName)
-        const filter = {paramId: fieldNameTags, filterValue: elTag, isArrElemFind: true} as MsscFilter
+        const filter = {paramId: fieldNameTags, filterValue: elTag, isArrElemFind: true} as MsscFilterType
         filters.push(filter)
       })
       return filters;

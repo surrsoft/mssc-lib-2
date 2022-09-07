@@ -49,7 +49,7 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "^7.0.2",
-    "rsuv-lib": "^2.25.0",
+    "rsuv-lib": "^2.26.0",
     "sass": "^1.51.0",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",

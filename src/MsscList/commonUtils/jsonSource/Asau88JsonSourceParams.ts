@@ -2,7 +2,7 @@
  * URL-адрес *эндпоинта
  * Например: http://localhost:22121/
  */
-import { MsscCommonSourceParams } from '../../msscUtils/MsscCommonSourceParams';
+import { MsscCommonSourceParamsType } from '../../types/types';
 
 type Asau88EndpointUrl = string;
 /**
@@ -10,7 +10,7 @@ type Asau88EndpointUrl = string;
  */
 type Asau88FieldPath = string;
 
-export class Asau88JsonSourceParams<T> extends MsscCommonSourceParams<T> {
+export class Asau88JsonSourceParams<T> extends MsscCommonSourceParamsType<T> {
   endpointUrl: Asau88EndpointUrl = '';
   fieldPath: Asau88FieldPath = '';
 }

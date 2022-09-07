@@ -1,13 +1,13 @@
-import { MsscEnListAreaHeightMode } from './MsscEnListAreaHeightMode';
+import { MsscEnListAreaHeightModeEnum } from './types/types';
 
 /**
  * Сущность определяющая высоту области прокрутки списка
  */
-export class MsscListAreaHeight {
+export class MsscListAreaHeightCls {
   /**
-   * режим, см. {@link MsscEnListAreaHeightMode}
+   * режим, см. {@link MsscEnListAreaHeightModeEnum}
    */
-  public mode: MsscEnListAreaHeightMode = MsscEnListAreaHeightMode.STICKY_DOWN
+  public mode: MsscEnListAreaHeightModeEnum = MsscEnListAreaHeightModeEnum.STICKY_DOWN
   /**
    * Размер в пикселях. Как используется, зависит от режима {@link mode}
    */

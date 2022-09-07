@@ -1,4 +1,4 @@
-import { MsscIdObject, MsscSource } from '../../msscUtils/MsscSource';
+import { MsscSourceType } from '../../types/MsscSourceType';
 import {
   HoggConnectorAirtable,
   HoggConnectorNT,
@@ -19,19 +19,17 @@ import {
   RsuvTxSort,
   RsuvTxStringAB
 } from 'rsuv-lib';
-import { MsscFilter } from '../../msscUtils/MsscFilter';
-import { MsscElem } from '../../msscUtils/MsscElem';
 import _ from 'lodash';
 import { PElemAsau66, RsuvAsau67 } from 'rsuv-lib/dist/RsuvTuPromiseAllSettled';
-import { MsscTag } from '../../msscUtils/MsscTag';
 import React from 'react';
 import { AirSourceParams } from './AirSourceParams';
+import { MsscElemType, MsscFilterType, MsscIdObjectType, MsscTagType } from '../../types/types';
 
 type Ty2130 = { index: number, tuple: HoggTupleNT }
 
 type Ty2214 = { field: string; direction: "desc" | "asc" }
 
-function msscFiltersToVuscFilter(filters: MsscFilter[]) {
+function msscFiltersToVuscFilter(filters: MsscFilterType[]) {
   if (filters && filters.length > 0) {
     const rrTags: string[] = []
     const rr0 = filters.reduce<string[]>((acc, elFilter) => {
@@ -63,9 +61,9 @@ function msscFiltersToVuscFilter(filters: MsscFilter[]) {
 }
 
 /**
- * Имплементация {@link MsscSource} для источника "airtable.com"
+ * Имплементация {@link MsscSourceType} для источника "airtable.com"
  */
-export class AirSource<T> implements MsscSource<T> {
+export class AirSource<T> implements MsscSourceType<T> {
 
   private connector: HoggConnectorNT;
   private readonly thParams: AirSourceParams<T>
@@ -94,7 +92,7 @@ export class AirSource<T> implements MsscSource<T> {
    * @param sorts
    * @private
    */
-  private fnFilterAndSort(filters: MsscFilter[], sorts: RsuvTxSort[]) {
+  private fnFilterAndSort(filters: MsscFilterType[], sorts: RsuvTxSort[]) {
     const filterVusc = msscFiltersToVuscFilter(filters)
     let sortArrObj: Array<Ty2214> = []
     if (sorts.length > 0) {
@@ -106,7 +104,7 @@ export class AirSource<T> implements MsscSource<T> {
     return {filterVusc, sortArrObj};
   }
 
-  async idsAll(filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<string[]> {
+  async idsAll(filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
     // ---
     let {filterVusc, sortArrObj} = this.fnFilterAndSort(filters, sorts);
     // ---
@@ -128,7 +126,7 @@ export class AirSource<T> implements MsscSource<T> {
     return Promise.resolve([]);
   }
 
-  async elemsById(ids: MsscIdObject[]): Promise<MsscElem[]> {
+  async elemsById(ids: MsscIdObjectType[]): Promise<MsscElemType[]> {
     const promises = ids.map(elId => {
       return this.connector.queryOneById(elId.id)
     })
@@ -144,7 +142,7 @@ export class AirSource<T> implements MsscSource<T> {
     return Promise.resolve([]);
   }
 
-  async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<MsscElem[]> {
+  async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<MsscElemType[]> {
     let {filterVusc, sortArrObj} = this.fnFilterAndSort(filters, sorts);
     // ---
     const indexStart = indexDiap.indexStart.val;
@@ -171,7 +169,7 @@ export class AirSource<T> implements MsscSource<T> {
         id: new RsuvTxStringAB(elObj.tid),
         elem: this.thParams?.elemJsx ? this.thParams.elemJsx(elObj) : (<div>{elObj.id} warn-[[220503114824]]</div>),
         elemModel: elObj
-      } as MsscElem
+      } as MsscElemType
     });
   }
 
@@ -205,7 +203,7 @@ export class AirSource<T> implements MsscSource<T> {
     return Promise.reject(new Error(createResult.errCode + ' : ' + createResult.errMessage));
   }
 
-  async elemsCountByFilter(filters: MsscFilter[]): Promise<RsuvTxNumIntAB> {
+  async elemsCountByFilter(filters: MsscFilterType[]): Promise<RsuvTxNumIntAB> {
     let vuscFilter: string = '';
     if (filters.length > 0) {
       vuscFilter = msscFiltersToVuscFilter(filters);
@@ -215,7 +213,7 @@ export class AirSource<T> implements MsscSource<T> {
     return new RsuvTxNumIntAB(count)
   }
 
-  async elemsDelete(elems: MsscIdObject[]): Promise<MsscIdObject[]> {
+  async elemsDelete(elems: MsscIdObjectType[]): Promise<MsscIdObjectType[]> {
     const promises = elems.map((el: any) => {
       return this.connector.delete([el.id || ''])
     })
@@ -273,14 +271,14 @@ export class AirSource<T> implements MsscSource<T> {
     return null;
   }
 
-  filterFromSearchText(searchText: string): MsscFilter[] | null {
+  filterFromSearchText(searchText: string): MsscFilterType[] | null {
     if (searchText) {
       return this.thParams.cbFilterFromSearchText?.(searchText) || null
     }
     return null
   }
 
-  filterFromTags(tags: string[], fieldName: string): MsscFilter[] | null {
+  filterFromTags(tags: string[], fieldName: string): MsscFilterType[] | null {
     if (tags && tags.length > 0) {
       return this.thParams.cbFilterFromTags?.(tags, fieldName) || null
     }
@@ -288,7 +286,7 @@ export class AirSource<T> implements MsscSource<T> {
   }
 
 
-  async tags(filters: MsscFilter[], fieldName: string): Promise<MsscTag[]> {
+  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagType[]> {
     let {filterVusc} = this.fnFilterAndSort(filters, []);
     // ---
     const hoggOffset = new HoggOffsetCount(true);
@@ -299,7 +297,7 @@ export class AirSource<T> implements MsscSource<T> {
     // ---
     if (queryResult && queryResult.length > 0) {
       return queryResult.map(el => {
-        return new MsscTag(el.value, el.ids.length)
+        return new MsscTagType(el.value, el.ids.length)
       })
     }
     return [];

@@ -7,11 +7,11 @@ import { airSource } from './sourceAir/sourceAir';
 import { listStructBuilder } from './listStructBuilder/listStructBuilder';
 import { elemStructBuilder } from './elemStructBuilder';
 import { sortDataSTA } from './sort';
-import { MsscListAreaHeight } from '../../MsscList/msscUtils/MsscListAreaHeight';
-import { MsscEnListAreaHeightMode } from '../../MsscList/msscUtils/MsscEnListAreaHeightMode';
 import { airTagsFieldNameArr } from './sourceAir/airTagsFieldNameArr';
 import { jsonSource } from './sourceJson/jsonSource';
 import { jsonTagsFieldNameArr } from './sourceJson/jsonTagsFieldNameArr';
+import { MsscEnListAreaHeightModeEnum } from '../../MsscList/types/types';
+import { MsscListAreaHeightCls } from '../../MsscList/classes';
 
 //👇 Этот экспорт по умолчанию определяет, куда попадет ваша история в списке историй
 export default {
@@ -34,7 +34,7 @@ StoryAirSource.args = {
   children: listStructBuilder,
   sortData: sortDataSTA,
   tagsFieldNameArr: airTagsFieldNameArr,
-  listAreaHeight: {mode: MsscEnListAreaHeightMode.STICKY_DOWN, value: 150} as MsscListAreaHeight
+  listAreaHeight: {mode: MsscEnListAreaHeightModeEnum.STICKY_DOWN, value: 150} as MsscListAreaHeightCls
 };
 
 export const StoryArraySource = Template.bind({});
@@ -45,5 +45,5 @@ StoryArraySource.args = {
   children: listStructBuilder,
   sortData: sortDataSTA,
   tagsFieldNameArr: jsonTagsFieldNameArr,
-  listAreaHeight: {mode: MsscEnListAreaHeightMode.STICKY_DOWN, value: 150} as MsscListAreaHeight
+  listAreaHeight: {mode: MsscEnListAreaHeightModeEnum.STICKY_DOWN, value: 150} as MsscListAreaHeightCls
 };

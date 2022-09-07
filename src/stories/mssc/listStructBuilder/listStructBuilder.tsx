@@ -1,6 +1,6 @@
 import React from 'react';
 import './listStructBuilder-styles.scss';
-import { MsscJsxExternal } from '../../../MsscList/msscUtils/MsscJsxExternal';
+import { MsscJsxExternalType } from '../../../MsscList/types/types';
 
 export const listStructBuilder = ({
                      infosJsx,
@@ -11,7 +11,7 @@ export const listStructBuilder = ({
                      buttonsJsx,
                      listJsx,
                      multiselectJsxArr
-                   }: MsscJsxExternal) => {
+                   }: MsscJsxExternalType) => {
   return (
     <>
       <div className="blk0921-pagination">

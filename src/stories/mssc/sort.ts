@@ -1,7 +1,7 @@
 import { RsuvEnSort } from 'rsuv-lib';
 import { EnAirField } from './sourceAir/EnAirField';
-import { BrSelectSortData } from '../../MsscList/commonUI/BrSelect/brSelectUtils';
-import { MsscColumnName } from '../../MsscList/msscUtils/MsscColumnName';
+import { BrSelectSortData } from '../../MsscList/commonUI/BrSelect/types';
+import { MsscColumnNameType } from '../../MsscList/types/types';
 
 export const sortDataSTA = {
   selectedId: 'date-create_desc',
@@ -34,4 +34,4 @@ export const sortDataSTA = {
       payload: EnAirField.TIME_LAST_MODIFIED
     },
   ]
-} as BrSelectSortData<MsscColumnName>
+} as BrSelectSortData<MsscColumnNameType>

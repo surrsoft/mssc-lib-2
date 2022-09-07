@@ -1,5 +1,5 @@
 import React from 'react';
-import { MsscIdObject, MsscSource } from '../../msscUtils/MsscSource';
+import { MsscSourceType } from '../../types/MsscSourceType';
 import {
   RsuvEnResultCrudSet,
   RsuvResultBoolPknz,
@@ -12,13 +12,11 @@ import {
   RsuvTxNumIntDiap,
   RsuvTxSort
 } from 'rsuv-lib';
-import { MsscFilter } from '../../msscUtils/MsscFilter';
-import { MsscElem } from '../../msscUtils/MsscElem';
-import { MsscTag } from '../../msscUtils/MsscTag';
 import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
 import _ from 'lodash';
 import fp from 'lodash/fp';
 import { RsuvAsau89 } from 'rsuv-lib/src/RsuvTuTree';
+import { MsscElemType, MsscFilterType, MsscIdObjectType, MsscTagType } from '../../types/types';
 
 /*
 ПОНЯТИЯ:
@@ -36,7 +34,7 @@ class Cls1941 {
   }
 }
 
-export class JsonSourceAsau88<T> implements MsscSource<T> {
+export class JsonSourceAsau88<T> implements MsscSourceType<T> {
   private thParams: Asau88JsonSourceParams<any>;
 
   constructor(params: Asau88JsonSourceParams<any>) {
@@ -59,14 +57,14 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
    * @param data
    * @private
    */
-  private elemsToMsscElems(data: any[]): MsscElem[] {
+  private elemsToMsscElems(data: any[]): MsscElemType[] {
     return data.map((el: any) => {
       const rr = this.thParams.elemJsx?.(el) || (<div>BR err [[220508132145]]</div>);
-      return {id: el.id, elemModel: el, elem: rr} as MsscElem
+      return {id: el.id, elemModel: el, elem: rr} as MsscElemType
     })
   }
 
-  async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<MsscElem[]> {
+  async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<MsscElemType[]> {
     const {indexStart: {val: ixStart}, indexEnd: {val: ixEnd}} = indexDiap;
     if (filters.length < 1) {
       const data = await jsonServer?.elemsGet(ixStart, ixEnd - ixStart + 1);
@@ -94,7 +92,7 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
    * @param filters (2) -- фильтры. Если пустой массив, возвращает элементы из (1) в виде нового массива
    * @private
    */
-  private elemsFiltered(elemsAll: any[], filters: MsscFilter[]) {
+  private elemsFiltered(elemsAll: any[], filters: MsscFilterType[]) {
     if (filters.length < 1) {
       return [...elemsAll]
     }
@@ -115,7 +113,7 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
       // здесь будет TRUE если элемент соответствует хотя бы одному из фильтров filtersByOne
       const isFindedByString = fp.anyPass([
         fp.isEmpty,
-        fp.some((elFilter: MsscFilter) => {
+        fp.some((elFilter: MsscFilterType) => {
           if (elFilter.filterValue) {
             const val = _.get(elElem, elFilter.paramIdB || '')
             if (_.isString(val)) {
@@ -150,11 +148,18 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
     return Promise.resolve([]); // TODO
   }
 
-  elemsById(ids: MsscIdObject[]): Promise<MsscElem[]> {
-    return Promise.resolve([]); // TODO
+  async elemsById(ids: MsscIdObjectType[]): Promise<MsscElemType[]> {
+    const elemsAll = await jsonServer?.elemsGetAll()
+    let ret = []
+    if (elemsAll && elemsAll.length > 0) {
+      ret = elemsAll.filter((el: any) => {
+        return ids.some(el2 => el2.id === el.id)
+      })
+    }
+    return this.elemsToMsscElems(ret)
   }
 
-  async elemsCountByFilter(filters: MsscFilter[]): Promise<RsuvTxNumIntAB> {
+  async elemsCountByFilter(filters: MsscFilterType[]): Promise<RsuvTxNumIntAB> {
     if (filters.length < 1) {
       const count = await jsonServer?.elemsCountGetAll()
       return new RsuvTxNumIntAB(count || 0);
@@ -165,7 +170,10 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
     }
   }
 
-  elemsDelete(elems: MsscIdObject[]): Promise<MsscIdObject[]> {
+  async elemsDelete(elems: MsscIdObjectType[]): Promise<MsscIdObjectType[]> {
+    const ids = elems.map(el => el.id)
+    const results = await jsonServer.elemsDeleteB(ids) // g8g
+
     return Promise.resolve([]); // TODO
   }
 
@@ -177,36 +185,49 @@ export class JsonSourceAsau88<T> implements MsscSource<T> {
     return Promise.resolve([]); // TODO
   }
 
-  filterFromSearchText(searchText: string): MsscFilter[] | null {
+  filterFromSearchText(searchText: string): MsscFilterType[] | null {
     if (searchText) {
       return this.thParams.cbFilterFromSearchText?.(searchText) || null
     }
     return null
   }
 
-  filterFromTags(tags: string[], fieldName: string): MsscFilter[] | null {
+  filterFromTags(tags: string[], fieldName: string): MsscFilterType[] | null {
     if (tags && tags.length > 0) {
       return this.thParams.cbFilterFromTags?.(tags, fieldName) || null
     }
     return null;
   }
 
-  idsAll(filters: MsscFilter[], sorts: RsuvTxSort[]): Promise<string[]> {
-    return Promise.resolve([]); // TODO
+  /**
+   *
+   * @param filters
+   * @param sorts -- не реализовано
+   */
+  async idsAll(filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
+    let retIds = []
+    const elemsAll = await jsonServer.elemsGetAll()
+    if (elemsAll && elemsAll.length > 0) {
+      // --- elemsFilteredAll - все элементы хранилища соответствующие фильтрам 'filters'
+      const elemsFilteredAll = this.elemsFiltered(elemsAll, filters);
+      // ---
+      retIds = elemsFilteredAll.map(el => el.id);
+    }
+    return retIds;
   }
 
-  async tags(filters: MsscFilter[], fieldName: string): Promise<MsscTag[]> {
+  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagType[]> {
     const elems = await Cls1941.elemsAll(jsonServer)
     const elemsFiltered = this.elemsFiltered(elems, filters)
     // ---
     const tibo: RsuvResultTibo<RsuvAsau89[]> = RsuvTuTree.accum(elemsFiltered, fieldName, 'id', true)
-    const msscTags: MsscTag[] = []
+    const msscTags: MsscTagType[] = []
     if (tibo.success) {
       const elems: RsuvAsau89[] | undefined = tibo.value
       elems!.forEach(el1 => {
         const val = el1.value;
         const count = el1.ids.length;
-        const msscTag = {value: val, count} as MsscTag;
+        const msscTag = {value: val, count} as MsscTagType;
         msscTags.push(msscTag)
       })
     }

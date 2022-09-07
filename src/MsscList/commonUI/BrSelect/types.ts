@@ -23,5 +23,6 @@ export type BrSelectSortData<T> = {
    * id выбранного элемента. Это должен быть один из id присутствующих в items.idElem
    */
   selectedId?: BrSelectId
+  /** */
   items: Array<BrSelectItem<T>>
 }

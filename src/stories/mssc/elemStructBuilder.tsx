@@ -1,7 +1,7 @@
 import React from 'react';
-import { MsscElemStruct } from '../../MsscList/msscUtils/MsscElemStruct';
+import { MsscElemStructType } from '../../MsscList/types/types';
 
-export const elemStructBuilder = ({checkboxJsx, bodyJsx, menuJsx}: MsscElemStruct) => {
+export const elemStructBuilder = ({checkboxJsx, bodyJsx, menuJsx}: MsscElemStructType) => {
   return (
     <>
       {checkboxJsx}

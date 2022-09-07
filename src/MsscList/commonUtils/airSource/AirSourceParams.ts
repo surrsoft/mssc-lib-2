@@ -1,7 +1,6 @@
-import { MsscFilter } from '../../msscUtils/MsscFilter';
-import { MsscCommonSourceParams } from '../../msscUtils/MsscCommonSourceParams';
+import { MsscCommonSourceParamsType, MsscFilterType } from '../../types/types';
 
-export class AirSourceParams<T> extends MsscCommonSourceParams<T> {
+export class AirSourceParams<T> extends MsscCommonSourceParamsType<T> {
   /**
    * Ключ БД Airtable, например `appSoHaX1a5tRLJlv` (не путать с Airtable API key)
    */

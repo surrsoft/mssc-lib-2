@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrSelectId, BrSelectItem, BrSelectSortData } from './brSelectUtils';
+import { BrSelectId, BrSelectItem, BrSelectSortData } from './types';
 import { useState } from 'react';
 import './brSelect.scss';
 
