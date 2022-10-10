@@ -24,17 +24,10 @@ import SvgIconDice from './commonIcons/SvgIconDice/SvgIconDice';
 import MenuAsau54FCC, { DataAtAsau54, ItemAtAsau54, SelectResultAtAsau54 } from './commonUI/MenuFCC/MenuAsau54FCC';
 import BrInput, { BrInputEnIcon } from './commonUI/BrFilter/BrInput';
 import BrSpinner from './commonUI/BrSpinner/BrSpinner';
-import { BrSelectId, BrSelectItem, BrSelectSortData } from './commonUI/BrSelect/types';
+import { BrSelectIdType, BrSelectItemType, BrSelectSortDataType } from './commonUI/BrSelect/types';
 import BrSelect from './commonUI/BrSelect/BrSelect';
 import classNames from 'classnames';
 import BrMultiselect from './commonUI/BrMultiselect/BrMultiselect';
-import {
-  filtersCreate,
-  sortsCreate,
-  elemsCountByFilterAndIf,
-  SquareBrackets,
-  tagsCookAndSet
-} from './msscUtils/msscUtils';
 import {
   MsscColumnNameType,
   MsscElemType,
@@ -43,6 +36,10 @@ import {
   MsscMenuActionEnum, MsscTagGroupSelectedType, MsscTagGroupType, MsscTagsGroupIdType
 } from './types/types';
 import { MsscListAreaHeightCls } from './classes';
+import {filtersCreate} from "./msscUtils/filtersCreate";
+import {elemsCountByFilterAndIf} from "./msscUtils/elemsCountByFilterAndIf";
+import {tagsCookAndSet} from "./msscUtils/tagsCookAndSet";
+import {sortsCreate} from "./msscUtils/sortsCreate";
 
 let scrollTop = 0;
 
@@ -111,7 +108,7 @@ const MsscListFCC = ({
   const [$refresh, $refreshSet] = useState(false);
   // ---
   // id выбранной в настоящее время сортировки
-  const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectId | undefined>(sortData?.selectedId);
+  const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(sortData?.selectedId);
   const [$searchText, $searchTextSet] = useState('');
   const [$randomEnabled, $randomEnabledSet] = useState(false);
   // ids элементов в случайном порядке
@@ -511,7 +508,7 @@ const MsscListFCC = ({
      * [[220129163836]]
      * @param sortItem
      */
-    const sortHandler = (sortItem: BrSelectItem<MsscColumnNameType>) => {
+    const sortHandler = (sortItem: BrSelectItemType<MsscColumnNameType>) => {
       $sortIdCurrSet(sortItem.idElem)
       refreshes.whole()
     }

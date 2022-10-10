@@ -1,6 +1,6 @@
 import { RsuvEnSort } from 'rsuv-lib';
 import { EnAirField } from './sourceAir/EnAirField';
-import { BrSelectSortData } from '../../MsscList/commonUI/BrSelect/types';
+import { BrSelectSortDataType } from '../../MsscList/commonUI/BrSelect/types';
 import { MsscColumnNameType } from '../../MsscList/types/types';
 
 export const sortDataSTA = {
@@ -34,4 +34,4 @@ export const sortDataSTA = {
       payload: EnAirField.TIME_LAST_MODIFIED
     },
   ]
-} as BrSelectSortData<MsscColumnNameType>
+} as BrSelectSortDataType<MsscColumnNameType>

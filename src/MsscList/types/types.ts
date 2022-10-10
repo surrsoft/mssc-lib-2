@@ -1,6 +1,6 @@
 import { RsuvTxChecked, RsuvTxStringAB, RsuvTxStringAC } from 'rsuv-lib';
 import { MsscSourceType } from './MsscSourceType';
-import { BrSelectSortData } from '../commonUI/BrSelect/types';
+import { BrSelectSortDataType } from '../commonUI/BrSelect/types';
 import { MsscListAreaHeightCls } from '../classes';
 
 export interface MsscFilterType {
@@ -165,7 +165,7 @@ export interface MsscListPropsType {
    */
   source: MsscSourceType<any> | null
   /** */
-  sortData?: BrSelectSortData<MsscColumnNameType>
+  sortData?: BrSelectSortDataType<MsscColumnNameType>
   /**
    * *клиент определяет как должны распологаться элементы отдельного элемента списка
    * @param checkboxJsx
@@ -238,7 +238,7 @@ export interface ElemsCountParamsType {
   source: MsscSourceType<any>,
   filters: MsscFilterType[],
   randomEnabled: boolean,
-  sortData?: BrSelectSortData<MsscColumnNameType>,
+  sortData?: BrSelectSortDataType<MsscColumnNameType>,
   sortIdCurr?: string,
 }
 

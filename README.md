@@ -1,7 +1,7 @@
 
 # Запуски
-- запускаем JSON-сервер `npm json-server-start` или `make json-server-start`
-- запускаем Storybook `npm storybook` или `make storybook_start`
+- запускаем JSON-сервер `npm run json-server-start` или `make json-server-start`
+- запускаем Storybook `npm run storybook` или `make storybook_start`
 
 # Запуски 2
 - с помощью `npm run rollup` билдим библиотеку `MsscList`
