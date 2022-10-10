@@ -4,3 +4,4 @@
 /.storybook
 /.env.local
 /jsonServer
+/storybook-static
