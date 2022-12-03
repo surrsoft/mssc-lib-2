@@ -1,19 +1,19 @@
 import React from 'react';
-import { BrSelectId, BrSelectItem, BrSelectSortData } from './types';
+import { BrSelectIdType, BrSelectItemType, BrSelectSortDataType } from './types';
 import { useState } from 'react';
 import './brSelect.scss';
 
 export interface BrSelectProps<T> {
-  data: BrSelectSortData<T>
+  data: BrSelectSortDataType<T>
   /**
    * вызывается когда пользователь делает выбор
    * @param selectedId
    */
-  cbSelect?: (selected: BrSelectItem<T>) => void
+  cbSelect?: (selected: BrSelectItemType<T>) => void
   /**
    * id выбранного элемента. Если указан, то переопределяет id из 'data`
    */
-  selectedId?: BrSelectId | undefined
+  selectedId?: BrSelectIdType | undefined
 }
 
 export default function BrSelect<T>({data, cbSelect, selectedId}: BrSelectProps<T>) {

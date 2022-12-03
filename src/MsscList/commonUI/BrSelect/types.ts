@@ -3,10 +3,10 @@ import { RsuvEnSort } from 'rsuv-lib';
 /**
  * строка для уникальной идентификации пункта
  */
-export type BrSelectId = string;
+export type BrSelectIdType = string;
 
-export type BrSelectItem<T> = {
-  idElem: BrSelectId,
+export type BrSelectItemType<T> = {
+  idElem: BrSelectIdType,
   direction: Omit<RsuvEnSort, RsuvEnSort.UNDEF>,
   text: string
   /**
@@ -18,11 +18,11 @@ export type BrSelectItem<T> = {
 /**
  * @typeParam T - тип сопутствующих данных
  */
-export type BrSelectSortData<T> = {
+export type BrSelectSortDataType<T> = {
   /**
    * id выбранного элемента. Это должен быть один из id присутствующих в items.idElem
    */
-  selectedId?: BrSelectId
+  selectedId?: BrSelectIdType
   /** */
-  items: Array<BrSelectItem<T>>
+  items: Array<BrSelectItemType<T>>
 }

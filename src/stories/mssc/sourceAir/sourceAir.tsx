@@ -2,13 +2,13 @@ import React from 'react';
 import _ from 'lodash';
 import './source-styles.scss';
 import { EnAirField } from './EnAirField';
-import { SquareBrackets } from '../../../MsscList/msscUtils/msscUtils';
 import { AirSource} from '../../../MsscList/commonUtils/airSource/AirSource';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup'
 import { AirSourceParams } from '../../../MsscList/commonUtils/airSource/AirSourceParams';
 import { RsuvTxStringAC } from 'rsuv-lib';
 import { MsscFilterType } from '../../../MsscList/types/types';
+import {SquareBrackets} from "../../../MsscList/msscUtils/SquareBrackets";
 
 const airSourceParams = {
   dbKey: 'appZoHaX4a5tRLJlv', // mssc-training-3
