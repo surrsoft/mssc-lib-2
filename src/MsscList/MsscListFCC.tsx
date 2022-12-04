@@ -39,8 +39,8 @@ import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
 import { ParamUiLocal } from './msscComponents/ParamUiLocal';
 import { SortLocalFCC } from './msscComponents/SortLocalFCC';
 import { MsscRefreshesType } from './types/types/MsscRefreshesType';
-import { ListElem } from './msscComponents/ListElemLocalFCC/ListElem';
 import { ListSelectingElemIdType, ListSelectingModel } from './commonUtils/ListSelectingModel';
+import { ListElem } from './msscComponents/ListElem/ListElem';
 
 let scrollTop = 0;
 
