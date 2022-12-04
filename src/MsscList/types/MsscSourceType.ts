@@ -6,7 +6,10 @@ import {
   RsuvTxNumIntDiap,
   RsuvTxSort
 } from 'rsuv-lib';
-import { MsscElemType, MsscFilterType, MsscIdObjectType, MsscTagType } from './types';
+import { MsscFilterType } from './types/MsscFilterType';
+import { MsscElemType } from './types/MsscElemType';
+import { MsscTagType } from './types/MsscTagType';
+import { MsscIdObjectType } from './types/MsscIdObjectType';
 
 /**
  * Интерфейс *источника. Через него *библиотека получает почти всю нужную ему информацию

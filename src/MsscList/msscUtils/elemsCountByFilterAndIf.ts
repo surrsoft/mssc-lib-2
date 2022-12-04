@@ -1,7 +1,8 @@
 import {RsuvTxNumIntAB} from "rsuv-lib";
 
-import {ElemsCountParamsType, ElemsCountReturnType} from "../types/types";
 import {sortsCreate} from "./sortsCreate";
+import { ElemsCountParamsType } from '../types/types/ElemsCountParamsType';
+import { ElemsCountReturnType } from '../types/types/ElemsCountReturnType';
 
 /**
  * Получение общего количества элементов с учетом фильтров {@param filters}, и всех ids если {@param randomEnabled}

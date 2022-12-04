@@ -1,7 +1,7 @@
 import { RsuvEnSort } from 'rsuv-lib';
 import { EnAirField } from './sourceAir/EnAirField';
 import { BrSelectSortDataType } from '../../MsscList/commonUI/BrSelect/types';
-import { MsscColumnNameType } from '../../MsscList/types/types';
+import { MsscColumnNameType } from '../../MsscList/types/types/MsscColumnNameType';
 
 export const sortDataSTA = {
   selectedId: 'date-create_desc',

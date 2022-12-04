@@ -1,4 +1,5 @@
-import { MsscCommonSourceParamsType, MsscFilterType } from '../../types/types';
+import { MsscFilterType } from '../../types/types/MsscFilterType';
+import { MsscCommonSourceParamsType } from '../../types/types/MsscCommonSourceParamsType';
 
 export class AirSourceParams<T> extends MsscCommonSourceParamsType<T> {
   /**

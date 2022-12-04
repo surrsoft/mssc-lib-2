@@ -1,8 +1,9 @@
 import _ from "lodash";
 import {RsuvTxChecked} from "rsuv-lib";
 
-import {MsscTagGroupType, TagsParamsType} from "../types/types";
 import {SquareBrackets} from "./SquareBrackets";
+import { MsscTagGroupType } from '../types/types/MsscTagGroupType';
+import { TagsParamsType } from '../types/types/TagsParamsType';
 
 export async function tagsCookAndSet(
     {

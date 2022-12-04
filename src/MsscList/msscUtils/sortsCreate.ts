@@ -1,7 +1,7 @@
 import {RsuvEnSort, RsuvTxSort, RsuvTxStringAC} from "rsuv-lib";
 
 import {BrSelectIdType, BrSelectItemType, BrSelectSortDataType} from "../commonUI/BrSelect/types";
-import {MsscColumnNameType} from "../types/types";
+import { MsscColumnNameType } from '../types/types/MsscColumnNameType';
 
 /** создаёт массив стандартных объектов описывающих сортировку */
 export function sortsCreate(sortData?: BrSelectSortDataType<MsscColumnNameType>, sortIdCurr?: BrSelectIdType): RsuvTxSort[] {

@@ -23,7 +23,10 @@ import _ from 'lodash';
 import { PElemAsau66, RsuvAsau67 } from 'rsuv-lib/dist/RsuvTuPromiseAllSettled';
 import React from 'react';
 import { AirSourceParams } from './AirSourceParams';
-import { MsscElemType, MsscFilterType, MsscIdObjectType, MsscTagType } from '../../types/types';
+import { MsscFilterType } from '../../types/types/MsscFilterType';
+import { MsscElemType } from '../../types/types/MsscElemType';
+import { MsscTagType } from '../../types/types/MsscTagType';
+import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
 
 type Ty2130 = { index: number, tuple: HoggTupleNT }
 

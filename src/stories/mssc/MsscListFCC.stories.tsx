@@ -10,8 +10,8 @@ import { sortDataSTA } from './sort';
 import { airTagsFieldNameArr } from './sourceAir/airTagsFieldNameArr';
 import { jsonSource } from './sourceJson/jsonSource';
 import { jsonTagsFieldNameArr } from './sourceJson/jsonTagsFieldNameArr';
-import { MsscEnListAreaHeightModeEnum } from '../../MsscList/types/types';
-import { MsscListAreaHeightCls } from '../../MsscList/classes';
+import { MsscListAreaHeightModeEnum } from '../../MsscList/types/enums/MsscListAreaHeightModeEnum';
+import { MsscListAreaHeightCls } from '../../MsscList/msscUtils/MsscListAreaHeightCls';
 
 //👇 Этот экспорт по умолчанию определяет, куда попадет ваша история в списке историй
 export default {
@@ -34,7 +34,7 @@ StoryAirSource.args = {
   children: listStructBuilder,
   sortData: sortDataSTA,
   tagsFieldNameArr: airTagsFieldNameArr,
-  listAreaHeight: {mode: MsscEnListAreaHeightModeEnum.STICKY_DOWN, value: 150} as MsscListAreaHeightCls
+  listAreaHeight: {mode: MsscListAreaHeightModeEnum.STICKY_DOWN, value: 150} as MsscListAreaHeightCls
 };
 
 export const StoryArraySource = Template.bind({});
@@ -45,5 +45,5 @@ StoryArraySource.args = {
   children: listStructBuilder,
   sortData: sortDataSTA,
   tagsFieldNameArr: jsonTagsFieldNameArr,
-  listAreaHeight: {mode: MsscEnListAreaHeightModeEnum.STICKY_DOWN, value: 150} as MsscListAreaHeightCls
+  listAreaHeight: {mode: MsscListAreaHeightModeEnum.STICKY_DOWN, value: 150} as MsscListAreaHeightCls
 };

@@ -4,7 +4,7 @@ import { Asau88JsonSourceParams } from '../../../MsscList/commonUtils/jsonSource
 import { RsuvTxStringAC } from 'rsuv-lib';
 import { EnJsonFieldName } from './EnJsonFieldName';
 import _ from 'lodash';
-import { MsscFilterType } from '../../../MsscList/types/types';
+import { MsscFilterType } from '../../../MsscList/types/types/MsscFilterType';
 
 const params = {
   endpointUrl: 'http://localhost:22121/',

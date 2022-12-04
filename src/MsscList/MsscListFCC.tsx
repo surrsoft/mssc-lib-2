@@ -28,18 +28,23 @@ import { BrSelectIdType, BrSelectItemType, BrSelectSortDataType } from './common
 import BrSelect from './commonUI/BrSelect/BrSelect';
 import classNames from 'classnames';
 import BrMultiselect from './commonUI/BrMultiselect/BrMultiselect';
-import {
-  MsscColumnNameType,
-  MsscElemType,
-  MsscEnListAreaHeightModeEnum,
-  MsscFilterType, MsscIdObjectType, MsscJsxExternalType, MsscListPropsType,
-  MsscMenuActionEnum, MsscTagGroupSelectedType, MsscTagGroupType, MsscTagsGroupIdType
-} from './types/types';
-import { MsscListAreaHeightCls } from './classes';
-import {filtersCreate} from "./msscUtils/filtersCreate";
-import {elemsCountByFilterAndIf} from "./msscUtils/elemsCountByFilterAndIf";
-import {tagsCookAndSet} from "./msscUtils/tagsCookAndSet";
-import {sortsCreate} from "./msscUtils/sortsCreate";
+import { filtersCreate } from "./msscUtils/filtersCreate";
+import { elemsCountByFilterAndIf } from "./msscUtils/elemsCountByFilterAndIf";
+import { tagsCookAndSet } from "./msscUtils/tagsCookAndSet";
+import { sortsCreate } from "./msscUtils/sortsCreate";
+import { MsscFilterType } from './types/types/MsscFilterType';
+import { MsscElemType } from './types/types/MsscElemType';
+import { MsscColumnNameType } from './types/types/MsscColumnNameType';
+import { MsscListAreaHeightModeEnum } from './types/enums/MsscListAreaHeightModeEnum';
+import { MsscMenuActionEnum } from './types/enums/MsscMenuActionEnum';
+import { MsscJsxExternalType } from './types/types/MsscJsxExternalType';
+import { MsscListPropsType } from './types/types/MsscListPropsType';
+import { MsscTagsGroupIdType } from './types/types/MsscTagsGroupIdType';
+import { MsscTagGroupType } from './types/types/MsscTagGroupType';
+import { MsscTagGroupSelectedType } from './types/types/MsscTagGroupSelectedType';
+import { MsscIdObjectType } from './types/types/MsscIdObjectType';
+import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
+import { ParamUiLocalFCC_B } from './msscComponents/ParamUiLocalFCC_B';
 
 let scrollTop = 0;
 
@@ -364,17 +369,6 @@ const MsscListFCC = ({
     }
   }
 
-  function ParamUiLocalFCC_B({str1, str2}: { str1: string, str2?: any }) {
-    return (
-      <div
-        className="mssc-infos-b__value"
-        title={str1}
-      >
-        {(str2 || str2 === 0) ? str2 : '-'}
-      </div>
-    )
-  }
-
   function ListElemLocalFCC({elem}: { elem: MsscElemType }) {
     const jsxElem: JSX.Element = elem.elem
 
@@ -688,9 +682,9 @@ const MsscListFCC = ({
     });
 
     const listAreaHeightCssObj = useMemo(() => {
-      if (listAreaHeight?.mode === MsscEnListAreaHeightModeEnum.FIXED) {
+      if (listAreaHeight?.mode === MsscListAreaHeightModeEnum.FIXED) {
         return {height: listAreaHeight.value}
-      } else if (listAreaHeight.mode === MsscEnListAreaHeightModeEnum.STICKY_DOWN) {
+      } else if (listAreaHeight.mode === MsscListAreaHeightModeEnum.STICKY_DOWN) {
         return {height: `calc(100vh - ${listAreaHeight.value}px)`}
       }
     }, [listAreaHeight, listAreaHeight?.mode, listAreaHeight?.value]) as CSSProperties || {}

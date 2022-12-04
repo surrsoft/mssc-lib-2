@@ -1,7 +1,9 @@
 import _ from "lodash";
 import {RsuvTxChecked} from "rsuv-lib";
 
-import {FiltersCreateParamsType, MsscFilterType, MsscTagGroupSelectedType} from "../types/types";
+import { MsscFilterType } from '../types/types/MsscFilterType';
+import { MsscTagGroupSelectedType } from '../types/types/MsscTagGroupSelectedType';
+import { FiltersCreateParamsType } from '../types/types/FiltersCreateParamsType';
 
 /**
  * Готовит объекты фильтрации на базе текста-для-поиска {@param searchText}, тегов {@param tagGroupSelectedArr}

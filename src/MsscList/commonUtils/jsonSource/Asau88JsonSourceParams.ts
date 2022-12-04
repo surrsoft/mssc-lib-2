@@ -2,7 +2,7 @@
  * URL-адрес *эндпоинта
  * Например: http://localhost:22121/
  */
-import { MsscCommonSourceParamsType } from '../../types/types';
+import { MsscCommonSourceParamsType } from '../../types/types/MsscCommonSourceParamsType';
 
 type Asau88EndpointUrl = string;
 /**

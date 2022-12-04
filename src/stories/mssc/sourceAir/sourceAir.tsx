@@ -7,8 +7,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup'
 import { AirSourceParams } from '../../../MsscList/commonUtils/airSource/AirSourceParams';
 import { RsuvTxStringAC } from 'rsuv-lib';
-import { MsscFilterType } from '../../../MsscList/types/types';
 import {SquareBrackets} from "../../../MsscList/msscUtils/SquareBrackets";
+import { MsscFilterType } from '../../../MsscList/types/types/MsscFilterType';
 
 const airSourceParams = {
   dbKey: 'appZoHaX4a5tRLJlv', // mssc-training-3

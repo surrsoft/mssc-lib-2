@@ -1,6 +1,6 @@
 import React from 'react';
 import './listStructBuilder-styles.scss';
-import { MsscJsxExternalType } from '../../../MsscList/types/types';
+import { MsscJsxExternalType } from '../../../MsscList/types/types/MsscJsxExternalType';
 
 export const listStructBuilder = ({
                      infosJsx,

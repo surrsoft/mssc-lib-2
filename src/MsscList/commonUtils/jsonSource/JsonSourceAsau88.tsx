@@ -16,7 +16,10 @@ import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
 import _ from 'lodash';
 import fp from 'lodash/fp';
 import { RsuvAsau89 } from 'rsuv-lib/src/RsuvTuTree';
-import { MsscElemType, MsscFilterType, MsscIdObjectType, MsscTagType } from '../../types/types';
+import { MsscFilterType } from '../../types/types/MsscFilterType';
+import { MsscElemType } from '../../types/types/MsscElemType';
+import { MsscTagType } from '../../types/types/MsscTagType';
+import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
 
 /*
 ПОНЯТИЯ:
