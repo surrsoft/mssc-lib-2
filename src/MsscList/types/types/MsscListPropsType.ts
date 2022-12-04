@@ -11,7 +11,7 @@ export interface MsscListPropsType {
    *
    */
   source: MsscSourceType<any> | null
-  /** */
+  /** SYNC [[221204124107]] */
   sortData?: BrSelectSortDataType<MsscColumnNameType>
   /**
    * *клиент определяет как должны распологаться элементы отдельного элемента списка

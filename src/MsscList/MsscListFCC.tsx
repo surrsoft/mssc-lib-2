@@ -45,6 +45,10 @@ import { MsscTagGroupSelectedType } from './types/types/MsscTagGroupSelectedType
 import { MsscIdObjectType } from './types/types/MsscIdObjectType';
 import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
 import { ParamUiLocalFCC_B } from './msscComponents/ParamUiLocalFCC_B';
+import { SortLocalFCC } from './msscComponents/SortLocalFCC';
+import { MsscRefreshesType } from './types/types/MsscRefreshesType';
+import { RkCheckbox } from './msscComponents/RkCheckbox';
+import { RkBody } from './msscComponents/RkBody';
 
 let scrollTop = 0;
 
@@ -281,7 +285,7 @@ const MsscListFCC = ({
 
   // ---
 
-  const refreshes = {
+  const refreshes: MsscRefreshesType = {
     pageDataRefresh: () => {
       $needUpdate2Set(!$needUpdate2)
     },
@@ -427,24 +431,6 @@ const MsscListFCC = ({
       refreshes.refreshPage()
     }
 
-    function RkCheckboxLocalFCC() {
-      return (
-        <div className="mssc-list-elem__checkbox">
-          <input
-            type="checkbox"
-            checked={$listModel.selectElemIs(elem.id.val)}
-            onChange={checkboxOnChange(elem.id.val)}
-          />
-        </div>
-      )
-    }
-
-    function RkBodyLocalFCC() {
-      return (
-        <div className="mssc-list-elem__body">{jsxElem}</div>
-      )
-    }
-
     function RkMenuLocalFCC() {
       return (
         <div className="mssc-list-elem__menu">
@@ -458,19 +444,26 @@ const MsscListFCC = ({
 
     const containerCn = classNames('mssc-list-elem', {'mssc-list-elem_active': $listModel.activeIdIs(elem.id.val)})
 
+    const CheckboxJsx = <RkCheckbox
+      onCheckboxChange={checkboxOnChange(elem.id.val)}
+      isChecked={$listModel.selectElemIs(elem.id.val)}
+    />
+
+    const BodyJsx = <RkBody jsxElem={jsxElem}/>
+
     return listElemStruct
       ? (<div className={containerCn}>
         {listElemStruct({
           isActive: $listModel.activeIdIs(elem.id.val),
-          checkboxJsx: <RkCheckboxLocalFCC/>,
-          bodyJsx: <RkBodyLocalFCC/>,
+          checkboxJsx: CheckboxJsx,
+          bodyJsx: BodyJsx,
           menuJsx: <RkMenuLocalFCC/>
         })}
       </div>)
       : (
         <div className={containerCn}>
-          <RkCheckboxLocalFCC/>
-          <RkBodyLocalFCC/>
+          CheckboxJsx
+          BodyJsx
           <RkMenuLocalFCC/>
         </div>
       )
@@ -493,29 +486,6 @@ const MsscListFCC = ({
         initialValue={$searchText}
         autoFocus={true}
       />
-    )
-  }
-
-  function SortLocalFCC() {
-
-    /**
-     * [[220129163836]]
-     * @param sortItem
-     */
-    const sortHandler = (sortItem: BrSelectItemType<MsscColumnNameType>) => {
-      $sortIdCurrSet(sortItem.idElem)
-      refreshes.whole()
-    }
-
-    return (
-      <>
-        {
-          sortData && <div className="mssc-body__sort-filter-container">
-            {/* [[220129214739]] */}
-						<BrSelect data={sortData} cbSelect={sortHandler} selectedId={$sortIdCurr}/>
-					</div>
-        }
-      </>
     )
   }
 
@@ -763,7 +733,12 @@ const MsscListFCC = ({
             btnDeselectAll: <ButtonDeselectAllLocalFCC/>,
             btnDice: <ButtonDiceLocalFCC/>
           },
-          sortJsx: <SortLocalFCC/>,
+          sortJsx: <SortLocalFCC
+            sortData={sortData}
+            sortIdCurr={$sortIdCurr}
+            sortIdCurrSet={$sortIdCurrSet}
+            refreshes={refreshes}
+          />,
           searchJsx: <SearchLocalFCC/>,
           listJsx: <ListLocalFCC/>,
           multiselectJsxArr: tagsFieldNameArr?.map(el => (<MultiselectLocalFCC tagsGroupId={el.id}/>))
