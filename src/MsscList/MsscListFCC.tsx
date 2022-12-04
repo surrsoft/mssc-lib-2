@@ -4,29 +4,23 @@ import './msscListStyles.scss';
 import { MsscSourceType } from './types/MsscSourceType';
 import {
   RsuvEnResultCrudSet,
-  RsuvEnSort,
   RsuvPaginationGyth,
   RsuvTxChecked,
   RsuvTxNumIntAB,
   RsuvTxNumIntDiap,
   RsuvTxSort,
-  RsuvTxStringAC
 } from 'rsuv-lib';
 import { useScrollFix } from 'ueur-lib';
 import MsscDialogFCC from './msscComponents/MsscDialogFCC/MsscDialogFCC';
 import MsscPaginatorFCC from './msscComponents/MsscPaginatorFCC/MsscPaginatorFCC';
-import ListModelAsau59 from './commonUtils/ListModelAsau59';
 import SvgIconTrash from './commonIcons/SvgIconTrash/SvgIconTrash';
 import SvgIconPlus from './commonIcons/SvgIconPlus/SvgIconPlus';
 import SvgIconUnckecked from './commonIcons/SvgIconUnchecked/SvgIconUnckecked';
 import { ColorsAsau61 } from './commonIcons/utils/ColorsAsau61';
 import SvgIconDice from './commonIcons/SvgIconDice/SvgIconDice';
-import MenuAsau54FCC, { DataAtAsau54, ItemAtAsau54, SelectResultAtAsau54 } from './commonUI/MenuFCC/MenuAsau54FCC';
 import BrInput, { BrInputEnIcon } from './commonUI/BrFilter/BrInput';
 import BrSpinner from './commonUI/BrSpinner/BrSpinner';
 import { BrSelectIdType, BrSelectItemType, BrSelectSortDataType } from './commonUI/BrSelect/types';
-import BrSelect from './commonUI/BrSelect/BrSelect';
-import classNames from 'classnames';
 import BrMultiselect from './commonUI/BrMultiselect/BrMultiselect';
 import { filtersCreate } from "./msscUtils/filtersCreate";
 import { elemsCountByFilterAndIf } from "./msscUtils/elemsCountByFilterAndIf";
@@ -34,9 +28,7 @@ import { tagsCookAndSet } from "./msscUtils/tagsCookAndSet";
 import { sortsCreate } from "./msscUtils/sortsCreate";
 import { MsscFilterType } from './types/types/MsscFilterType';
 import { MsscElemType } from './types/types/MsscElemType';
-import { MsscColumnNameType } from './types/types/MsscColumnNameType';
 import { MsscListAreaHeightModeEnum } from './types/enums/MsscListAreaHeightModeEnum';
-import { MsscMenuActionEnum } from './types/enums/MsscMenuActionEnum';
 import { MsscJsxExternalType } from './types/types/MsscJsxExternalType';
 import { MsscListPropsType } from './types/types/MsscListPropsType';
 import { MsscTagsGroupIdType } from './types/types/MsscTagsGroupIdType';
@@ -44,11 +36,11 @@ import { MsscTagGroupType } from './types/types/MsscTagGroupType';
 import { MsscTagGroupSelectedType } from './types/types/MsscTagGroupSelectedType';
 import { MsscIdObjectType } from './types/types/MsscIdObjectType';
 import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
-import { ParamUiLocalFCC_B } from './msscComponents/ParamUiLocalFCC_B';
+import { ParamUiLocal } from './msscComponents/ParamUiLocal';
 import { SortLocalFCC } from './msscComponents/SortLocalFCC';
 import { MsscRefreshesType } from './types/types/MsscRefreshesType';
-import { RkCheckbox } from './msscComponents/RkCheckbox';
-import { RkBody } from './msscComponents/RkBody';
+import { ListElem } from './msscComponents/ListElemLocalFCC/ListElem';
+import { ListSelectingElemIdType, ListSelectingModel } from './commonUtils/ListSelectingModel';
 
 let scrollTop = 0;
 
@@ -66,15 +58,6 @@ const MsscListFCC = ({
     // записей на странице
     elemsOnPage: 10
   }
-
-  const menuDataSTA = {
-    id: '',
-    items: [
-      {idAction: MsscMenuActionEnum.EDIT, text: 'Изменить'} as ItemAtAsau54,
-      {idAction: MsscMenuActionEnum.SELECT, text: 'Выбрать'} as ItemAtAsau54,
-      {idAction: MsscMenuActionEnum.DELETE, text: 'Удалить'} as ItemAtAsau54
-    ]
-  } as DataAtAsau54
 
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
@@ -112,7 +95,7 @@ const MsscListFCC = ({
   const [$isDialogCreateEditShowed, $isDialogCreateEditShowedSet] = useState(false);
   // ---
   const [$listModel] = useState(() => {
-    return new ListModelAsau59()
+    return new ListSelectingModel()
   });
   const [$refresh, $refreshSet] = useState(false);
   // ---
@@ -373,102 +356,6 @@ const MsscListFCC = ({
     }
   }
 
-  function ListElemLocalFCC({elem}: { elem: MsscElemType }) {
-    const jsxElem: JSX.Element = elem.elem
-
-    /**
-     * [[220129111758]]
-     * @param obj
-     */
-    const menuElemOnSelected = async (obj: SelectResultAtAsau54) => {
-      switch (obj.idAction) {
-        case MsscMenuActionEnum.DELETE:
-          if (obj.idElem) {
-            // чистим если что-то уже выбрано
-            $listModel.selectElemsClear()
-            $listModel.selectElemsAdd([obj.idElem])
-            $listModel.activeIdSet(obj.idElem)
-            refreshes.refreshPage()
-          }
-          dialogDeleteShow()
-          break;
-        case MsscMenuActionEnum.SELECT:
-          if (obj.idElem) {
-            $listModel.selectElemsAdd([obj.idElem])
-            $listModel.activeIdSet(obj.idElem)
-            refreshes.refreshPage()
-          }
-          break;
-        case MsscMenuActionEnum.EDIT:
-          if (obj.idElem) {
-            const elem = $elems.find(el => el.id.val === obj.idElem)
-            if (elem) {
-              $listModel.activeIdSet(elem.id.val)
-              const jsxEdit = await source?.dialogCreateOrEdit(dialogCreateEditCallbacks.ok, dialogCreateEditCallbacks.cancel, elem.elemModel)
-              $dialogCreateEditJsxSet(jsxEdit || null)
-              if (jsxEdit) {
-                $isDialogCreateEditShowedSet(true)
-              }
-            }
-          }
-          break;
-      }
-    }
-
-    /**
-     * [[220129135526]]
-     * @param id
-     */
-    const checkboxOnChange = (id: string) => (ev: any) => {
-      const checked = ev.target.checked
-      if (checked) {
-        $listModel.selectElemsAdd([id])
-        $listModel.activeIdSet(id)
-      } else {
-        $listModel.selectElemsDelete([id])
-        $listModel.activeIdSet(id)
-      }
-      refreshes.refreshPage()
-    }
-
-    function RkMenuLocalFCC() {
-      return (
-        <div className="mssc-list-elem__menu">
-          <MenuAsau54FCC
-            data={Object.assign({}, menuDataSTA, {id: elem.id.val})}
-            cbOnSelected={menuElemOnSelected}
-          />
-        </div>
-      )
-    }
-
-    const containerCn = classNames('mssc-list-elem', {'mssc-list-elem_active': $listModel.activeIdIs(elem.id.val)})
-
-    const CheckboxJsx = <RkCheckbox
-      onCheckboxChange={checkboxOnChange(elem.id.val)}
-      isChecked={$listModel.selectElemIs(elem.id.val)}
-    />
-
-    const BodyJsx = <RkBody jsxElem={jsxElem}/>
-
-    return listElemStruct
-      ? (<div className={containerCn}>
-        {listElemStruct({
-          isActive: $listModel.activeIdIs(elem.id.val),
-          checkboxJsx: CheckboxJsx,
-          bodyJsx: BodyJsx,
-          menuJsx: <RkMenuLocalFCC/>
-        })}
-      </div>)
-      : (
-        <div className={containerCn}>
-          CheckboxJsx
-          BodyJsx
-          <RkMenuLocalFCC/>
-        </div>
-      )
-  }
-
   function SearchLocalFCC() {
     /**
      * [[220130110028]]
@@ -589,7 +476,7 @@ const MsscListFCC = ({
       },
       ok: async () => {
         if ($listModel.selectElemsCount() > 0) {
-          const ids: MsscIdObjectType[] = $listModel.selectElems().map(el => ({id: el}))
+          const ids: MsscIdObjectType[] = $listModel.selectElems().map((el: ListSelectingElemIdType) => ({id: el}))
           try {
             $loadingDialogSet(true)
             const noDeletedElems = await source?.elemsDelete(ids)
@@ -627,13 +514,13 @@ const MsscListFCC = ({
   function InfosLocalFCC_B() {
     return (
       <div className="mssc-infos-b">
-        <ParamUiLocalFCC_B str1="элементов на текущ. странице" str2={$elemsCountOnCurrPage}/>
+        <ParamUiLocal str1="элементов на текущ. странице" str2={$elemsCountOnCurrPage}/>
         <span className="mssc-infos-b__divider">/</span>
-        <ParamUiLocalFCC_B str1="элементов всего по фильтру" str2={$elemsCountByFilter}/>
+        <ParamUiLocal str1="элементов всего по фильтру" str2={$elemsCountByFilter}/>
         <span className="mssc-infos-b__divider">/</span>
-        <ParamUiLocalFCC_B str1="элементов всего" str2={$elemsCountAll === -1 ? '-' : $elemsCountAll}/>
+        <ParamUiLocal str1="элементов всего" str2={$elemsCountAll === -1 ? '-' : $elemsCountAll}/>
         <span className="mssc-infos-b__divider">/</span>
-        <ParamUiLocalFCC_B str1="элементов выбрано" str2={$listModel.selectElemsCount()}/>
+        <ParamUiLocal str1="элементов выбрано" str2={$listModel.selectElemsCount()}/>
       </div>
     )
   }
@@ -669,7 +556,19 @@ const MsscListFCC = ({
         <BrSpinner show={$loadingPage} fullscreen={false}/>
         {
           $elems.map((elObj: MsscElemType) => {
-            return (<ListElemLocalFCC key={elObj.id.val} elem={elObj}/>)
+            return (<ListElem
+              key={elObj.id.val}
+              dialogCreateOrEdit={source?.dialogCreateOrEdit}
+              elem={elObj}
+              elems={$elems}
+              listModel={$listModel}
+              refreshes={refreshes}
+              listElemStruct={listElemStruct}
+              dialogCreateEditCallbacks={dialogCreateEditCallbacks}
+              dialogCreateEditJsxSet={$dialogCreateEditJsxSet}
+              isDialogCreateEditShowedSet={$isDialogCreateEditShowedSet}
+              dialogDeleteShow={dialogDeleteShow}
+            />)
           })
         }
       </div>

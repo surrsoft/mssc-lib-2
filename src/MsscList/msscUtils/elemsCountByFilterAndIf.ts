@@ -1,8 +1,8 @@
 import {RsuvTxNumIntAB} from "rsuv-lib";
 
 import {sortsCreate} from "./sortsCreate";
-import { ElemsCountParamsType } from '../types/types/ElemsCountParamsType';
-import { ElemsCountReturnType } from '../types/types/ElemsCountReturnType';
+import { MsscElemsCountParamsType } from '../types/types/MsscElemsCountParamsType';
+import { MsscElemsCountReturnType } from '../types/types/MsscElemsCountReturnType';
 
 /**
  * Получение общего количества элементов с учетом фильтров {@param filters}, и всех ids если {@param randomEnabled}
@@ -20,8 +20,8 @@ export async function elemsCountByFilterAndIf(
         randomEnabled,
         sortData,
         sortIdCurr,
-    }: ElemsCountParamsType
-): Promise<ElemsCountReturnType> {
+    }: MsscElemsCountParamsType
+): Promise<MsscElemsCountReturnType> {
     let elemsCountByFilter: number = 0;
     let ids: string[] = []
     if (randomEnabled) {

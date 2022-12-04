@@ -10,6 +10,7 @@ import { MsscFilterType } from './types/MsscFilterType';
 import { MsscElemType } from './types/MsscElemType';
 import { MsscTagType } from './types/MsscTagType';
 import { MsscIdObjectType } from './types/MsscIdObjectType';
+import { MsscDialogCreateOrEditType } from './types/MsscDialogCreateOrEditType';
 
 /**
  * Интерфейс *источника. Через него *библиотека получает почти всю нужную ему информацию
@@ -93,7 +94,7 @@ export interface MsscSourceType<TModel> {
    * @param cbCancel (2) -- колбэк, который *клиент должен вызвать по нажатию Cancel
    * @param initialValues (3) --
    */
-  dialogCreateOrEdit(cbOk: (model: TModel) => void, cbCancel: () => void, initialValues?: object): Promise<JSX.Element>
+  dialogCreateOrEdit: MsscDialogCreateOrEditType<TModel>
 
   /**
    * *С-компонент вызывает эту функцию чтобы подготовить объект (1) к передаче в диалог создания/редактирования

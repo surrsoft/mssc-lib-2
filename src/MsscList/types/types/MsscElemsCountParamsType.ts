@@ -4,7 +4,7 @@ import { BrSelectSortDataType } from '../../commonUI/BrSelect/types';
 import { MsscColumnNameType } from './MsscColumnNameType';
 
 /** входные параметры функции {@link elemsCountByFilterAndIf} */
-export interface ElemsCountParamsType {
+export interface MsscElemsCountParamsType {
   source: MsscSourceType<any>,
   filters: MsscFilterType[],
   randomEnabled: boolean,

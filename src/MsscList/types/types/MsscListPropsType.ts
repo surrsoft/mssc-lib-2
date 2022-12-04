@@ -4,6 +4,7 @@ import { MsscColumnNameType } from './MsscColumnNameType';
 import { MsscElemStructType } from './MsscElemStructType';
 import { MsscMultFieldsType } from './MsscMultFieldsType';
 import { MsscListAreaHeightCls } from '../../msscUtils/MsscListAreaHeightCls';
+import { MsscListElemStructType } from './MsscListElemStructType';
 
 /** Пропсы для MsscListFCC */
 export interface MsscListPropsType {
@@ -19,11 +20,7 @@ export interface MsscListPropsType {
    * @param bodyJsx
    * @param menuJsx
    */
-  listElemStruct?: ({
-                      checkboxJsx,
-                      bodyJsx,
-                      menuJsx
-                    }: MsscElemStructType) => JSX.Element
+  listElemStruct?: MsscListElemStructType
   children?: any
   /**
    * [[220607221651]] Описание полей содержащих теги. Сколько здесь будет элементов, столько будет показываться

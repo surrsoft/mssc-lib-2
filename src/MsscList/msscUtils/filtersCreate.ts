@@ -3,7 +3,7 @@ import {RsuvTxChecked} from "rsuv-lib";
 
 import { MsscFilterType } from '../types/types/MsscFilterType';
 import { MsscTagGroupSelectedType } from '../types/types/MsscTagGroupSelectedType';
-import { FiltersCreateParamsType } from '../types/types/FiltersCreateParamsType';
+import { MsscFiltersCreateParamsType } from '../types/types/MsscFiltersCreateParamsType';
 
 /**
  * Готовит объекты фильтрации на базе текста-для-поиска {@param searchText}, тегов {@param tagGroupSelectedArr}
@@ -18,7 +18,7 @@ export function filtersCreate(
         tagGroupSelectedArr,
         searchText,
         tagsFieldNameArr,
-    }: FiltersCreateParamsType
+    }: MsscFiltersCreateParamsType
 ): MsscFilterType[] {
     let filterTags: MsscFilterType[] = []
     if (!_.isEmpty(tagsFieldNameArr)) {
