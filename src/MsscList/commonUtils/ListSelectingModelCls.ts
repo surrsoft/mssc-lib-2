@@ -16,7 +16,7 @@ export type ListSelectingElemIdOrNullType = ListSelectingElemIdType | null
  *
  * ID [[asau59]] [[221204151130]] rev 1 1.0.0 2022-12-04
  */
-export class ListSelectingModel {
+export class ListSelectingModelCls {
   /**
    * список id выбранных элементов
    */

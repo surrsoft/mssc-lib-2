@@ -10,16 +10,19 @@ import { MsscFilterType } from './types/MsscFilterType';
 import { MsscElemType } from './types/MsscElemType';
 import { MsscTagType } from './types/MsscTagType';
 import { MsscIdObjectType } from './types/MsscIdObjectType';
-import { MsscDialogCreateOrEditType } from './types/MsscDialogCreateOrEditType';
+import { MsscSourceDialogCreateOrEditType } from './types/MsscSourceDialogCreateOrEditType';
+import { MsscSourceElemsDeleteType } from './types/MsscSourceElemsDeleteType';
 
 /**
- * Интерфейс *источника. Через него *библиотека получает почти всю нужную ему информацию
+ * Интерфейс {@link umsscsourceu источника}. Через него {@link umssclibu библиотека} получает почти всю нужную ему информацию
  */
 export interface MsscSourceType<TModel> {
 
   /**
-   * Возвращает общее количество элементов удовлетворяющих фильтрам {@param filters}. Если {@param filters} это
-   * пустой массив то возвращает просто общее количество элементов
+   * DESC Возвращает общее количество элементов или количество элементов удовлетворяющих фильтру.
+   *
+   * Возвращает общее количество элементов удовлетворяющих фильтрам {@param filters}.
+   * Если {@param filters} это пустой массив то возвращает просто общее количество элементов
    */
   elemsCountByFilter(filters: MsscFilterType[]): Promise<RsuvTxNumIntAB>
 
@@ -58,7 +61,7 @@ export interface MsscSourceType<TModel> {
    * или список тех элементов (1) записи которых удалить не удалось.
    * @param elems (1) -- любой объект обладающий полем `id`
    */
-  elemsDelete(elems: MsscIdObjectType[]): Promise<MsscIdObjectType[]>
+  elemsDelete: MsscSourceElemsDeleteType
 
   /**
    * Выполняет set operation (см. [asau138]) для элементов из (1).
@@ -87,30 +90,34 @@ export interface MsscSourceType<TModel> {
   elemsUpsert(elems: TModel[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>>
 
   /**
+   * Должен вернуть JSX диалога создания или редактирования.
+   *
    * Возвращает диалог создания элемента если (3) is falsy, иначе возвращает диалог редактирования элемента.
    * *С-компонент показывает его. Когда пользователь нажимает ОК вызывается (1)
    * с моделью данных в аргументе
    * @param cbOk (1) -- колбэк, который *клиент должен вызвать по нажатию ОК
    * @param cbCancel (2) -- колбэк, который *клиент должен вызвать по нажатию Cancel
-   * @param initialValues (3) --
+   * @param initialValues (3) -- начальные данные для диалога редактирования
    */
-  dialogCreateOrEdit: MsscDialogCreateOrEditType<TModel>
+  dialogCreateOrEdit: MsscSourceDialogCreateOrEditType<TModel>
 
   /**
-   * *С-компонент вызывает эту функцию чтобы подготовить объект (1) к передаче в диалог создания/редактирования
+   * {@link umssccomponentu компонент} вызывает эту функцию чтобы подготовить объект (1) к передаче в диалог создания/редактирования ({@link dialogCreateOrEdit})
    * ID [[220129122002]]
    * @param obj (1) --
    */
   dialogMiddleware(obj?: TModel): object | TModel | null;
 
   /**
-   * [[220509113255]] *С-компонент вызывает эту функцию чтобы *клиент на базе (1) подготовил {@link MsscFilterType[]}
+   * [[220509113255]] {@link umssccomponentu компонент} вызывает эту функцию чтобы {@link umsscclientu клиент}
+   * на базе (1) подготовил {@link MsscFilterType[]}
    * @param searchText
    */
   filterFromSearchText(searchText: string): MsscFilterType[] | null
 
   /**
-   * [[220514092623]] *С-компонент вызывает эту функцию чтобы *клиент на базе тегов (1) подготовил {@link MsscFilterType[]}
+   * [[220514092623]] {@link umssccomponentu компонент} вызывает эту функцию чтобы {@link umsscclientu клиент}
+   * на базе тегов (1) подготовил {@link MsscFilterType[]}
    * @param tags (1) --
    * @param fieldName (2) -- поле в котором нужно искать теги (1)
    */

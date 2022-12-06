@@ -9,15 +9,15 @@ import { RkMenu } from './components/RkMenu';
 import { MsscRefreshesType } from '../../types/types/MsscRefreshesType';
 import { MsscListElemStructType } from '../../types/types/MsscListElemStructType';
 import { menuDataSTA } from '../../msscUtils/menuDataSTA';
-import { MsscDialogCreateOrEditType } from '../../types/types/MsscDialogCreateOrEditType';
-import { ListSelectingModel } from '../../commonUtils/ListSelectingModel';
+import { MsscSourceDialogCreateOrEditType } from '../../types/types/MsscSourceDialogCreateOrEditType';
+import { ListSelectingModelCls } from '../../commonUtils/ListSelectingModelCls';
 
 export interface PropsType {
   elem: MsscElemType
   elems: MsscElemType[]
   refreshes: MsscRefreshesType
-  listModel: ListSelectingModel
-  dialogCreateOrEdit?: MsscDialogCreateOrEditType<any>
+  listModel: ListSelectingModelCls
+  dialogCreateOrEdit?: MsscSourceDialogCreateOrEditType<any>
   dialogDeleteShow: () => void
   dialogCreateEditCallbacks: any
   dialogCreateEditJsxSet: any

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function ParamUiLocal({str1, str2}: { str1: string, str2?: any }) {
+export function MsscParamUiLocal({str1, str2}: { str1: string, str2?: any }) {
   return (
     <div
       className="mssc-infos-b__value"

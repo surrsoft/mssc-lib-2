@@ -5,23 +5,18 @@ import { MsscSourceType } from './types/MsscSourceType';
 import {
   RsuvEnResultCrudSet,
   RsuvPaginationGyth,
-  RsuvTxChecked,
   RsuvTxNumIntAB,
   RsuvTxNumIntDiap,
   RsuvTxSort,
 } from 'rsuv-lib';
 import { useScrollFix } from 'ueur-lib';
-import MsscDialogFCC from './msscComponents/MsscDialogFCC/MsscDialogFCC';
 import MsscPaginatorFCC from './msscComponents/MsscPaginatorFCC/MsscPaginatorFCC';
-import SvgIconTrash from './commonIcons/SvgIconTrash/SvgIconTrash';
 import SvgIconPlus from './commonIcons/SvgIconPlus/SvgIconPlus';
 import SvgIconUnckecked from './commonIcons/SvgIconUnchecked/SvgIconUnckecked';
 import { ColorsAsau61 } from './commonIcons/utils/ColorsAsau61';
 import SvgIconDice from './commonIcons/SvgIconDice/SvgIconDice';
-import BrInput, { BrInputEnIcon } from './commonUI/BrFilter/BrInput';
 import BrSpinner from './commonUI/BrSpinner/BrSpinner';
-import { BrSelectIdType, BrSelectItemType, BrSelectSortDataType } from './commonUI/BrSelect/types';
-import BrMultiselect from './commonUI/BrMultiselect/BrMultiselect';
+import { BrSelectIdType } from './commonUI/BrSelect/types';
 import { filtersCreate } from "./msscUtils/filtersCreate";
 import { elemsCountByFilterAndIf } from "./msscUtils/elemsCountByFilterAndIf";
 import { tagsCookAndSet } from "./msscUtils/tagsCookAndSet";
@@ -31,16 +26,22 @@ import { MsscElemType } from './types/types/MsscElemType';
 import { MsscListAreaHeightModeEnum } from './types/enums/MsscListAreaHeightModeEnum';
 import { MsscJsxExternalType } from './types/types/MsscJsxExternalType';
 import { MsscListPropsType } from './types/types/MsscListPropsType';
-import { MsscTagsGroupIdType } from './types/types/MsscTagsGroupIdType';
 import { MsscTagGroupType } from './types/types/MsscTagGroupType';
 import { MsscTagGroupSelectedType } from './types/types/MsscTagGroupSelectedType';
 import { MsscIdObjectType } from './types/types/MsscIdObjectType';
 import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
-import { ParamUiLocal } from './msscComponents/ParamUiLocal';
-import { SortLocalFCC } from './msscComponents/SortLocalFCC';
+import { MsscSort } from './msscComponents/MsscSort';
 import { MsscRefreshesType } from './types/types/MsscRefreshesType';
 import { ListElem } from './msscComponents/ListElemLocalFCC/ListElem';
-import { ListSelectingElemIdType, ListSelectingModel } from './commonUtils/ListSelectingModel';
+import { ListSelectingModelCls } from './commonUtils/ListSelectingModelCls';
+import { MsscDialogDelete } from './msscComponents/MsscDialogDelete';
+import { MsscButtonDelete } from './msscComponents/MsscButtonDelete';
+import { MsscIconsConfType } from './types/types/MsscIconsConfType';
+import { MsscSearch } from './msscComponents/MsscSearch';
+import { MsscInfos } from './msscComponents/MsscInfos';
+import { MultiselectLocalFCC } from './msscComponents/MultiselectLocalFCC';
+import { MsscButtonDeselectAll } from './msscComponents/MsscButtonDeselectAll';
+import { PaginatorLocalFCC } from './msscComponents/PaginatorLocalFCC';
 
 let scrollTop = 0;
 
@@ -76,7 +77,7 @@ const MsscListFCC = ({
   // для показа спиннера при первоначальной загрузке
   const [$isLoadingInitial, $isLoadingInitialSet] = useState(false);
   // для показа спиннера при запросе данных страницы (пагинация страниц)
-  const [$loadingPage, $loadingPageSet] = useState(false);
+  const [$isLoadingPage, $isLoadingPageSet] = useState(false);
   // показ спиннера для диалогов
   const [$loadingDialog, $loadingDialogSet] = useState(false);
   // для того чтобы содержимое второго useEffect отрабатывало строго после содержимого первого
@@ -95,7 +96,7 @@ const MsscListFCC = ({
   const [$isDialogCreateEditShowed, $isDialogCreateEditShowedSet] = useState(false);
   // ---
   const [$listModel] = useState(() => {
-    return new ListSelectingModel()
+    return new ListSelectingModelCls()
   });
   const [$refresh, $refreshSet] = useState(false);
   // ---
@@ -194,7 +195,7 @@ const MsscListFCC = ({
    */
   const requestTwo = async (source: MsscSourceType<any>) => {
     try {
-      $loadingPageSet(true)
+      $isLoadingPageSet(true)
       // await fnWait(3000)
       // --- pagination - ixStart, ixEnd
       const pagination = new RsuvPaginationGyth($elemsCountByFilter, configSTA.elemsOnPage)
@@ -240,7 +241,7 @@ const MsscListFCC = ({
       $pageNumCurrentSet($pageNumBeforChange)
       fnError()
     } finally {
-      $loadingPageSet(false)
+      $isLoadingPageSet(false)
     }
   }
 
@@ -356,61 +357,9 @@ const MsscListFCC = ({
     }
   }
 
-  function SearchLocalFCC() {
-    /**
-     * [[220130110028]]
-     */
-    function searchHandler(value: string) {
-      $searchTextSet(value)
-      refreshes.whole()
-    }
-
-    return (
-      // [[220130103738]]
-      <BrInput
-        icon={BrInputEnIcon.SEARCH}
-        cbOnChange={searchHandler}
-        initialValue={$searchText}
-        autoFocus={true}
-      />
-    )
-  }
-
-  function PaginatorLocalFCC() {
-
-    async function fnPaginationHandle(nextPage: number) {
-      $pageNumBeforChangeSet($pageNumCurrent)
-      $pageNumCurrentSet(nextPage)
-      refreshes.pageDataRefresh()
-    }
-
-    return (
-      <div className="mssc-list-paginator">
-        <MsscPaginatorFCC
-          pageCurrNum={$pageNumCurrent}
-          pageAllCountNum={$pageCountAll}
-          cbChange={fnPaginationHandle}
-          disabled={$loadingPage}
-        />
-      </div>
-    )
-  }
-
-  const iconsConf = {
+  const iconsConf: MsscIconsConfType = {
     svgProps: {width: '20px', height: '20px'},
     colors: new ColorsAsau61().buNormal('#474747')
-  }
-
-  function ButtonDeleteLocalFCC() {
-    const deleteHandler = () => {
-      dialogDeleteShow()
-    }
-    return (
-      <button disabled={$listModel.selectElemsCount() < 1} title="удалить выбранные элементы"
-              onClick={deleteHandler}>
-        <SvgIconTrash {...iconsConf}/>
-      </button>
-    )
   }
 
   function ButtonCreateLocalFCC() {
@@ -424,19 +373,6 @@ const MsscListFCC = ({
     return (
       <button title="создать новый элемент" onClick={createHandler}>
         <SvgIconPlus {...iconsConf}/>
-      </button>
-    )
-  }
-
-  function ButtonDeselectAllLocalFCC() {
-    const deselectAllHandler = () => {
-      $listModel.selectElemsClear()
-      refreshes.refreshPage()
-    }
-    return (
-      <button disabled={$listModel.selectElemsCount() < 1} title="отменить выбор всех элементов"
-              onClick={deselectAllHandler}>
-        <SvgIconUnckecked {...iconsConf}/>
       </button>
     )
   }
@@ -465,67 +401,6 @@ const MsscListFCC = ({
     )
   }
 
-  function DialogDeleteLocalFCC() {
-    /**
-     * [[220128215639]]
-     */
-    const dialogDeleteHandlers = {
-      cancel: () => {
-        $listModel.selectElemsClear()
-        $isDialogDeleteShowedSet(false)
-      },
-      ok: async () => {
-        if ($listModel.selectElemsCount() > 0) {
-          const ids: MsscIdObjectType[] = $listModel.selectElems().map((el: ListSelectingElemIdType) => ({id: el}))
-          try {
-            $loadingDialogSet(true)
-            const noDeletedElems = await source?.elemsDelete(ids)
-            if (noDeletedElems) {
-              if (noDeletedElems.length === 0) {
-                $listModel.selectElemsClear()
-                scrollFixFn(false)
-                $isDialogDeleteShowedSet(false)
-                refreshes.whole()
-              } else {
-                console.warn(`[${noDeletedElems.length}] elems not deleted`)
-                fnError()
-              }
-            }
-          } catch (err) {
-            console.log('!!-!!-!! err {220128215806}\n', err)
-          } finally {
-            $loadingDialogSet(false)
-          }
-        }
-      }
-    }
-
-    return (
-      <MsscDialogFCC
-        show={$isDialogDeleteShowed}
-        title={$dialogTitle}
-        body={$dialogBody}
-        cbCancel={dialogDeleteHandlers.cancel}
-        cbOk={dialogDeleteHandlers.ok}
-      />
-    )
-  }
-
-  function InfosLocalFCC_B() {
-    return (
-      <div className="mssc-infos-b">
-        <ParamUiLocal str1="элементов на текущ. странице" str2={$elemsCountOnCurrPage}/>
-        <span className="mssc-infos-b__divider">/</span>
-        <ParamUiLocal str1="элементов всего по фильтру" str2={$elemsCountByFilter}/>
-        <span className="mssc-infos-b__divider">/</span>
-        <ParamUiLocal str1="элементов всего" str2={$elemsCountAll === -1 ? '-' : $elemsCountAll}/>
-        <span className="mssc-infos-b__divider">/</span>
-        <ParamUiLocal str1="элементов выбрано" str2={$listModel.selectElemsCount()}/>
-      </div>
-    )
-  }
-
-
   function ListLocalFCC() {
     const refDivScroll = useRef(null)
 
@@ -553,7 +428,7 @@ const MsscListFCC = ({
         style={Object.assign({}, {position: 'relative'}, listAreaHeightCssObj)}
         onScroll={onScrollHandler}
       >
-        <BrSpinner show={$loadingPage} fullscreen={false}/>
+        <BrSpinner show={$isLoadingPage} fullscreen={false}/>
         {
           $elems.map((elObj: MsscElemType) => {
             return (<ListElem
@@ -575,44 +450,17 @@ const MsscListFCC = ({
     )
   }
 
-  function MultiselectLocalFCC({tagsGroupId}: { tagsGroupId: MsscTagsGroupIdType }) {
-
-    /**
-     * Обработчик выбора тега
-     * [[220211130543]]
-     * @param checkedElems
-     */
-    const onChangeHandle = (checkedElems: RsuvTxChecked[]) => {
-      const tagGroups = _.cloneDeep($tagGroupSelectedArr)
-      const group = tagGroups.find((el: MsscTagGroupSelectedType) => el.id === tagsGroupId)
-      if (group) {
-        group.elems = checkedElems;
-      } else {
-        const newGroup = {id: tagsGroupId, elems: checkedElems} as MsscTagGroupSelectedType
-        tagGroups.push(newGroup)
-      }
-      $tagGroupSelectedArrSet(tagGroups)
-      refreshes.whole()
-    }
-
-    const rr: MsscTagGroupType | undefined = $tagGroupArr.find((ell: MsscTagGroupType) => ell.id === tagsGroupId)
-    const tagGroup = $tagGroupSelectedArr.find(el => el.id === tagsGroupId)
-    rr?.elems.forEach((el: RsuvTxChecked) => {
-      const b1 = tagGroup?.elems.find(el0 => el0.id === el.id)
-      if (b1) {
-        el.checked = true
-      }
-    })
-
-    return (
-      <div className="mscc-mselect">
-        <BrMultiselect datas={rr?.elems} cbOnChange={onChangeHandle} text={rr?.visibleName}/>
-      </div>
-    )
-  }
-
   const handleLogsShow = () => {
   }
+
+  const paginatorJsx = <PaginatorLocalFCC
+    refreshes={refreshes}
+    $loadingPage={$isLoadingPage}
+    $pageNumBeforChangeSet={$pageNumBeforChangeSet}
+    $pageCountAll={$pageCountAll}
+    $pageNumCurrent={$pageNumCurrent}
+    $pageNumCurrentSet={$pageNumCurrentSet}
+  />
 
   // --- === ---
   return (
@@ -623,29 +471,59 @@ const MsscListFCC = ({
 
       {
         !$isLoadingInitial && children?.({
-          infosJsx: <InfosLocalFCC_B/>,
-          paginator1Jsx: <PaginatorLocalFCC/>,
-          paginator2Jsx: <PaginatorLocalFCC/>,
+          infosJsx: <MsscInfos
+            $elemsCountByFilter={$elemsCountByFilter}
+            $elemsCountOnCurrPage={$elemsCountOnCurrPage}
+            elemsAll={$elemsCountAll === -1 ? '-' : ($elemsCountAll + '')}
+            elemsCountSelected={$listModel.selectElemsCount()}
+          />,
+          paginator1Jsx: paginatorJsx,
+          paginator2Jsx: paginatorJsx,
           buttonsJsx: {
-            btnDelete: <ButtonDeleteLocalFCC/>,
+            btnDelete: <MsscButtonDelete
+              listModel={$listModel}
+              dialogDeleteShow={dialogDeleteShow}
+              iconsConf={iconsConf}
+            />,
             btnCreate: <ButtonCreateLocalFCC/>,
-            btnDeselectAll: <ButtonDeselectAllLocalFCC/>,
+            btnDeselectAll: <MsscButtonDeselectAll
+              listModel={$listModel}
+              refreshes={refreshes}
+              iconsConf={iconsConf}
+            />,
             btnDice: <ButtonDiceLocalFCC/>
           },
-          sortJsx: <SortLocalFCC
+          sortJsx: <MsscSort
             sortData={sortData}
             sortIdCurr={$sortIdCurr}
             sortIdCurrSet={$sortIdCurrSet}
             refreshes={refreshes}
           />,
-          searchJsx: <SearchLocalFCC/>,
+          searchJsx: <MsscSearch searchText={$searchText} searchTextSet={$searchTextSet} refreshes={refreshes}/>,
           listJsx: <ListLocalFCC/>,
-          multiselectJsxArr: tagsFieldNameArr?.map(el => (<MultiselectLocalFCC tagsGroupId={el.id}/>))
+          multiselectJsxArr: tagsFieldNameArr?.map(el => (<MultiselectLocalFCC
+            tagsGroupId={el.id}
+            $tagGroupSelectedArr={$tagGroupSelectedArr}
+            $tagGroupSelectedArrSet={$tagGroupSelectedArrSet}
+            $tagGroupArr={$tagGroupArr}
+            refreshes={refreshes}
+          />))
         } as MsscJsxExternalType)
       }
 
       {/* ^^dialog delete^^ */}
-      <DialogDeleteLocalFCC/>
+      <MsscDialogDelete
+        listModel={$listModel}
+        refreshes={refreshes}
+        elemsDelete={source?.elemsDelete}
+        dialogBody={$dialogBody}
+        isDialogDeleteShowed={$isDialogDeleteShowed}
+        isDialogDeleteShowedSet={$isDialogDeleteShowedSet}
+        dialogTitle={$dialogTitle}
+        scrollFixFn={scrollFixFn}
+        loadingDialogSet={$loadingDialogSet}
+        fnError={fnError}
+      />
       {/* ^^dialog create/edit ^^ */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
       {/* spinner */}

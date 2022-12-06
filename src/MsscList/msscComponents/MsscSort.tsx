@@ -12,7 +12,7 @@ export interface PropsType {
   sortData?: BrSelectSortDataType<MsscColumnNameType>
 }
 
-export function SortLocalFCC({sortIdCurrSet, sortIdCurr, refreshes, sortData}: PropsType) {
+export function MsscSort({sortIdCurrSet, sortIdCurr, refreshes, sortData}: PropsType) {
 
   /**
    * [[220129163836]]
