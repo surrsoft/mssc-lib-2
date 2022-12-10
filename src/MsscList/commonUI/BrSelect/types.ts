@@ -5,9 +5,9 @@ import { RsuvEnSort } from 'rsuv-lib';
  */
 export type BrSelectIdType = string;
 
-export type BrSelectItemType<T> = {
-  idElem: BrSelectIdType,
-  direction: Omit<RsuvEnSort, RsuvEnSort.UNDEF>,
+export interface BrSelectItemType<T> {
+  idElem: BrSelectIdType
+  direction: Omit<RsuvEnSort, RsuvEnSort.UNDEF>
   text: string
   /**
    * любые сопуствующие данные, например "имя столбца"
@@ -18,7 +18,7 @@ export type BrSelectItemType<T> = {
 /**
  * @typeParam T - тип сопутствующих данных
  */
-export type BrSelectSortDataType<T> = {
+export interface BrSelectSortDataType<T> {
   /**
    * id выбранного элемента. Это должен быть один из id присутствующих в items.idElem
    */

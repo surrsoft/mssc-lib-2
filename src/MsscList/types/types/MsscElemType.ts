@@ -1,17 +1,22 @@
-import { RsuvTxStringAB } from 'rsuv-lib';
+import { RsuvTxStringAB } from "rsuv-lib";
 
 /**
  * Тип представляющий *с-элемент (см. понятие [221204121005])
  */
 export interface MsscElemType {
   /** идентификатор */
-  id: RsuvTxStringAB
+  id: RsuvTxStringAB;
   /** JSX элемента */
-  elem: JSX.Element
+  elem: JSX.Element;
   /** модель элемента */
-  elemModel: object
+  elemModel: object;
 }
 
 export function isMsscElemType(data: any): data is MsscElemType {
-  return !!(data && data.id && data.elem && data.elemModel && data.id.bnuwIsValid()?.success);
+  return !!(
+    data?.id &&
+    data.elem &&
+    data.elemModel &&
+    data.id.bnuwIsValid()?.success
+  );
 }

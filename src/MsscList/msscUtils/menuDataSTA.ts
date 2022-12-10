@@ -1,12 +1,14 @@
-import { MsscMenuActionEnum } from '../types/enums/MsscMenuActionEnum';
-import { DataPoarType } from '../commonUI/MenuPoar/types/DataPoarType';
-import { ItemAtPoarType } from '../commonUI/MenuPoar/types/ItemAtPoarType';
+import { MsscMenuActionEnum } from "../types/enums/MsscMenuActionEnum";
+import { DataPoarType } from "../commonUI/MenuPoar/types/DataPoarType";
+import { ItemAtPoarType } from "../commonUI/MenuPoar/types/ItemAtPoarType";
 
-export const menuDataSTA = {
-  id: '',
-  items: [
-    {idAction: MsscMenuActionEnum.EDIT, text: 'Изменить'} as ItemAtPoarType,
-    {idAction: MsscMenuActionEnum.SELECT, text: 'Выбрать'} as ItemAtPoarType,
-    {idAction: MsscMenuActionEnum.DELETE, text: 'Удалить'} as ItemAtPoarType
-  ]
-} as DataPoarType
+const items: ItemAtPoarType[] = [
+  { idAction: MsscMenuActionEnum.EDIT, text: "Изменить" },
+  { idAction: MsscMenuActionEnum.SELECT, text: "Выбрать" },
+  { idAction: MsscMenuActionEnum.DELETE, text: "Удалить" },
+];
+
+export const menuDataSTA: DataPoarType = {
+  id: "",
+  items,
+};

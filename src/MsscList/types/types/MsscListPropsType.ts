@@ -1,7 +1,6 @@
 import { MsscSourceType } from '../MsscSourceType';
 import { BrSelectSortDataType } from '../../commonUI/BrSelect/types';
 import { MsscColumnNameType } from './MsscColumnNameType';
-import { MsscElemStructType } from './MsscElemStructType';
 import { MsscMultFieldsType } from './MsscMultFieldsType';
 import { MsscListAreaHeightCls } from '../../msscUtils/MsscListAreaHeightCls';
 import { MsscListElemStructType } from './MsscListElemStructType';
@@ -26,7 +25,7 @@ export interface MsscListPropsType {
    * [[220607221651]] Описание полей содержащих теги. Сколько здесь будет элементов, столько будет показываться
    * выпадающих списков
    */
-  tagsFieldNameArr?: MsscMultFieldsType[],
+  tagsFieldNameArr?: MsscMultFieldsType[]
   /**
    * Высота области прокрутки списка
    */

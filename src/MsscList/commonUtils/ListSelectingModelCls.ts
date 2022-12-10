@@ -6,9 +6,9 @@
  */
 
 /** идентификатор элемента (*id) */
-export type ListSelectingElemIdType = string
+export type ListSelectingElemIdType = string;
 /** идентификатор элемента или null */
-export type ListSelectingElemIdOrNullType = ListSelectingElemIdType | null
+export type ListSelectingElemIdOrNullType = ListSelectingElemIdType | null;
 
 /**
  * Предназначен для хранения текущего состояния какого-либо списка.
@@ -20,29 +20,29 @@ export class ListSelectingModelCls {
   /**
    * список id выбранных элементов
    */
-  private _selectedIds: Set<ListSelectingElemIdType> = new Set()
+  private readonly _selectedIds: Set<ListSelectingElemIdType> = new Set();
 
   /**
    * id *активного-элемента
    * @private
    */
-  private _activeId: ListSelectingElemIdOrNullType = null
+  private _activeId: ListSelectingElemIdOrNullType = null;
 
   /** установка значения id *активного-элемента */
   activeIdSet(id: ListSelectingElemIdType) {
-    this._activeId = id
+    this._activeId = id;
   }
 
   /**
    * Возвращает идентификатор активного элемента или null
    */
   activeId(): ListSelectingElemIdOrNullType {
-    return this._activeId
+    return this._activeId;
   }
 
   /** сброс id *активного-элемента */
   activeIdReset() {
-    this._activeId = null
+    this._activeId = null;
   }
 
   /**
@@ -50,7 +50,7 @@ export class ListSelectingModelCls {
    * @param id идентификатор элемента
    */
   activeIdIs(id: ListSelectingElemIdType): boolean {
-    return !!id && this._activeId === id
+    return !!id && this._activeId === id;
   }
 
   /**
@@ -60,14 +60,14 @@ export class ListSelectingModelCls {
    * @param str (2) --
    */
   activeIdIsB(id: ListSelectingElemIdType, str: string): string {
-    return this.activeIdIs(id) ? str : ''
+    return this.activeIdIs(id) ? str : "";
   }
 
   /**
    * Возвращает количество выбранных элементов
    */
   selectElemsCount(): number {
-    return this._selectedIds.size
+    return this._selectedIds.size;
   }
 
   /**
@@ -76,10 +76,10 @@ export class ListSelectingModelCls {
    */
   selectElemsAdd(ids: ListSelectingElemIdType[]) {
     ids
-      .filter(id => !!id)
+      .filter((id) => !!id)
       .forEach((id: ListSelectingElemIdType) => {
-        this._selectedIds.add(id)
-      })
+        this._selectedIds.add(id);
+      });
   }
 
   /**
@@ -88,10 +88,10 @@ export class ListSelectingModelCls {
    */
   selectElemsDelete(ids: ListSelectingElemIdType[]) {
     ids
-      .filter(el => !!el)
-      .forEach(el => {
-        this._selectedIds.delete(el)
-      })
+      .filter((el) => !!el)
+      .forEach((el) => {
+        this._selectedIds.delete(el);
+      });
   }
 
   /**
@@ -99,14 +99,14 @@ export class ListSelectingModelCls {
    * @param id (1) --
    */
   selectElemIs(id: ListSelectingElemIdType): boolean {
-    return this._selectedIds.has(id)
+    return this._selectedIds.has(id);
   }
 
   /**
    * Очищает *в-список
    */
   selectElemsClear() {
-    this._selectedIds.clear()
+    this._selectedIds.clear();
   }
 
   /**
@@ -114,15 +114,15 @@ export class ListSelectingModelCls {
    */
   selectElemOne(): ListSelectingElemIdOrNullType {
     if (this.selectElemsCount() > 0) {
-      return this._selectedIds.values().next().value
+      return this._selectedIds.values().next().value;
     }
-    return null
+    return null;
   }
 
   /**
    * выбранные идентификаторы
    */
   selectElems(): ListSelectingElemIdType[] {
-    return Array.from(this._selectedIds)
+    return Array.from(this._selectedIds);
   }
 }

@@ -1,7 +1,15 @@
-import { EnAirField } from './EnAirField';
-import { MsscMultFields } from '../../../MsscList/msscUtils/MsscMultFields';
+import { EnAirField } from "./EnAirField";
+import { MsscMultFieldsType } from "../../../MsscList/types/types/MsscMultFieldsType";
 
-export const airTagsFieldNameArr = [
-  {id: EnAirField.TAGS, fieldName: EnAirField.TAGS, visibleName: 'теги'} as MsscMultFields,
-  {id: EnAirField.TAGS2, fieldName: EnAirField.TAGS2, visibleName: 'теги-2'} as MsscMultFields,
+export const airTagsFieldNameArr: MsscMultFieldsType[] = [
+  {
+    id: EnAirField.TAGS,
+    fieldName: EnAirField.TAGS,
+    visibleName: "теги",
+  },
+  {
+    id: EnAirField.TAGS2,
+    fieldName: EnAirField.TAGS2,
+    visibleName: "теги-2",
+  },
 ];

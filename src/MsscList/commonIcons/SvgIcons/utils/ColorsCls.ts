@@ -2,25 +2,25 @@
  * Представляет 4 цвета для кнопок и т.п.
  * id [[asau61]]
  */
-import { AnimateCls } from './AnimateCls';
+import { AnimateCls } from "./AnimateCls";
 
 export class ColorsCls {
   /**
    * цвет в нормальном состоянии
    */
-  public normal: string = 'black'
+  public normal: string = "black";
   /**
    * цвет при наведении
    */
-  public hover: string = 'red'
+  public hover: string = "red";
   /**
    * цвет в состоянии disabled родителя
    */
-  public disable: string = 'silver'
+  public disable: string = "silver";
   /**
    * цвет при нажатии
    */
-  public click: string = 'silver'
+  public click: string = "silver";
 
   buNormal(color: string): ColorsCls {
     this.normal = color;
@@ -49,7 +49,7 @@ export class ColorsCls {
    */
   static cssCreate(cssClassName: string, colors: ColorsCls) {
     if (!cssClassName || cssClassName.length < 1 || !colors) {
-      return ''
+      return "";
     }
     return `
       .${cssClassName} {
@@ -68,10 +68,15 @@ export class ColorsCls {
         stroke: ${colors.click};
         fill: ${colors.click};
       }
-    `
+    `;
   }
 
-  static cssCreateB(cn = 'CN', uniqueId: string = '', colors: ColorsCls = new ColorsCls(), animate?: AnimateCls) {
+  static cssCreateB(
+    cn = "CN",
+    uniqueId: string = "",
+    colors: ColorsCls = new ColorsCls(),
+    animate?: AnimateCls
+  ) {
     return `
           .${cn}_svg${uniqueId} {
               --colorNormal: ${colors?.normal};
@@ -83,33 +88,41 @@ export class ColorsCls {
           .${cn}_svg${uniqueId} {
               fill: var(--colorNormal);
               stroke: var(--colorNormal);
-              ${!animate?.enabled ? '' : `
+              ${
+                !animate?.enabled
+                  ? ""
+                  : `
                 animation-name: ${cn}_anim_disable${uniqueId};
-                animation-duration: ${animate.durationMillisec || 500}ms;
+                animation-duration: ${animate.durationMillisec ?? 500}ms;
                 animation-timing-function: ease;
                 animation-iteration-count: infinite;
                 animation-direction: alternate;
                 animation-play-state: paused;
-              `}
+              `
+              }
           }
           
           *:hover:not(:disabled) > .${cn}_svg${uniqueId} {
               fill: var(--colorHover);
               stroke: var(--colorHover);
-              ${!animate?.enabled ? '' : `
+              ${
+                !animate?.enabled
+                  ? ""
+                  : `
                 animation-name: ${cn}_anim_hover${uniqueId};
                 animation-duration: 100ms;
                 animation-timing-function: linear;
                 animation-fill-mode: forwards;
                 animation-iteration-count: 1;
                 animation-play-state: running;
-              `}
+              `
+              }
           }
           
           *:disabled > .${cn}_svg${uniqueId} {
               fill: var(--colorDiasable);
               stroke: var(--colorDisable);
-              ${!animate?.enabled ? '' : 'animation-play-state: running;'}
+              ${!animate?.enabled ? "" : "animation-play-state: running;"}
           }
           
           *:active > .${cn}_svg${uniqueId} {
@@ -117,7 +130,10 @@ export class ColorsCls {
               stroke: var(--colorClick); 
           }
           
-          ${!animate?.enabled ? '' : `
+          ${
+            !animate?.enabled
+              ? ""
+              : `
             @keyframes ${cn}_anim_disable${uniqueId} {
               0% {
                   fill: var(--colorNormal);
@@ -139,8 +155,8 @@ export class ColorsCls {
                 stroke: var(--colorHover);
               }
             }
-          `}
+          `
+          }
         `;
   }
-
 }
