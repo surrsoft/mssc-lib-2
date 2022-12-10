@@ -1,18 +1,18 @@
-import { ColorsAsau61 } from './ColorsAsau61';
-import { AnimateAsau71 } from './AnimateAsau71';
+import { ColorsCls } from './ColorsCls';
+import { AnimateCls } from './AnimateCls';
 
 /**
  * ID [[asau72]]
  */
-export interface SvgPropsAsau72 {
+export interface SvgPropsCls {
   /**
-   * указнные здесь пропсы будут переопределять/добавляться к корневому svg
+   * указанные здесь пропсы будут переопределять/добавляться к корневому svg
    */
   svgProps?: any,
   /**
    * цвета для состояний
    */
-  colors?: ColorsAsau61,
+  colors?: ColorsCls,
   /**
    * угол поворота: 180 - смотрит влево, 0 - вправо
    */
@@ -21,7 +21,7 @@ export interface SvgPropsAsau72 {
    * [[xx1]] если {enabled: true, ...} то в состоянии 'disabled' будет проигрываться анимация меняющая цвет с normal к
    * disable и обратно
    */
-  animate?: AnimateAsau71,
+  animate?: AnimateCls,
   /**
    * Текст который будет добавлен к идентификаторам CSS; может быть полезно для идентификации отдельных экземпляров.
    * Вообще лучше всега прописывать уникальный идентификатор здесь, т.к. иначе могут быть проблемы с анимациями -

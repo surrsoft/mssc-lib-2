@@ -1,49 +1,12 @@
-import SvgIconMenu from '../../commonIcons/SvgIconMenu/SvgIconMenu';
+import SvgIconMenu from '../../commonIcons/SvgIcons/SvgIconMenu';
 import React, { useEffect, useRef, useState } from 'react';
-import './stylesMenuAsau54.css';
+import './stylesMenuPoar.css';
+import { IdActionPoarType } from './types/types';
+import { PropsAtPoarType } from './types/PropsAtPoarType';
 
-// ID [[asau54]]
+// ID [[asau54]] [[poar]]
 // ИСПОЛЬЗОВАННЫЕ ТЕХНИКИ: [asau58]
 
-
-export class DataAtAsau54 {
-  id: string = ''
-  items: ItemAtAsau54[] = []
-}
-
-/**
- * идентификатор действия которое пункт меню представляет
- */
-export type IdActionAtAsau54PMT = string
-/**
- * текст для отображения на пункте меню
- */
-export type ActionTextAtAsau54PMT = string
-
-/**
- * представляет элемент меню
- */
-export class ItemAtAsau54 {
-  idAction: IdActionAtAsau54PMT = ''
-  text: ActionTextAtAsau54PMT = ''
-}
-
-export class SelectResultAtAsau54 {
-  idAction?: IdActionAtAsau54PMT
-  idElem?: string
-}
-
-export class PropsAtAsau54 {
-  /**
-   * Данные описывающие пункты меню
-   */
-  data?: DataAtAsau54
-  /**
-   * Вызывается когда сделан выбор пункта
-   * @param el (1) -- выбранный пункт
-   */
-  cbOnSelected?: (el: SelectResultAtAsau54) => void
-}
 
 /**
  * Реализация списка пунктов меню
@@ -51,7 +14,7 @@ export class PropsAtAsau54 {
  * @param cbOnSelected
  * @constructor
  */
-function MenuAsau54FCC({data, cbOnSelected}: PropsAtAsau54) {
+function MenuPoar({data, cbOnSelected}: PropsAtPoarType) {
   const [$isListShowed, $isListShowedSet] = useState(false);
   const refBtnDropdown = useRef(null)
 
@@ -62,7 +25,7 @@ function MenuAsau54FCC({data, cbOnSelected}: PropsAtAsau54) {
     })
   };
 
-  const btnOnClick = (idAction: IdActionAtAsau54PMT, idElem: string) => (ev: any) => {
+  const btnOnClick = (idAction: IdActionPoarType, idElem: string) => (ev: any) => {
     ev.stopPropagation()
     $isListShowedSet(false)
     if (cbOnSelected) {
@@ -116,4 +79,4 @@ function MenuAsau54FCC({data, cbOnSelected}: PropsAtAsau54) {
   )
 }
 
-export default MenuAsau54FCC;
+export default MenuPoar;

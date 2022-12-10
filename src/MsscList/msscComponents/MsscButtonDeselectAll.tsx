@@ -1,4 +1,4 @@
-import SvgIconUnckecked from '../commonIcons/SvgIconUnchecked/SvgIconUnckecked';
+import SvgIconUnckecked from '../commonIcons/SvgIcons/SvgIconUnckecked';
 import React from 'react';
 import { MsscListPropsType } from '../types/types/MsscListPropsType';
 import { ListSelectingModelCls } from '../commonUtils/ListSelectingModelCls';

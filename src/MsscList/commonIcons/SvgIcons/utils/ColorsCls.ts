@@ -2,9 +2,9 @@
  * Представляет 4 цвета для кнопок и т.п.
  * id [[asau61]]
  */
-import { AnimateAsau71 } from './AnimateAsau71';
+import { AnimateCls } from './AnimateCls';
 
-export class ColorsAsau61 {
+export class ColorsCls {
   /**
    * цвет в нормальном состоянии
    */
@@ -22,22 +22,22 @@ export class ColorsAsau61 {
    */
   public click: string = 'silver'
 
-  buNormal(color: string): ColorsAsau61 {
+  buNormal(color: string): ColorsCls {
     this.normal = color;
     return this;
   }
 
-  buHover(color: string): ColorsAsau61 {
+  buHover(color: string): ColorsCls {
     this.hover = color;
     return this;
   }
 
-  buDisabled(color: string): ColorsAsau61 {
+  buDisabled(color: string): ColorsCls {
     this.disable = color;
     return this;
   }
 
-  buClick(color: string): ColorsAsau61 {
+  buClick(color: string): ColorsCls {
     this.click = color;
     return this;
   }
@@ -47,7 +47,7 @@ export class ColorsAsau61 {
    * @param cssClassName (1) --
    * @param colors (2) --
    */
-  static cssCreate(cssClassName: string, colors: ColorsAsau61) {
+  static cssCreate(cssClassName: string, colors: ColorsCls) {
     if (!cssClassName || cssClassName.length < 1 || !colors) {
       return ''
     }
@@ -71,7 +71,7 @@ export class ColorsAsau61 {
     `
   }
 
-  static cssCreateB(cn = 'CN', uniqueId: string = '', colors: ColorsAsau61 = new ColorsAsau61(), animate?: AnimateAsau71) {
+  static cssCreateB(cn = 'CN', uniqueId: string = '', colors: ColorsCls = new ColorsCls(), animate?: AnimateCls) {
     return `
           .${cn}_svg${uniqueId} {
               --colorNormal: ${colors?.normal};

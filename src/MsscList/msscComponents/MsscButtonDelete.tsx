@@ -1,5 +1,5 @@
 import React from 'react';
-import SvgIconTrash from '../commonIcons/SvgIconTrash/SvgIconTrash';
+import SvgIconTrash from '../commonIcons/SvgIcons/SvgIconTrash';
 import { ListSelectingModelCls } from '../commonUtils/ListSelectingModelCls';
 import { MsscIconsConfType } from '../types/types/MsscIconsConfType';
 

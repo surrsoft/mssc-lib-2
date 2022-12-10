@@ -1,7 +1,7 @@
 /**
  * ID [[asau71]]
  */
-export class AnimateAsau71 {
+export class AnimateCls {
   /**
    * если true то будет проигрываться анимация (см. [xx1])
    */

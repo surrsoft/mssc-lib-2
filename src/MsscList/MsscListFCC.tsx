@@ -10,9 +10,9 @@ import {
   RsuvTxSort,
 } from 'rsuv-lib';
 import { useScrollFix } from 'ueur-lib';
-import SvgIconPlus from './commonIcons/SvgIconPlus/SvgIconPlus';
-import { ColorsAsau61 } from './commonIcons/utils/ColorsAsau61';
-import SvgIconDice from './commonIcons/SvgIconDice/SvgIconDice';
+import SvgIconPlus from './commonIcons/SvgIcons/SvgIconPlus';
+import { ColorsCls } from './commonIcons/SvgIcons/utils/ColorsCls';
+import SvgIconDice from './commonIcons/SvgIcons/SvgIconDice';
 import BrSpinner from './commonUI/BrSpinner/BrSpinner';
 import { BrSelectIdType } from './commonUI/BrSelect/types';
 import { filtersCreate } from "./msscUtils/filtersCreate";
@@ -36,10 +36,10 @@ import { MsscButtonDelete } from './msscComponents/MsscButtonDelete';
 import { MsscIconsConfType } from './types/types/MsscIconsConfType';
 import { MsscSearch } from './msscComponents/MsscSearch';
 import { MsscInfos } from './msscComponents/MsscInfos';
-import { MultiselectLocalFCC } from './msscComponents/MultiselectLocalFCC';
+import { MsscMultiselect } from './msscComponents/MsscMultiselect';
 import { MsscButtonDeselectAll } from './msscComponents/MsscButtonDeselectAll';
-import { PaginatorLocalFCC } from './msscComponents/PaginatorLocalFCC';
-import { ListElem } from './msscComponents/ListElem/ListElem';
+import { MsscPaginator } from './msscComponents/MsscPaginator';
+import { MsscListElem } from './msscComponents/ListElem/MsscListElem';
 
 let scrollTop = 0;
 
@@ -357,7 +357,7 @@ const MsscListFCC = ({
 
   const iconsConf: MsscIconsConfType = {
     svgProps: {width: '20px', height: '20px'},
-    colors: new ColorsAsau61().buNormal('#474747')
+    colors: new ColorsCls().buNormal('#474747')
   }
 
   function ButtonCreateLocalFCC() {
@@ -378,9 +378,9 @@ const MsscListFCC = ({
   function ButtonDiceLocalFCC() {
     const fnColorsForRandom = () => {
       if (!$randomEnabled) {
-        return new ColorsAsau61()
+        return new ColorsCls()
       }
-      return new ColorsAsau61().buNormal('#71fc22').buHover('#71fc22')
+      return new ColorsCls().buNormal('#71fc22').buHover('#71fc22')
     }
 
     /**
@@ -429,7 +429,7 @@ const MsscListFCC = ({
         <BrSpinner show={$isLoadingPage} fullscreen={false}/>
         {
           $elems.map((elObj: MsscElemType) => {
-            return (<ListElem
+            return (<MsscListElem
               key={elObj.id.val}
               dialogCreateOrEdit={source?.dialogCreateOrEdit}
               elem={elObj}
@@ -451,7 +451,7 @@ const MsscListFCC = ({
   const handleLogsShow = () => {
   }
 
-  const paginatorJsx = <PaginatorLocalFCC
+  const paginatorJsx = <MsscPaginator
     refreshes={refreshes}
     $loadingPage={$isLoadingPage}
     $pageNumBeforChangeSet={$pageNumBeforChangeSet}
@@ -499,7 +499,7 @@ const MsscListFCC = ({
           />,
           searchJsx: <MsscSearch searchText={$searchText} searchTextSet={$searchTextSet} refreshes={refreshes}/>,
           listJsx: <ListLocalFCC/>,
-          multiselectJsxArr: tagsFieldNameArr?.map(el => (<MultiselectLocalFCC
+          multiselectJsxArr: tagsFieldNameArr?.map(el => (<MsscMultiselect
             tagsGroupId={el.id}
             $tagGroupSelectedArr={$tagGroupSelectedArr}
             $tagGroupSelectedArrSet={$tagGroupSelectedArrSet}

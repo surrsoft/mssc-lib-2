@@ -15,7 +15,7 @@ export interface PropsType {
   $tagGroupArr: MsscTagGroupType[]
 }
 
-export function MultiselectLocalFCC({
+export function MsscMultiselect({
                                tagsGroupId,
                                refreshes,
                                $tagGroupSelectedArr,

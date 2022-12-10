@@ -1,11 +1,11 @@
 import * as React from "react";
-import { ColorsAsau61 } from '../utils/ColorsAsau61';
-import { PropsAsau62 } from '../utils/PropsAsau62';
+import { ColorsCls } from './utils/ColorsCls';
+import { SvgIconPropsType } from './types/SvgIconPropsType';
 
 // id [[asau60]]
 // Ikonate Bold Interface Icons
 
-const SvgIconTrash = ({svgProps, colors = new ColorsAsau61()}: PropsAsau62) => {
+const SvgIconTrash = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => {
 
   const svgClassName = 'asau60svg'
 
@@ -18,7 +18,7 @@ const SvgIconTrash = ({svgProps, colors = new ColorsAsau61()}: PropsAsau62) => {
       xmlns="http://www.w3.org/2000/svg"
       {...svgProps}
     >
-      <style type="text/css">{ColorsAsau61.cssCreate(svgClassName, colors)}</style>
+      <style type="text/css">{ColorsCls.cssCreate(svgClassName, colors)}</style>
       <path
         fillRule="evenodd"
         clipRule="evenodd"

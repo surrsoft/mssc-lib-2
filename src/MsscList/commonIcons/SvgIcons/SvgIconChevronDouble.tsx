@@ -1,12 +1,12 @@
 import * as React from "react";
-import { ColorsAsau61 } from '../utils/ColorsAsau61';
-import { SvgPropsAsau72 } from '../utils/SvgPropsAsau72';
+import { ColorsCls } from './utils/ColorsCls';
+import { SvgPropsCls } from './utils/SvgPropsCls';
 
 // [[asau70]]
 
 /**
  *
- * @param svgProps {SvgPropsAsau72}
+ * @param svgProps {SvgPropsCls}
  * @param colors
  * @param angle
  * @param animate
@@ -15,11 +15,11 @@ import { SvgPropsAsau72 } from '../utils/SvgPropsAsau72';
  */
 const SvgIconChevron = ({
                           svgProps,
-                          colors = new ColorsAsau61(),
+                          colors = new ColorsCls(),
                           angle = 180,
                           animate,
                           uniqueId = Date.now() + ''
-                        }: SvgPropsAsau72) => {
+                        }: SvgPropsCls) => {
 
   const cfg = {
     clsName: 'asau70', // NEED UNIQUE
@@ -37,7 +37,7 @@ const SvgIconChevron = ({
       {...svgProps}
     >
       <defs>
-        <style>{ColorsAsau61.cssCreateB(cfg.clsName, uniqueId, colors, animate)}</style>
+        <style>{ColorsCls.cssCreateB(cfg.clsName, uniqueId, colors, animate)}</style>
       </defs>
       <g transform={`rotate(${angle}, ${16 / 2}, ${16 / 2})`} strokeWidth={0.5} >
         <path

@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
 import { MsscElemType } from '../../types/types/MsscElemType';
-import { DataAtAsau54, SelectResultAtAsau54 } from '../../commonUI/MenuFCC/MenuAsau54FCC';
 import { MsscMenuActionEnum } from '../../types/enums/MsscMenuActionEnum';
 import { RkCheckbox } from './components/RkCheckbox';
 import { RkBody } from './components/RkBody';
@@ -11,6 +10,8 @@ import { MsscListElemStructType } from '../../types/types/MsscListElemStructType
 import { menuDataSTA } from '../../msscUtils/menuDataSTA';
 import { MsscSourceDialogCreateOrEditType } from '../../types/types/MsscSourceDialogCreateOrEditType';
 import { ListSelectingModelCls } from '../../commonUtils/ListSelectingModelCls';
+import { DataPoarType } from '../../commonUI/MenuPoar/types/DataPoarType';
+import { SelectResultPoarType } from '../../commonUI/MenuPoar/types/SelectResultPoarType';
 
 export interface PropsType {
   elem: MsscElemType
@@ -25,7 +26,7 @@ export interface PropsType {
   listElemStruct?: MsscListElemStructType
 }
 
-export function ListElem({
+export function MsscListElem({
                                    elem,
                                    refreshes,
                                    listModel,
@@ -43,7 +44,7 @@ export function ListElem({
    * [[220129111758]]
    * @param obj
    */
-  const menuElemOnSelected = async (obj: SelectResultAtAsau54) => {
+  const menuElemOnSelected = async (obj: SelectResultPoarType) => {
     switch (obj.idAction) {
       case MsscMenuActionEnum.DELETE:
         if (obj.idElem) {

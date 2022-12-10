@@ -1,6 +1,6 @@
-import { ColorsAsau61 } from '../../commonIcons/utils/ColorsAsau61';
+import { ColorsCls } from '../../commonIcons/SvgIcons/utils/ColorsCls';
 
 export interface MsscIconsConfType {
   svgProps: { width: string, height: string },
-  colors: ColorsAsau61
+  colors: ColorsCls
 }

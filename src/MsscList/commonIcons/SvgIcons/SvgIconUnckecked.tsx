@@ -1,11 +1,11 @@
 import * as React from "react";
-import { ColorsAsau61 } from '../utils/ColorsAsau61';
-import { PropsAsau62 } from '../utils/PropsAsau62';
+import { ColorsCls } from './utils/ColorsCls';
+import { SvgIconPropsType } from './types/SvgIconPropsType';
 
 // [[asau64]]
 // Ikonate Bold Interface Icons
 
-const SvgIconUnckecked = ({svgProps, colors = new ColorsAsau61()}: PropsAsau62) => {
+const SvgIconUnckecked = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => {
   const svgClassName = 'asau64svg'
   return (
     <svg
@@ -22,7 +22,7 @@ const SvgIconUnckecked = ({svgProps, colors = new ColorsAsau61()}: PropsAsau62) 
       color="#000000"
       {...svgProps}
     >
-      <style type="text/css">{ColorsAsau61.cssCreate(svgClassName, colors)}</style>
+      <style type="text/css">{ColorsCls.cssCreate(svgClassName, colors)}</style>
       <rect
         x={21}
         y={3}

@@ -11,7 +11,7 @@ export interface PropsType {
   $loadingPage: boolean
 }
 
-export function PaginatorLocalFCC({
+export function MsscPaginator({
                                     $pageNumBeforChangeSet,
                                     $pageNumCurrent,
                                     $pageNumCurrentSet,

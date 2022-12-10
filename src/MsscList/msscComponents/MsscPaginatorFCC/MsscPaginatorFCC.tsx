@@ -1,6 +1,6 @@
 import React from 'react';
-import SvgIconChevron from '../../commonIcons/SvgIconChevron/SvgIconChevron';
-import SvgIconChevronDouble from '../../commonIcons/SvgIconChevronDouble/SvgIconChevronDouble';
+import SvgIconChevron from '../../commonIcons/SvgIcons/SvgIconChevron';
+import SvgIconChevronDouble from '../../commonIcons/SvgIcons/SvgIconChevronDouble';
 import _ from 'lodash';
 
 export interface MsscPaginatorProps {
