@@ -1,6 +1,6 @@
 import { MsscSourceType } from '../MsscSourceType';
-import { MsscTagGroupSelectedType } from './MsscTagGroupSelectedType';
 import { MsscMultFieldsType } from './MsscMultFieldsType';
+import { MsscTagGroupSelectedType } from './MsscTagGroupSelectedType';
 
 export interface MsscFiltersCreateParamsType {
   source: MsscSourceType<any>,

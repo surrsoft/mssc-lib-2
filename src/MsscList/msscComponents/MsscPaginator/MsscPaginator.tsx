@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { MsscRefreshesType } from '../types/types/MsscRefreshesType';
-import MsscPaginatorFCC from './MsscPaginatorFCC/MsscPaginatorFCC';
+import { MsscRefreshesType } from '../../types/types/MsscRefreshesType';
+import MsscPaginatorSub from './components/MsscPaginatorSub';
 
 export interface PropsType {
   $pageNumBeforChangeSet: any
@@ -29,7 +29,7 @@ export function MsscPaginator({
 
   return (
     <div className="mssc-list-paginator">
-      <MsscPaginatorFCC
+      <MsscPaginatorSub
         pageCurrNum={$pageNumCurrent}
         pageAllCountNum={$pageCountAll}
         cbChange={fnPaginationHandle}

@@ -4,7 +4,7 @@ import { ListSelectingElemIdType, ListSelectingModelCls } from '../commonUtils/L
 import { MsscIdObjectType } from '../types/types/MsscIdObjectType';
 import { MsscRefreshesType } from '../types/types/MsscRefreshesType';
 import { MsscSourceElemsDeleteType } from '../types/types/MsscSourceElemsDeleteType';
-import MsscDialogFCC from './MsscDialogFCC/MsscDialogFCC';
+import MsscDialog from './MsscDialog/MsscDialog';
 
 export interface PropsType {
   listModel: ListSelectingModelCls
@@ -66,7 +66,7 @@ export function MsscDialogDelete({
   }
 
   return (
-    <MsscDialogFCC
+    <MsscDialog
       show={isDialogDeleteShowed}
       title={dialogTitle}
       body={dialogBody}

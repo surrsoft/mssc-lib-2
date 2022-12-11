@@ -1,57 +1,69 @@
-import _ from 'lodash';
-import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
-import { RsuvEnResultCrudSet, RsuvPaginationGyth, RsuvTxNumIntAB, RsuvTxNumIntDiap, RsuvTxSort, } from 'rsuv-lib';
-import { useScrollFix } from 'ueur-lib';
+import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import {
+  RsuvEnResultCrudSet,
+  RsuvPaginationGyth,
+  RsuvTxNumIntAB,
+  RsuvTxNumIntDiap,
+  RsuvTxSort,
+} from "rsuv-lib";
+import { useScrollFix } from "ueur-lib";
 
-import './msscListStyles.scss';
-import SvgIconDice from './commonIcons/SvgIcons/SvgIconDice';
-import SvgIconPlus from './commonIcons/SvgIcons/SvgIconPlus';
-import { ColorsCls } from './commonIcons/SvgIcons/utils/ColorsCls';
-import { BrSelectIdType } from './commonUI/BrSelect/types';
-import BrSpinner from './commonUI/BrSpinner/BrSpinner';
-import { ListSelectingModelCls } from './commonUtils/ListSelectingModelCls';
-import { MsscListElem } from './msscComponents/ListElem/MsscListElem';
-import { MsscButtonDelete } from './msscComponents/MsscButtonDelete';
-import { MsscButtonDeselectAll } from './msscComponents/MsscButtonDeselectAll';
-import { MsscDialogDelete } from './msscComponents/MsscDialogDelete';
-import { MsscInfos } from './msscComponents/MsscInfos';
-import { MsscMultiselect } from './msscComponents/MsscMultiselect';
-import { MsscPaginator } from './msscComponents/MsscPaginator';
-import { MsscSearch } from './msscComponents/MsscSearch';
-import { MsscSort } from './msscComponents/MsscSort';
-import { elemsCountByFilterAndIf } from './msscUtils/elemsCountByFilterAndIf';
-import { filtersCreate } from './msscUtils/filtersCreate';
-import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
-import { sortsCreate } from './msscUtils/sortsCreate';
-import { tagsCookAndSet } from './msscUtils/tagsCookAndSet';
-import { MsscListAreaHeightModeEnum } from './types/enums/MsscListAreaHeightModeEnum';
-import { MsscSourceType } from './types/MsscSourceType';
-import { MsscElemType } from './types/types/MsscElemType';
-import { MsscFilterType } from './types/types/MsscFilterType';
-import { MsscIconsConfType } from './types/types/MsscIconsConfType';
-import { MsscIdObjectType } from './types/types/MsscIdObjectType';
-import { MsscJsxExternalType } from './types/types/MsscJsxExternalType';
-import { MsscListPropsType } from './types/types/MsscListPropsType';
-import { MsscRefreshesType } from './types/types/MsscRefreshesType';
-import { MsscTagGroupSelectedType } from './types/types/MsscTagGroupSelectedType';
-import { MsscTagGroupType } from './types/types/MsscTagGroupType';
+import "./msscListStyles.scss";
+import { SvgIconDice } from "./commonIcons/SvgIcons/SvgIconDice";
+import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
+import { BrSelectIdType } from "./commonUI/BrSelect/types";
+import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
+import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
+import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
+import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
+import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
+import { MsscDialogDelete } from "./msscComponents/MsscDialogDelete";
+import { MsscInfos } from "./msscComponents/MsscInfos";
+import { MsscList } from "./msscComponents/MsscList/MsscList";
+import { MsscListElemPropsBaseType } from './msscComponents/MsscList/types/MsscListElemPropsBaseType';
+import { MsscMultiselect } from "./msscComponents/MsscMultiselect";
+import { MsscPaginator } from "./msscComponents/MsscPaginator/MsscPaginator";
+import { MsscSearch } from "./msscComponents/MsscSearch";
+import { MsscSort } from "./msscComponents/MsscSort";
+import { elemsCountByFilterAndIf } from "./msscUtils/elemsCountByFilterAndIf";
+import { filtersCreate } from "./msscUtils/filtersCreate";
+import { MsscListAreaHeightCls } from "./msscUtils/MsscListAreaHeightCls";
+import { sortsCreate } from "./msscUtils/sortsCreate";
+import { tagsCookAndSet } from "./msscUtils/tagsCookAndSet";
+import { MsscSourceType } from "./types/MsscSourceType";
+import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreateEditCallbacksType";
+import { MsscElemType } from "./types/types/MsscElemType";
+import { MsscFilterType } from "./types/types/MsscFilterType";
+import { MsscIdObjectType } from "./types/types/MsscIdObjectType";
+import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
+import { MsscListPropsType } from "./types/types/MsscListPropsType";
+import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
+import { MsscSettingsType } from "./types/types/MsscSettingsType";
+import { MsscTagGroupSelectedType } from "./types/types/MsscTagGroupSelectedType";
+import { MsscTagGroupType } from "./types/types/MsscTagGroupType";
 
-let scrollTop = 0;
+const scrollTop = 0;
+
+/** настроечные вещи */
+export const MSSC_SETTINGS: MsscSettingsType = {
+  // записей на странице
+  elemsOnPage: 10,
+  // дефолты иконок
+  iconsConf: {
+    svgProps: { width: "20px", height: "20px" },
+    colors: new ColorsCls().buNormal("#474747"),
+  },
+};
 
 const MsscListFCC = ({
-                       source,
-                       sortData,
-                       children,
-                       listElemStruct,
-                       tagsFieldNameArr,
-                       listAreaHeight = new MsscListAreaHeightCls()
-                     }: MsscListPropsType
-): JSX.Element => {
-  const configSTA = {
-    // записей на странице
-    elemsOnPage: 10
-  }
-
+  source,
+  sortData,
+  children,
+  listElemStruct,
+  tagsFieldNameArr,
+  listAreaHeight = new MsscListAreaHeightCls(),
+}: MsscListPropsType): JSX.Element => {
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
   // номер страницы который был перед тем как изменить его на новый
@@ -82,19 +94,23 @@ const MsscListFCC = ({
   const [$isError, $isErrorSet] = useState(false);
   // --- диалоги
   const [$isDialogDeleteShowed, $isDialogDeleteShowedSet] = useState(false);
-  const [$dialogTitle, $dialogTitleSet] = useState('');
-  const [$dialogBody, $dialogBodySet] = useState('');
-  const [$dialogCreateEditJsx, $dialogCreateEditJsxSet] = useState<JSX.Element | null>(null);
-  const [$isDialogCreateEditShowed, $isDialogCreateEditShowedSet] = useState(false);
+  const [$dialogTitle, $dialogTitleSet] = useState("");
+  const [$dialogBody, $dialogBodySet] = useState("");
+  const [$dialogCreateEditJsx, $dialogCreateEditJsxSet] =
+    useState<JSX.Element | null>(null);
+  const [$isDialogCreateEditShowed, $isDialogCreateEditShowedSet] =
+    useState(false);
   // ---
   const [$listModel] = useState(() => {
-    return new ListSelectingModelCls()
+    return new ListSelectingModelCls();
   });
   const [$refresh, $refreshSet] = useState(false);
   // ---
   // id выбранной в настоящее время сортировки
-  const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(sortData?.selectedId);
-  const [$searchText, $searchTextSet] = useState('');
+  const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(
+    sortData?.selectedId
+  );
+  const [$searchText, $searchTextSet] = useState("");
   const [$randomEnabled, $randomEnabledSet] = useState(false);
   // ids элементов в случайном порядке
   const [$idsShuffled, $idsShuffledSet] = useState<string[]>([]);
@@ -102,10 +118,12 @@ const MsscListFCC = ({
   // все *группы-тегов
   const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupType[]>([]);
   // *группы-тегов только с выбранными тегами (отмеченными галками)
-  const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<MsscTagGroupSelectedType[]>([]);
+  const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
+    MsscTagGroupSelectedType[]
+  >([]);
 
   // ---
-  const scrollFixFn = useScrollFix($isDialogCreateEditShowed)
+  const scrollFixFn = useScrollFix($isDialogCreateEditShowed);
 
   const shuffleUtils = {
     /**
@@ -114,16 +132,16 @@ const MsscListFCC = ({
      * @param ixEnd (2) -- индекс
      */
     elems(ixStart: number, ixEnd: number): MsscIdObjectType[] {
-      return $idsShuffled.slice(ixStart, ixEnd + 1).map((el) => ({ id: el }))
+      return $idsShuffled.slice(ixStart, ixEnd + 1).map((el) => ({ id: el }));
     },
-  }
+  };
 
   const fnError = (): void => {
-    $isErrorSet(true)
+    $isErrorSet(true);
     setTimeout(() => {
-      $isErrorSet(false)
+      $isErrorSet(false);
     }, 2000);
-  }
+  };
 
   /**
    * получение всех основных данных
@@ -132,33 +150,34 @@ const MsscListFCC = ({
   const requestFirst = async (sourcePrm: MsscSourceType<any>): Promise<any> => {
     try {
       // --- общее кол-во элементов без учета фильтра
-      $elemsCountAllSet(-1)
-      sourcePrm?.elemsCountByFilter([]).then((result: RsuvTxNumIntAB) => {
-        $elemsCountAllSet(result.val);
-      }).catch((err) => {
-        console.log('!!-!!-!! err {220130133850}\n', err);
-      })
+      $elemsCountAllSet(-1);
+      sourcePrm
+        ?.elemsCountByFilter([])
+        .then((result: RsuvTxNumIntAB) => {
+          $elemsCountAllSet(result.val);
+        })
+        .catch((err) => {
+          console.log("!!-!!-!! err {220130133850}\n", err);
+        });
       // --- готовка фильтров
       $isLoadingInitialSet(true);
-      const filters: MsscFilterType[] = filtersCreate(
-        {
-          source: sourcePrm,
-          tagGroupSelectedArr: $tagGroupSelectedArr,
-          searchText: $searchText,
-          tagsFieldNameArr
-        }
-      );
+      const filters: MsscFilterType[] = filtersCreate({
+        source: sourcePrm,
+        tagGroupSelectedArr: $tagGroupSelectedArr,
+        searchText: $searchText,
+        tagsFieldNameArr,
+      });
       // --- получение общего количества элементов с учетом фильтров; в random-режиме также получаем список всех ids
       const { elemsCountByFilter, ids } = await elemsCountByFilterAndIf({
         source: sourcePrm,
         filters,
         randomEnabled: $randomEnabled,
         sortData,
-        sortIdCurr: $sortIdCurr
+        sortIdCurr: $sortIdCurr,
       });
       if ($randomEnabled) {
-        const idsShuffled = _.shuffle(ids)
-        $idsShuffledSet(idsShuffled)
+        const idsShuffled = _.shuffle(ids);
+        $idsShuffledSet(idsShuffled);
       }
       // --- получение тегов
       await tagsCookAndSet({
@@ -166,18 +185,21 @@ const MsscListFCC = ({
         filters,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         tagsFieldNameArr,
-        $tagGroupArrSet
-      })
+        $tagGroupArrSet,
+      });
       // --- pagination - pageCountAll
-      const pagination = new RsuvPaginationGyth(elemsCountByFilter, configSTA.elemsOnPage)
+      const pagination = new RsuvPaginationGyth(
+        elemsCountByFilter,
+        MSSC_SETTINGS.elemsOnPage
+      );
       // ---
-      $pageCountAllSet(pagination.pageCount)
-      $elemsCountByFilterSet(elemsCountByFilter)
+      $pageCountAllSet(pagination.pageCount);
+      $elemsCountByFilterSet(elemsCountByFilter);
     } catch (err) {
-      console.log('!!-!!-!! err {220119120755}\n', err)
-      fnError()
+      console.log("!!-!!-!! err {220119120755}\n", err);
+      fnError();
     } finally {
-      $isLoadingInitialSet(false)
+      $isLoadingInitialSet(false);
     }
   };
 
@@ -187,17 +209,20 @@ const MsscListFCC = ({
    */
   const requestTwo = async (source: MsscSourceType<any>): Promise<any> => {
     try {
-      $isLoadingPageSet(true)
+      $isLoadingPageSet(true);
       // await fnWait(3000)
       // --- pagination - ixStart, ixEnd
-      const pagination = new RsuvPaginationGyth($elemsCountByFilter, configSTA.elemsOnPage)
+      const pagination = new RsuvPaginationGyth(
+        $elemsCountByFilter,
+        MSSC_SETTINGS.elemsOnPage
+      );
       if ($pageNumCurrent > pagination.pageCount) {
         // если в результате удаления элементов, страниц стало меньше чем было раньше
-        $pageNumCurrentSet(pagination.pageCount)
+        $pageNumCurrentSet(pagination.pageCount);
       }
-      const indexes = pagination.indexesByPageNum($pageNumCurrent)
-      const ixStart = indexes.indexStart
-      const ixEnd = indexes.indexLast
+      const indexes = pagination.indexesByPageNum($pageNumCurrent);
+      const ixStart = indexes.indexStart;
+      const ixEnd = indexes.indexLast;
       // --- --- получение элементов из source
       // --- сортировка
       const sorts: RsuvTxSort[] = sortsCreate(sortData, $sortIdCurr);
@@ -206,44 +231,49 @@ const MsscListFCC = ({
         source,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        tagsFieldNameArr
+        tagsFieldNameArr,
       });
       // ---
-      let elemsResult: MsscElemType[]
+      let elemsResult: MsscElemType[];
       if (!$randomEnabled) {
         elemsResult = await source.elems(
-          new RsuvTxNumIntDiap(new RsuvTxNumIntAB(ixStart), new RsuvTxNumIntAB(ixEnd)),
+          new RsuvTxNumIntDiap(
+            new RsuvTxNumIntAB(ixStart),
+            new RsuvTxNumIntAB(ixEnd)
+          ),
           filter0,
           sorts
-        )
+        );
       } else {
-        const idObjs = shuffleUtils.elems(ixStart, ixEnd)
-        const res: any = await source?.elemsById(idObjs)
-        elemsResult = res?.filter((el: MsscElemType | null) => (el !== null)) as MsscElemType[]
+        const idObjs = shuffleUtils.elems(ixStart, ixEnd);
+        const res: any = await source?.elemsById(idObjs);
+        elemsResult = res?.filter(
+          (el: MsscElemType | null) => el !== null
+        ) as MsscElemType[];
       }
       // --- ---
-      $elemsCountOnCurrPageSet(elemsResult.length)
+      $elemsCountOnCurrPageSet(elemsResult.length);
       // ---
-      $elemsSet(elemsResult)
+      $elemsSet(elemsResult);
     } catch (err) {
-      console.log('!!-!!-!! err {220119120754}\n', err)
+      console.log("!!-!!-!! err {220119120754}\n", err);
       // возвращаем старый номер страницы
-      $pageNumCurrentSet($pageNumBeforChange)
-      fnError()
+      $pageNumCurrentSet($pageNumBeforChange);
+      fnError();
     } finally {
-      $isLoadingPageSet(false)
+      $isLoadingPageSet(false);
     }
-  }
+  };
 
   // --- useEffect() 1
 
   useEffect(() => {
-    $fdoneSet(false)
+    $fdoneSet(false);
     if (source !== null) {
       (async () => {
-        await requestFirst(source)
-        $fdoneSet(true)
-      })()
+        await requestFirst(source);
+        $fdoneSet(true);
+      })();
     }
   }, [$needUpdate1]);
 
@@ -252,7 +282,7 @@ const MsscListFCC = ({
   useEffect(() => {
     if (source !== null && $fdone) {
       (async () => {
-        await requestTwo(source)
+        await requestTwo(source);
       })();
     }
   }, [$fdone, $needUpdate2]);
@@ -261,7 +291,7 @@ const MsscListFCC = ({
 
   const refreshes: MsscRefreshesType = {
     pageDataRefresh: () => {
-      $needUpdate2Set(!$needUpdate2)
+      $needUpdate2Set(!$needUpdate2);
     },
     /**
      * Выполнение полного перезапроса всех данных
@@ -269,7 +299,7 @@ const MsscListFCC = ({
      * СМ, ТАКЖЕ {@link refresh}
      */
     whole: () => {
-      $needUpdate1Set(!$needUpdate1)
+      $needUpdate1Set(!$needUpdate1);
     },
     /**
      * Перезапрос данных страницы только.
@@ -277,17 +307,17 @@ const MsscListFCC = ({
      * СМ. ТАКЖЕ {@link refreshes#whole}
      */
     refreshPage: () => {
-      $refreshSet(!$refresh)
-    }
-  }
+      $refreshSet(!$refresh);
+    },
+  };
 
-  const dialogDeleteShow = (): void => {
-    $dialogTitleSet('удаление')
-    $dialogBodySet(`удалить элемент(ы) ? ${$listModel.selectElemsCount()} шт.`)
-    $isDialogDeleteShowedSet(true)
-  }
+  const handleDialogDeleteShow = (): void => {
+    $dialogTitleSet("удаление");
+    $dialogBodySet(`удалить элемент(ы) ? ${$listModel.selectElemsCount()} шт.`);
+    $isDialogDeleteShowedSet(true);
+  };
 
-  const dialogCreateEditCallbacks = {
+  const dialogCreateEditCallbacks: MsscDialogCreateEditCallbacksType = {
     /**
      * [[220128213044]]
      * Будет вызыван при нажатии ОК в диалоге создания/редактировании элемента. Если у (1) не пустое (truthy) поле `id` то
@@ -297,42 +327,50 @@ const MsscListFCC = ({
     ok: async (model: any) => {
       let success = false;
       try {
-        $loadingDialogSet(true)
+        $loadingDialogSet(true);
         if (!model?.id) {
           // ^ создание нового элемента
-          const result = await source?.elemsAdd([model])
+          const result = await source?.elemsAdd([model]);
           if (result && result.length === 1 && result[0].id) {
             success = true;
-            $listModel.activeIdSet(result[0].id)
-            $searchTextSet('')
+            $listModel.activeIdSet(result[0].id);
+            $searchTextSet("");
           }
         } else {
           // ^ обновление элемента
-          const result = await source?.elemsSet([model])
+          const result = await source?.elemsSet([model]);
           if (result && result.length === 1) {
             const rr = result[0];
             if (rr.success) {
-              const enCrudResult: RsuvEnResultCrudSet | undefined = rr.value
-              if (!enCrudResult) throw new Error('[[220129123729]]')
-              if (enCrudResult === RsuvEnResultCrudSet.ERROR) throw new Error('[[220129123837]]')
+              const enCrudResult: RsuvEnResultCrudSet | undefined = rr.value;
+              if (!enCrudResult) {
+                console.error("[[220129123729]]");
+                return;
+              }
+              if (enCrudResult === RsuvEnResultCrudSet.ERROR) {
+                console.error("[[220129123837]]");
+                return;
+              }
               success = true;
             } else {
-              throw new Error('[[220129123902]]')
+              console.error("[[220129123902]]");
+              return;
             }
           } else {
-            throw new Error('[[220129123916]]')
+            console.error("[[220129123916]]");
+            return;
           }
         }
       } catch (err) {
-        console.log('!!-!!-!! err {220126221404}\n', err)
+        console.log("!!-!!-!! err {220126221404}\n", err);
       } finally {
-        $loadingDialogSet(false)
-        scrollFixFn(false)
+        $loadingDialogSet(false);
+        scrollFixFn(false);
         if (success) {
-          $isDialogCreateEditShowedSet(false)
-          refreshes.whole()
+          $isDialogCreateEditShowedSet(false);
+          refreshes.whole();
         } else {
-          fnError()
+          fnError();
         }
       }
     },
@@ -340,166 +378,139 @@ const MsscListFCC = ({
      * для вызова при нажатии Cancel в диалоге создания/редатирования нового элемента
      */
     cancel: async () => {
-      $isDialogCreateEditShowedSet(false)
-      scrollFixFn(false)
-    }
-  }
-
-  const iconsConf: MsscIconsConfType = {
-    svgProps: { width: '20px', height: '20px' },
-    colors: new ColorsCls().buNormal('#474747')
-  }
-
-  function ButtonCreateLocalFCC() {
-    const createHandler = async () => {
-      const jsxCreate = await source?.dialogCreateOrEdit(dialogCreateEditCallbacks.ok, dialogCreateEditCallbacks.cancel)
-      $dialogCreateEditJsxSet(jsxCreate ?? null)
-      if (jsxCreate) {
-        $isDialogCreateEditShowedSet(true)
-      }
-    }
-    return (
-      <button title="создать новый элемент" onClick={createHandler}>
-        <SvgIconPlus {...iconsConf}/>
-      </button>
-    )
-  }
+      $isDialogCreateEditShowedSet(false);
+      scrollFixFn(false);
+    },
+  };
 
   function ButtonDiceLocalFCC() {
     const fnColorsForRandom = () => {
       if (!$randomEnabled) {
-        return new ColorsCls()
+        return new ColorsCls();
       }
-      return new ColorsCls().buNormal('#71fc22').buHover('#71fc22')
-    }
+      return new ColorsCls().buNormal("#71fc22").buHover("#71fc22");
+    };
 
     /**
      * [[220130202338]]
      */
     function diceHandler() {
-      $randomEnabledSet(!$randomEnabled)
-      refreshes.whole()
+      $randomEnabledSet(!$randomEnabled);
+      refreshes.whole();
     }
 
     // [[220130202258]] random button
     return (
       <button onClick={diceHandler} title="random">
-        <SvgIconDice svgProps={{ width: '20px', height: '20px' }} colors={fnColorsForRandom()}/>
+        <SvgIconDice
+          svgProps={{ width: "20px", height: "20px" }}
+          colors={fnColorsForRandom()}
+        />
       </button>
-    )
+    );
   }
 
-  function ListLocalFCC() {
-    const refDivScroll = useRef(null)
+  const paginatorJsx = (
+    <MsscPaginator
+      refreshes={refreshes}
+      $loadingPage={$isLoadingPage}
+      $pageNumBeforChangeSet={$pageNumBeforChangeSet}
+      $pageCountAll={$pageCountAll}
+      $pageNumCurrent={$pageNumCurrent}
+      $pageNumCurrentSet={$pageNumCurrentSet}
+    />
+  );
 
-    function onScrollHandler(ev: any) {
-      scrollTop = ev?.target?.scrollTop
-    }
-
-    useEffect(() => {
-      const node: any = refDivScroll.current
-      node.scrollTo(0, scrollTop)
-    });
-
-    const listAreaHeightCssObj = useMemo(() => {
-      if (listAreaHeight?.mode === MsscListAreaHeightModeEnum.FIXED) {
-        return { height: listAreaHeight.value }
-      } else if (listAreaHeight.mode === MsscListAreaHeightModeEnum.STICKY_DOWN) {
-        return { height: `calc(100vh - ${listAreaHeight.value}px)` }
-      }
-    }, [listAreaHeight, listAreaHeight?.mode, listAreaHeight?.value]) as CSSProperties || {}
-
-    return (
-      <div
-        ref={refDivScroll}
-        className="mssc-list-block"
-        style={Object.assign({}, { position: 'relative' }, listAreaHeightCssObj)}
-        onScroll={onScrollHandler}
-      >
-        <BrSpinner show={$isLoadingPage} fullscreen={false}/>
-        {
-          $elems.map((elObj: MsscElemType) => {
-            return (<MsscListElem
-              key={elObj.id.val}
-              dialogCreateOrEdit={source?.dialogCreateOrEdit}
-              elem={elObj}
-              elems={$elems}
-              listModel={$listModel}
-              refreshes={refreshes}
-              listElemStruct={listElemStruct}
-              dialogCreateEditCallbacks={dialogCreateEditCallbacks}
-              dialogCreateEditJsxSet={$dialogCreateEditJsxSet}
-              isDialogCreateEditShowedSet={$isDialogCreateEditShowedSet}
-              dialogDeleteShow={dialogDeleteShow}
-            />)
-          })
-        }
-      </div>
-    )
-  }
-
-  const paginatorJsx = <MsscPaginator
-    refreshes={refreshes}
-    $loadingPage={$isLoadingPage}
-    $pageNumBeforChangeSet={$pageNumBeforChangeSet}
-    $pageCountAll={$pageCountAll}
-    $pageNumCurrent={$pageNumCurrent}
-    $pageNumCurrentSet={$pageNumCurrentSet}
-  />
+  const mainListObj: MsscListElemPropsBaseType = {
+    listModel: $listModel,
+    dialogDeleteShow: handleDialogDeleteShow,
+    elems: $elems,
+    dialogCreateEditJsxSet: $dialogCreateEditJsxSet,
+    dialogCreateOrEdit: source?.dialogCreateOrEdit,
+    dialogCreateEditCallbacks,
+    refreshes,
+    listElemStruct,
+    isDialogCreateEditShowedSet: $isDialogCreateEditShowedSet,
+  };
 
   const childrenBlock: MsscJsxExternalType = {
-    infosJsx: <MsscInfos
-      $elemsCountByFilter={$elemsCountByFilter}
-      $elemsCountOnCurrPage={$elemsCountOnCurrPage}
-      elemsAll={$elemsCountAll === -1 ? '-' : (`${$elemsCountAll}`)}
-      elemsCountSelected={$listModel.selectElemsCount()}
-    />,
+    infosJsx: (
+      <MsscInfos
+        $elemsCountByFilter={$elemsCountByFilter}
+        $elemsCountOnCurrPage={$elemsCountOnCurrPage}
+        elemsAll={$elemsCountAll === -1 ? "-" : `${$elemsCountAll}`}
+        elemsCountSelected={$listModel.selectElemsCount()}
+      />
+    ),
     paginator1Jsx: paginatorJsx,
     paginator2Jsx: paginatorJsx,
     buttonsJsx: {
-      btnDelete: <MsscButtonDelete
-        listModel={$listModel}
-        dialogDeleteShow={dialogDeleteShow}
-        iconsConf={iconsConf}
-      />,
-      btnCreate: <ButtonCreateLocalFCC/>,
-      btnDeselectAll: <MsscButtonDeselectAll
-        listModel={$listModel}
-        refreshes={refreshes}
-        iconsConf={iconsConf}
-      />,
-      btnDice: <ButtonDiceLocalFCC/>
+      btnDelete: (
+        <MsscButtonDelete
+          listModel={$listModel}
+          dialogDeleteShow={handleDialogDeleteShow}
+          iconsConf={MSSC_SETTINGS.iconsConf}
+        />
+      ),
+      btnCreate: (
+        <ButtonCreateLocal
+          sourceDialogCreateOrEdit={source?.dialogCreateOrEdit}
+          dialogCreateEditCallbacks={dialogCreateEditCallbacks}
+          $dialogCreateEditJsxSet={$dialogCreateEditJsxSet}
+          $isDialogCreateEditShowedSet={$isDialogCreateEditShowedSet}
+        />
+      ),
+      btnDeselectAll: (
+        <MsscButtonDeselectAll
+          listModel={$listModel}
+          refreshes={refreshes}
+          iconsConf={MSSC_SETTINGS.iconsConf}
+        />
+      ),
+      btnDice: <ButtonDiceLocalFCC />,
     },
-    sortJsx: <MsscSort
-      sortData={sortData}
-      sortIdCurr={$sortIdCurr}
-      sortIdCurrSet={$sortIdCurrSet}
-      refreshes={refreshes}
-    />,
-    searchJsx: <MsscSearch searchText={$searchText} searchTextSet={$searchTextSet} refreshes={refreshes}/>,
-    listJsx: <ListLocalFCC/>,
-    multiselectJsxArr: tagsFieldNameArr?.map(el => (<MsscMultiselect
-      key={el.id}
-      tagsGroupId={el.id}
-      $tagGroupSelectedArr={$tagGroupSelectedArr}
-      $tagGroupSelectedArrSet={$tagGroupSelectedArrSet}
-      $tagGroupArr={$tagGroupArr}
-      refreshes={refreshes}
-    />))
-  }
+    sortJsx: (
+      <MsscSort
+        sortData={sortData}
+        sortIdCurr={$sortIdCurr}
+        sortIdCurrSet={$sortIdCurrSet}
+        refreshes={refreshes}
+      />
+    ),
+    searchJsx: (
+      <MsscSearch
+        searchText={$searchText}
+        searchTextSet={$searchTextSet}
+        refreshes={refreshes}
+      />
+    ),
+    listJsx: (
+      <MsscList
+        scrollTop={scrollTop}
+        listAreaHeight={listAreaHeight}
+        $isLoadingPage={$isLoadingPage}
+        mainList={mainListObj}
+      />
+    ),
+    multiselectJsxArr: tagsFieldNameArr?.map((el) => (
+      <MsscMultiselect
+        key={el.id}
+        tagsGroupId={el.id}
+        $tagGroupSelectedArr={$tagGroupSelectedArr}
+        $tagGroupSelectedArrSet={$tagGroupSelectedArrSet}
+        $tagGroupArr={$tagGroupArr}
+        refreshes={refreshes}
+      />
+    )),
+  };
 
-  // --- === ---
+  // ---
   return (
     <div className="mssc-base">
       {$isError ? <div className="mssc-base__error">ошибка</div> : null}
-
-      {source ? '' : (<div>MsscListFCC-info: source is empty</div>)}
-
-      {
-        !$isLoadingInitial && children?.(childrenBlock)
-      }
-
-      {/* ^^dialog delete^^ */}
+      {source ? "" : <div>MsscListFCC-info: source is empty</div>}
+      {!$isLoadingInitial && children?.(childrenBlock)}
+      {/* // --- dialog delete */}
       <MsscDialogDelete
         listModel={$listModel}
         refreshes={refreshes}
@@ -512,12 +523,12 @@ const MsscListFCC = ({
         loadingDialogSet={$loadingDialogSet}
         fnError={fnError}
       />
-      {/* ^^dialog create/edit ^^ */}
+      {/* // --- dialog create/edit */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
-      {/* spinner */}
-      <BrSpinner show={$isLoadingInitial || $loadingDialog}/>
+      {/* // --- spinner */}
+      <BrSpinner show={$isLoadingInitial || $loadingDialog} />
     </div>
-  )
-}
+  );
+};
 
 export default MsscListFCC;

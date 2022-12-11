@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { MsscParamUiLocal } from './MsscParamUiLocal';
+import { MsscParamUi } from './MsscParamUi';
 
 export interface PropsType {
   $elemsCountOnCurrPage: number
@@ -12,13 +12,13 @@ export interface PropsType {
 export function MsscInfos({$elemsCountOnCurrPage, $elemsCountByFilter, elemsAll, elemsCountSelected}: PropsType) {
   return (
     <div className="mssc-infos-b">
-      <MsscParamUiLocal str1="элементов на текущ. странице" str2={$elemsCountOnCurrPage}/>
+      <MsscParamUi str1="элементов на текущ. странице" str2={$elemsCountOnCurrPage}/>
       <span className="mssc-infos-b__divider">/</span>
-      <MsscParamUiLocal str1="элементов всего по фильтру" str2={$elemsCountByFilter}/>
+      <MsscParamUi str1="элементов всего по фильтру" str2={$elemsCountByFilter}/>
       <span className="mssc-infos-b__divider">/</span>
-      <MsscParamUiLocal str1="элементов всего" str2={elemsAll}/>
+      <MsscParamUi str1="элементов всего" str2={elemsAll}/>
       <span className="mssc-infos-b__divider">/</span>
-      <MsscParamUiLocal str1="элементов выбрано" str2={elemsCountSelected}/>
+      <MsscParamUi str1="элементов выбрано" str2={elemsCountSelected}/>
     </div>
   )
 }

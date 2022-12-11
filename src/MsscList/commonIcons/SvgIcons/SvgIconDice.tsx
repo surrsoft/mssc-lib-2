@@ -6,7 +6,7 @@ import { ColorsCls } from "./utils/ColorsCls";
 // [[asau64]]
 // Ikonate Bold Interface Icons
 
-const SvgIconDice = ({
+export const SvgIconDice = ({
   svgProps,
   colors = new ColorsCls(),
 }: SvgIconPropsType) => {
@@ -35,4 +35,3 @@ const SvgIconDice = ({
   );
 };
 
-export default SvgIconDice;

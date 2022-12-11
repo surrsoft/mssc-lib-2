@@ -16,7 +16,7 @@ export class MsscDialogProps {
   cbOk?: () => void
 }
 
-export default function MsscDialogFCC({show, title, body, cbOk, cbCancel}: MsscDialogProps) {
+export default function MsscDialog({show, title, body, cbOk, cbCancel}: MsscDialogProps) {
 
   const scrollFixFn = useScrollFix(show)
 

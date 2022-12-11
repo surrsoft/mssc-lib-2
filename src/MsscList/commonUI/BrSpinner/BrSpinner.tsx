@@ -2,7 +2,7 @@ import React from "react";
 import "./brSpinner.scss";
 import { useScrollFix } from "ueur-lib";
 
-interface Ty2217 {
+interface PropsType {
   /**
    * триггер показа текущего компонента
    */
@@ -21,12 +21,12 @@ interface Ty2217 {
   css?: object;
 }
 
-export default function BrSpinner({
+export function BrSpinner({
   show = false,
   bgColor,
   fullscreen = true,
   css = {},
-}: Ty2217) {
+}: PropsType) {
   if (bgColor) {
     const elem: any = document.querySelector(".brspinner-block");
     elem?.style.setProperty("--color2140", bgColor);

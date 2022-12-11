@@ -1,11 +1,11 @@
 import React from 'react';
 
-export interface PropsType {
+interface PropsType {
   isChecked: boolean
   onCheckboxChange: (ev: any) => void
 }
 
-export function RkCheckbox({isChecked, onCheckboxChange}: PropsType) {
+export function MsscRkCheckbox({isChecked, onCheckboxChange}: PropsType) {
   return (
     <div className="mssc-list-elem__checkbox">
       <input

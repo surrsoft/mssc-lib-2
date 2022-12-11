@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { RsuvTxChecked } from "rsuv-lib";
 
-import { FnTagsCookParamsType } from '../types/types/FnTagsCookParamsType';
 import { MsscTagGroupType } from '../types/types/MsscTagGroupType';
+import { MsscTagsCookParamsType } from '../types/types/MsscTagsCookParamsType';
 import { SquareBrackets } from "./SquareBrackets";
 
 export async function tagsCookAndSet(
@@ -12,7 +12,7 @@ export async function tagsCookAndSet(
     filters,
     tagGroupSelectedArr,
     $tagGroupArrSet
-  }: FnTagsCookParamsType
+  }: MsscTagsCookParamsType
 ) {
   if (tagsFieldNameArr && tagsFieldNameArr.length > 0) {
     const tagsTotal: MsscTagGroupType[] = [];
