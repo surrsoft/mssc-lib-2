@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import "./brFilter.scss";
-
 import _ from "lodash";
+import React, { useEffect, useState } from "react";
+
+import "./brFilter.scss";
 
 export enum BrInputEnIcon {
   SEARCH = "search",
@@ -75,12 +75,12 @@ const iconBy = (enIcon: BrInputEnIcon) => {
 let debounce: any = null;
 
 export default function BrInput({
-  icon = BrInputEnIcon.FILTER,
-  cbOnChange,
-  debounceMillisec = 700,
-  initialValue = "",
-  autoFocus = false,
-}: BrInputProps) {
+                                  icon = BrInputEnIcon.FILTER,
+                                  cbOnChange,
+                                  debounceMillisec = 700,
+                                  initialValue = "",
+                                  autoFocus = false,
+                                }: BrInputProps) {
   const [$inputValue, $inputValueSet] = useState(initialValue);
 
   function inputHandler(ev: any) {
@@ -121,8 +121,8 @@ export default function BrInput({
           viewBox="0 0 50 50"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M37.304 11.282l1.414 1.414-26.022 26.02-1.414-1.413z" />
-          <path d="M12.696 11.282l26.022 26.02-1.414 1.415-26.022-26.02z" />
+          <path d="M37.304 11.282l1.414 1.414-26.022 26.02-1.414-1.413z"/>
+          <path d="M12.696 11.282l26.022 26.02-1.414 1.415-26.022-26.02z"/>
         </svg>
       </button>
     </div>

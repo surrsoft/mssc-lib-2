@@ -1,5 +1,5 @@
-import { EnAirField } from "./EnAirField";
 import { MsscMultFieldsType } from "../../../MsscList/types/types/MsscMultFieldsType";
+import { EnAirField } from "./EnAirField";
 
 export const airTagsFieldNameArr: MsscMultFieldsType[] = [
   {

@@ -1,5 +1,6 @@
+import _ from 'lodash';
+import fp from 'lodash/fp';
 import React from 'react';
-import { MsscSourceType } from '../../types/MsscSourceType';
 import {
   RsuvEnResultCrudSet,
   RsuvResultBoolPknz,
@@ -12,14 +13,14 @@ import {
   RsuvTxNumIntDiap,
   RsuvTxSort
 } from 'rsuv-lib';
-import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
-import _ from 'lodash';
-import fp from 'lodash/fp';
 import { RsuvAsau89 } from 'rsuv-lib/src/RsuvTuTree';
-import { MsscFilterType } from '../../types/types/MsscFilterType';
+
+import { MsscSourceType } from '../../types/MsscSourceType';
 import { MsscElemType } from '../../types/types/MsscElemType';
-import { MsscTagType } from '../../types/types/MsscTagType';
+import { MsscFilterType } from '../../types/types/MsscFilterType';
 import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
+import { MsscTagType } from '../../types/types/MsscTagType';
+import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
 
 /*
 ПОНЯТИЯ:
@@ -38,7 +39,7 @@ class Cls1941 {
 }
 
 export class JsonSourceAsau88<T> implements MsscSourceType<T> {
-  private thParams: Asau88JsonSourceParams<any>;
+  private readonly thParams: Asau88JsonSourceParams<any>;
 
   constructor(params: Asau88JsonSourceParams<any>) {
     if (!jsonServer) {
@@ -47,8 +48,8 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     this.thParams = params;
   }
 
-  dialogCreateOrEdit(cbOk: (model: T) => void, cbCancel: () => void, initialValues?: object): Promise<JSX.Element> {
-    return Promise.resolve(<></>); // TODO
+  async dialogCreateOrEdit(cbOk: (model: T) => void, cbCancel: () => void, initialValues?: object): Promise<JSX.Element> {
+    return await Promise.resolve(<></>); // TODO
   }
 
   dialogMiddleware(obj?: T): object | T | null {
@@ -62,13 +63,13 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
    */
   private elemsToMsscElems(data: any[]): MsscElemType[] {
     return data.map((el: any) => {
-      const rr = this.thParams.elemJsx?.(el) || (<div>BR err [[220508132145]]</div>);
-      return {id: el.id, elemModel: el, elem: rr} as MsscElemType
+      const rr = this.thParams.elemJsx?.(el) ?? (<div>BR err [[220508132145]]</div>);
+      return { id: el.id, elemModel: el, elem: rr }
     })
   }
 
   async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<MsscElemType[]> {
-    const {indexStart: {val: ixStart}, indexEnd: {val: ixEnd}} = indexDiap;
+    const { indexStart: { val: ixStart }, indexEnd: { val: ixEnd } } = indexDiap;
     if (filters.length < 1) {
       const data = await jsonServer?.elemsGet(ixStart, ixEnd - ixStart + 1);
       return this.elemsToMsscElems(data)
@@ -111,14 +112,14 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     ])(filters)
     // ---
     const retElemsFiltered: any[] = []
-    elemsAll.map((elElem: any) => {
+    elemsAll.forEach((elElem: any) => {
       // --- поиск совпадений для filtersByOne
       // здесь будет TRUE если элемент соответствует хотя бы одному из фильтров filtersByOne
       const isFindedByString = fp.anyPass([
         fp.isEmpty,
         fp.some((elFilter: MsscFilterType) => {
           if (elFilter.filterValue) {
-            const val = _.get(elElem, elFilter.paramIdB || '')
+            const val = _.get(elElem, elFilter.paramIdB ?? '')
             if (_.isString(val)) {
               const res = RsuvTuString.substrIndexes(val, elFilter.filterValue, true)
               return res.length > 0
@@ -147,8 +148,8 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     return retElemsFiltered;
   }
 
-  elemsAdd(elems: T[]): Promise<Array<RsuvResultBoolPknz | T>> {
-    return Promise.resolve([]); // TODO
+  async elemsAdd(elems: T[]): Promise<Array<RsuvResultBoolPknz | T>> {
+    return await Promise.resolve([]); // TODO
   }
 
   async elemsById(ids: MsscIdObjectType[]): Promise<MsscElemType[]> {
@@ -177,15 +178,15 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     const ids = elems.map(el => el.id)
     const results = await jsonServer.elemsDeleteB(ids) // g8g
 
-    return Promise.resolve([]); // TODO
+    return await Promise.resolve([]); // TODO
   }
 
-  elemsSet(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
-    return Promise.resolve([]); // TODO
+  async elemsSet(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
+    return await Promise.resolve([]); // TODO
   }
 
-  elemsUpsert(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
-    return Promise.resolve([]); // TODO
+  async elemsUpsert(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
+    return await Promise.resolve([]); // TODO
   }
 
   filterFromSearchText(searchText: string): MsscFilterType[] | null {
@@ -230,7 +231,7 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
       elems!.forEach(el1 => {
         const val = el1.value;
         const count = el1.ids.length;
-        const msscTag = {value: val, count} as MsscTagType;
+        const msscTag = { value: val, count } as MsscTagType;
         msscTags.push(msscTag)
       })
     }

@@ -1,9 +1,9 @@
-import { MsscMultFieldsType } from './MsscMultFieldsType';
 import { MsscSourceType } from '../MsscSourceType';
 import { MsscFilterType } from './MsscFilterType';
+import { MsscMultFieldsType } from './MsscMultFieldsType';
 import { MsscTagGroupSelectedType } from './MsscTagGroupSelectedType';
 
-export interface TagsParamsType {
+export interface FnTagsCookParamsType {
   /** см. [220607221651] */
   tagsFieldNameArr?: MsscMultFieldsType[],
   source: MsscSourceType<any>,

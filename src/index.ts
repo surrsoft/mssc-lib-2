@@ -24,4 +24,4 @@ export { MsscJsxExternalType } from "./MsscList/types/types/MsscJsxExternalType"
 export { MsscFiltersCreateParamsType } from "./MsscList/types/types/MsscFiltersCreateParamsType";
 export { MsscElemsCountParamsType } from "./MsscList/types/types/MsscElemsCountParamsType";
 export { MsscElemsCountReturnType } from "./MsscList/types/types/MsscElemsCountReturnType";
-export { TagsParamsType } from "./MsscList/types/types/TagsParamsType";
+export { FnTagsCookParamsType } from "./MsscList/types/types/FnTagsCookParamsType";

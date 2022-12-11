@@ -1,12 +1,13 @@
-import React from 'react';
-import { JsonSourceAsau88 } from '../../../MsscList/commonUtils/jsonSource/JsonSourceAsau88';
-import { Asau88JsonSourceParams } from '../../../MsscList/commonUtils/jsonSource/Asau88JsonSourceParams';
-import { RsuvTxStringAC } from 'rsuv-lib';
-import { EnJsonFieldName } from './EnJsonFieldName';
 import _ from 'lodash';
-import { MsscFilterType } from '../../../MsscList/types/types/MsscFilterType';
+import React from 'react';
+import { RsuvTxStringAC } from 'rsuv-lib';
 
-const params = {
+import { Asau88JsonSourceParams } from '../../../MsscList/commonUtils/jsonSource/Asau88JsonSourceParams';
+import { JsonSourceAsau88 } from '../../../MsscList/commonUtils/jsonSource/JsonSourceAsau88';
+import { MsscFilterType } from '../../../MsscList/types/types/MsscFilterType';
+import { EnJsonFieldName } from './EnJsonFieldName';
+
+const params: Asau88JsonSourceParams<any> = {
   endpointUrl: 'http://localhost:22121/',
   fieldPath: 'data',
   elemJsx: (obj: any) => {
@@ -26,29 +27,29 @@ const params = {
       const rr2 = EnJsonFieldName.USERNAME
       const rr3 = EnJsonFieldName.PROFILE_ABOUT
       return [
-        {paramId: new RsuvTxStringAC('_'), paramIdB: rr1, filterValue: searchText} as MsscFilterType,
-        {paramId: new RsuvTxStringAC('_'), paramIdB: rr2, filterValue: searchText} as MsscFilterType,
-        {paramId: new RsuvTxStringAC('_'), paramIdB: rr3, filterValue: searchText} as MsscFilterType,
-      ]
+        { paramId: new RsuvTxStringAC('_'), paramIdB: rr1, filterValue: searchText },
+        { paramId: new RsuvTxStringAC('_'), paramIdB: rr2, filterValue: searchText },
+        { paramId: new RsuvTxStringAC('_'), paramIdB: rr3, filterValue: searchText },
+      ];
     }
     return null;
   },
   cbFilterFromTags: (tags: string[], fieldName: string): MsscFilterType[] | null => {
     if (tags && tags.length > 0) {
       const filters: MsscFilterType[] = []
-      tags.map(elTag => {
-        const filter = {
+      tags.forEach(elTag => {
+        const filter: MsscFilterType = {
           paramId: new RsuvTxStringAC('_'),
           paramIdB: fieldName,
           filterValue: elTag,
           isArrElemFind: true
-        } as MsscFilterType
+        }
         filters.push(filter)
       })
       return filters;
     }
     return null;
   }
-} as Asau88JsonSourceParams<any>;
+};
 
 export const jsonSource = new JsonSourceAsau88(params);

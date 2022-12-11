@@ -1,39 +1,40 @@
-import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import _ from 'lodash';
+import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { RsuvEnResultCrudSet, RsuvPaginationGyth, RsuvTxNumIntAB, RsuvTxNumIntDiap, RsuvTxSort, } from 'rsuv-lib';
 import { useScrollFix } from 'ueur-lib';
+
 import './msscListStyles.scss';
+import SvgIconDice from './commonIcons/SvgIcons/SvgIconDice';
 import SvgIconPlus from './commonIcons/SvgIcons/SvgIconPlus';
 import { ColorsCls } from './commonIcons/SvgIcons/utils/ColorsCls';
-import SvgIconDice from './commonIcons/SvgIcons/SvgIconDice';
-import BrSpinner from './commonUI/BrSpinner/BrSpinner';
 import { BrSelectIdType } from './commonUI/BrSelect/types';
-import { filtersCreate } from './msscUtils/filtersCreate';
-import { MsscSourceType } from './types/MsscSourceType';
-import { elemsCountByFilterAndIf } from './msscUtils/elemsCountByFilterAndIf';
-import { tagsCookAndSet } from './msscUtils/tagsCookAndSet';
-import { sortsCreate } from './msscUtils/sortsCreate';
-import { MsscFilterType } from './types/types/MsscFilterType';
-import { MsscElemType } from './types/types/MsscElemType';
-import { MsscListAreaHeightModeEnum } from './types/enums/MsscListAreaHeightModeEnum';
-import { MsscJsxExternalType } from './types/types/MsscJsxExternalType';
-import { MsscListPropsType } from './types/types/MsscListPropsType';
-import { MsscTagGroupType } from './types/types/MsscTagGroupType';
-import { MsscTagGroupSelectedType } from './types/types/MsscTagGroupSelectedType';
-import { MsscIdObjectType } from './types/types/MsscIdObjectType';
-import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
-import { MsscSort } from './msscComponents/MsscSort';
-import { MsscRefreshesType } from './types/types/MsscRefreshesType';
+import BrSpinner from './commonUI/BrSpinner/BrSpinner';
 import { ListSelectingModelCls } from './commonUtils/ListSelectingModelCls';
 import { MsscListElem } from './msscComponents/ListElem/MsscListElem';
-import { MsscDialogDelete } from './msscComponents/MsscDialogDelete';
 import { MsscButtonDelete } from './msscComponents/MsscButtonDelete';
-import { MsscIconsConfType } from './types/types/MsscIconsConfType';
-import { MsscInfos } from './msscComponents/MsscInfos';
 import { MsscButtonDeselectAll } from './msscComponents/MsscButtonDeselectAll';
+import { MsscDialogDelete } from './msscComponents/MsscDialogDelete';
+import { MsscInfos } from './msscComponents/MsscInfos';
 import { MsscMultiselect } from './msscComponents/MsscMultiselect';
 import { MsscPaginator } from './msscComponents/MsscPaginator';
 import { MsscSearch } from './msscComponents/MsscSearch';
+import { MsscSort } from './msscComponents/MsscSort';
+import { elemsCountByFilterAndIf } from './msscUtils/elemsCountByFilterAndIf';
+import { filtersCreate } from './msscUtils/filtersCreate';
+import { MsscListAreaHeightCls } from './msscUtils/MsscListAreaHeightCls';
+import { sortsCreate } from './msscUtils/sortsCreate';
+import { tagsCookAndSet } from './msscUtils/tagsCookAndSet';
+import { MsscListAreaHeightModeEnum } from './types/enums/MsscListAreaHeightModeEnum';
+import { MsscSourceType } from './types/MsscSourceType';
+import { MsscElemType } from './types/types/MsscElemType';
+import { MsscFilterType } from './types/types/MsscFilterType';
+import { MsscIconsConfType } from './types/types/MsscIconsConfType';
+import { MsscIdObjectType } from './types/types/MsscIdObjectType';
+import { MsscJsxExternalType } from './types/types/MsscJsxExternalType';
+import { MsscListPropsType } from './types/types/MsscListPropsType';
+import { MsscRefreshesType } from './types/types/MsscRefreshesType';
+import { MsscTagGroupSelectedType } from './types/types/MsscTagGroupSelectedType';
+import { MsscTagGroupType } from './types/types/MsscTagGroupType';
 
 let scrollTop = 0;
 
@@ -217,10 +218,8 @@ const MsscListFCC = ({
         )
       } else {
         const idObjs = shuffleUtils.elems(ixStart, ixEnd)
-        elemsResult = (
-          (await source?.elemsById(idObjs))
-            .filter((el: MsscElemType | null) => (el !== null)) as MsscElemType[]
-        )
+        const res: any = await source?.elemsById(idObjs)
+        elemsResult = res?.filter((el: MsscElemType | null) => (el !== null)) as MsscElemType[]
       }
       // --- ---
       $elemsCountOnCurrPageSet(elemsResult.length)

@@ -1,6 +1,6 @@
 import "./brMultiselectStyles.scss";
-import React, { useState } from "react";
 import classNames from "classnames";
+import React, { useState } from "react";
 import { RsuvTxChecked } from "rsuv-lib";
 
 // [[asau73]]
@@ -28,10 +28,10 @@ export interface PropsAtAsau73 {
 }
 
 export default function BrMultiselect({
-  datas = [],
-  cbOnChange,
-  text = "selected",
-}: PropsAtAsau73) {
+                                        datas = [],
+                                        cbOnChange,
+                                        text = "selected",
+                                      }: PropsAtAsau73) {
   const [$selectCount] = useState(() => {
     return datas.filter((el) => el.checked)?.length || 0;
   });
@@ -87,8 +87,8 @@ export default function BrMultiselect({
           viewBox="0 0 50 50"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path d="M37.304 11.282l1.414 1.414-26.022 26.02-1.414-1.413z" />
-          <path d="M12.696 11.282l26.022 26.02-1.414 1.415-26.022-26.02z" />
+          <path d="M37.304 11.282l1.414 1.414-26.022 26.02-1.414-1.413z"/>
+          <path d="M12.696 11.282l26.022 26.02-1.414 1.415-26.022-26.02z"/>
         </svg>
       </button>
       {$dropdownShow && (

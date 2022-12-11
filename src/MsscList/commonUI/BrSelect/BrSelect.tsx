@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   BrSelectIdType,
   BrSelectItemType,
@@ -21,10 +22,10 @@ export interface BrSelectProps<T> {
 }
 
 export default function BrSelect<T>({
-  data,
-  cbSelect,
-  selectedId,
-}: BrSelectProps<T>) {
+                                      data,
+                                      cbSelect,
+                                      selectedId,
+                                    }: BrSelectProps<T>) {
   let selectedIndex = 0;
   const sId = selectedId ?? data.selectedId;
   if (sId) {
@@ -60,8 +61,8 @@ export default function BrSelect<T>({
         xmlns="http://www.w3.org/2000/svg"
       >
         <g>
-          <path fill="none" d="M0 0H24V24H0z" />
-          <path d="M19 3l4 5h-3v12h-2V8h-3l4-5zm-5 15v2H3v-2h11zm0-7v2H3v-2h11zm-2-7v2H3V4h9z" />
+          <path fill="none" d="M0 0H24V24H0z"/>
+          <path d="M19 3l4 5h-3v12h-2V8h-3l4-5zm-5 15v2H3v-2h11zm0-7v2H3v-2h11zm-2-7v2H3V4h9z"/>
         </g>
       </svg>
       <select
