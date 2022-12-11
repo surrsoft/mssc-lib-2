@@ -3,10 +3,10 @@ import { EnAirField } from './sourceAir/EnAirField';
 import { BrSelectSortDataType } from '../../MsscList/commonUI/BrSelect/types';
 import { MsscColumnNameType } from '../../MsscList/types/types/MsscColumnNameType';
 
-export const sortDataSTA = {
+export const sortDataSTA: BrSelectSortDataType<MsscColumnNameType> = {
   selectedId: 'date-create_desc',
   items: [
-    {idElem: 'default', direction: RsuvEnSort.ASC, text: 'по умолчанию', payload: ''},
+    { idElem: 'default', direction: RsuvEnSort.ASC, text: 'по умолчанию', payload: '' },
     {
       idElem: 'date-create_asc',
       direction: RsuvEnSort.ASC,
@@ -19,8 +19,8 @@ export const sortDataSTA = {
       text: 'дата создания (от свежих к старым)',
       payload: EnAirField.TIME_CREATED
     },
-    {idElem: 'title_asc', direction: RsuvEnSort.ASC, text: 'заголовок (по возрастанию)', payload: EnAirField.TITLE},
-    {idElem: 'title_desc', direction: RsuvEnSort.DESC, text: 'заголовок (по убыванию)', payload: EnAirField.TITLE},
+    { idElem: 'title_asc', direction: RsuvEnSort.ASC, text: 'заголовок (по возрастанию)', payload: EnAirField.TITLE },
+    { idElem: 'title_desc', direction: RsuvEnSort.DESC, text: 'заголовок (по убыванию)', payload: EnAirField.TITLE },
     {
       idElem: 'time-last-modif_asc',
       direction: RsuvEnSort.ASC,
@@ -34,4 +34,4 @@ export const sortDataSTA = {
       payload: EnAirField.TIME_LAST_MODIFIED
     },
   ]
-} as BrSelectSortDataType<MsscColumnNameType>
+}

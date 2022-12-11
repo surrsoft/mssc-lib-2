@@ -4,7 +4,7 @@ import { RsuvTxChecked } from 'rsuv-lib';
 /**
  * Представляет *группу-тегов всех
  */
-export type MsscTagGroupType = {
+export interface MsscTagGroupType {
   id: MsscTagsGroupIdType
   /**
    * сами теги

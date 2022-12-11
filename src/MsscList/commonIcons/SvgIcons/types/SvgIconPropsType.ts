@@ -1,3 +1,3 @@
 import { ColorsCls } from '../utils/ColorsCls';
 
-export type SvgIconPropsType = { svgProps?: any, colors?: ColorsCls }
+export interface SvgIconPropsType { svgProps?: any, colors?: ColorsCls }

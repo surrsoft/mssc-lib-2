@@ -16,7 +16,7 @@ const SvgIconChevron = ({
                           colors = new ColorsCls(),
                           angle = 180,
                           animate,
-                          uniqueId = Date.now() + ''
+                          uniqueId = `${Date.now()}`
                         }: SvgPropsCls) => {
 
   const cfg = {
