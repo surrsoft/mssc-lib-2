@@ -1,7 +1,7 @@
 import React from "react";
 
 import { SvgIconPlus } from "../commonIcons/SvgIcons/SvgIconPlus";
-import { MSSC_SETTINGS } from "../MsscListFCC";
+import { MSSC_SETTINGS } from '../settings';
 import { MsscDialogCreateEditCallbacksType } from "../types/types/MsscDialogCreateEditCallbacksType";
 import { MsscSourceDialogCreateOrEditType } from "../types/types/MsscSourceDialogCreateOrEditType";
 

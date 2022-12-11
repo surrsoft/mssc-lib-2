@@ -8,7 +8,7 @@ import { MsscMultFieldsType } from './MsscMultFieldsType';
 /** Пропсы для MsscListFCC */
 export interface MsscListPropsType {
   /**
-   *
+   * источник данных (см. {@link umsscSOURCEu источник} )
    */
   source: MsscSourceType<any> | null
   /** SYNC [[221204124107]] */

@@ -15,7 +15,7 @@ import { MsscSourceElemsDeleteType } from "./types/MsscSourceElemsDeleteType";
 import { MsscTagType } from "./types/MsscTagType";
 
 /**
- * Интерфейс {@link umsscsourceu источника}. Через него {@link umssclibu библиотека} получает почти всю нужную ему информацию
+ * Интерфейс {@link umsscSOURCEu источника}. Через него {@link umsscLIBu библиотека} получает почти всю нужную ему информацию
  */
 export interface MsscSourceType<TModel> {
   /**
@@ -110,21 +110,21 @@ export interface MsscSourceType<TModel> {
   dialogCreateOrEdit: MsscSourceDialogCreateOrEditType<TModel>;
 
   /**
-   * {@link umssccomponentu компонент} вызывает эту функцию чтобы подготовить объект (1) к передаче в диалог создания/редактирования ({@link dialogCreateOrEdit})
+   * {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы подготовить объект (1) к передаче в диалог создания/редактирования ({@link dialogCreateOrEdit})
    * ID [[220129122002]]
    * @param obj (1) --
    */
   dialogMiddleware: (obj?: TModel) => object | TModel | null;
 
   /**
-   * [[220509113255]] {@link umssccomponentu компонент} вызывает эту функцию чтобы {@link umsscclientu клиент}
+   * [[220509113255]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscCLIENTu клиент}
    * на базе (1) подготовил {@link MsscFilterType[]}
    * @param searchText
    */
   filterFromSearchText: (searchText: string) => MsscFilterType[] | null;
 
   /**
-   * [[220514092623]] {@link umssccomponentu компонент} вызывает эту функцию чтобы {@link umsscclientu клиент}
+   * [[220514092623]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscCLIENTu клиент}
    * на базе тегов (1) подготовил {@link MsscFilterType[]}
    * @param tags (1) --
    * @param fieldName (2) -- поле в котором нужно искать теги (1)

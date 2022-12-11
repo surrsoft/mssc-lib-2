@@ -21,7 +21,7 @@ import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
 import { MsscDialogDelete } from "./msscComponents/MsscDialogDelete";
 import { MsscInfos } from "./msscComponents/MsscInfos";
 import { MsscList } from "./msscComponents/MsscList/MsscList";
-import { MsscListElemPropsBaseType } from './msscComponents/MsscList/types/MsscListElemPropsBaseType';
+import { MsscListElemPropsBaseType } from "./msscComponents/MsscList/types/MsscListElemPropsBaseType";
 import { MsscMultiselect } from "./msscComponents/MsscMultiselect";
 import { MsscPaginator } from "./msscComponents/MsscPaginator/MsscPaginator";
 import { MsscSearch } from "./msscComponents/MsscSearch";
@@ -31,6 +31,7 @@ import { filtersCreate } from "./msscUtils/filtersCreate";
 import { MsscListAreaHeightCls } from "./msscUtils/MsscListAreaHeightCls";
 import { sortsCreate } from "./msscUtils/sortsCreate";
 import { tagsCookAndSet } from "./msscUtils/tagsCookAndSet";
+import { MSSC_SETTINGS } from "./settings";
 import { MsscSourceType } from "./types/MsscSourceType";
 import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreateEditCallbacksType";
 import { MsscElemType } from "./types/types/MsscElemType";
@@ -39,22 +40,10 @@ import { MsscIdObjectType } from "./types/types/MsscIdObjectType";
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
-import { MsscSettingsType } from "./types/types/MsscSettingsType";
 import { MsscTagGroupSelectedType } from "./types/types/MsscTagGroupSelectedType";
 import { MsscTagGroupType } from "./types/types/MsscTagGroupType";
 
 const scrollTop = 0;
-
-/** настроечные вещи */
-export const MSSC_SETTINGS: MsscSettingsType = {
-  // записей на странице
-  elemsOnPage: 10,
-  // дефолты иконок
-  iconsConf: {
-    svgProps: { width: "20px", height: "20px" },
-    colors: new ColorsCls().buNormal("#474747"),
-  },
-};
 
 const MsscListFCC = ({
   source,
