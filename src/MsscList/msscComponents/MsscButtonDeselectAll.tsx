@@ -1,8 +1,9 @@
-import SvgIconUnckecked from "../commonIcons/SvgIcons/SvgIconUnckecked";
 import React from "react";
+
+import SvgIconUnckecked from "../commonIcons/SvgIcons/SvgIconUnckecked";
 import { ListSelectingModelCls } from "../commonUtils/ListSelectingModelCls";
-import { MsscRefreshesType } from "../types/types/MsscRefreshesType";
 import { MsscIconsConfType } from "../types/types/MsscIconsConfType";
+import { MsscRefreshesType } from "../types/types/MsscRefreshesType";
 
 export interface PropsType {
   listModel: ListSelectingModelCls;

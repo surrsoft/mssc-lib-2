@@ -1,17 +1,17 @@
-import React from 'react';
 import classNames from 'classnames';
-import { MsscElemType } from '../../types/types/MsscElemType';
-import { MsscMenuActionEnum } from '../../types/enums/MsscMenuActionEnum';
-import { RkCheckbox } from './components/RkCheckbox';
-import { RkBody } from './components/RkBody';
-import { RkMenu } from './components/RkMenu';
-import { MsscRefreshesType } from '../../types/types/MsscRefreshesType';
-import { MsscListElemStructType } from '../../types/types/MsscListElemStructType';
-import { menuDataSTA } from '../../msscUtils/menuDataSTA';
-import { MsscSourceDialogCreateOrEditType } from '../../types/types/MsscSourceDialogCreateOrEditType';
-import { ListSelectingModelCls } from '../../commonUtils/ListSelectingModelCls';
-import { DataPoarType } from '../../commonUI/MenuPoar/types/DataPoarType';
+import React from 'react';
+
 import { SelectResultPoarType } from '../../commonUI/MenuPoar/types/SelectResultPoarType';
+import { ListSelectingModelCls } from '../../commonUtils/ListSelectingModelCls';
+import { menuDataSTA } from '../../msscUtils/menuDataSTA';
+import { MsscMenuActionEnum } from '../../types/enums/MsscMenuActionEnum';
+import { MsscElemType } from '../../types/types/MsscElemType';
+import { MsscListElemStructType } from '../../types/types/MsscListElemStructType';
+import { MsscRefreshesType } from '../../types/types/MsscRefreshesType';
+import { MsscSourceDialogCreateOrEditType } from '../../types/types/MsscSourceDialogCreateOrEditType';
+import { RkBody } from './components/RkBody';
+import { RkCheckbox } from './components/RkCheckbox';
+import { RkMenu } from './components/RkMenu';
 
 export interface PropsType {
   elem: MsscElemType
@@ -69,7 +69,7 @@ export function MsscListElem({
           if (elem) {
             listModel.activeIdSet(elem.id.val)
             const jsxEdit = await dialogCreateOrEdit?.(dialogCreateEditCallbacks.ok, dialogCreateEditCallbacks.cancel, elem.elemModel)
-            dialogCreateEditJsxSet(jsxEdit || null)
+            dialogCreateEditJsxSet(jsxEdit ?? null)
             if (jsxEdit) {
               isDialogCreateEditShowedSet(true)
             }
