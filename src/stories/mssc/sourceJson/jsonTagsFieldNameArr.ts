@@ -1,5 +1,5 @@
-import { EnJsonFieldName } from "./EnJsonFieldName";
 import { MsscMultFieldsType } from "../../../MsscList/types/types/MsscMultFieldsType";
+import { EnJsonFieldName } from "./EnJsonFieldName";
 
 export const jsonTagsFieldNameArr: MsscMultFieldsType[] = [
   {

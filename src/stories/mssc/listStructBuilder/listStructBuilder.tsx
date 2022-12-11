@@ -1,7 +1,9 @@
 import React from 'react';
+
 import './listStructBuilder-styles.scss';
 import { MsscJsxExternalType } from '../../../MsscList/types/types/MsscJsxExternalType';
 
+// noinspection JSUnusedLocalSymbols
 export const listStructBuilder = ({
                      infosJsx,
                      paginator1Jsx,

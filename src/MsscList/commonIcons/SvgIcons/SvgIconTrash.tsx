@@ -1,13 +1,16 @@
-import * as React from "react";
-import { ColorsCls } from './utils/ColorsCls';
-import { SvgIconPropsType } from './types/SvgIconPropsType';
+import React from "react";
+
+import { SvgIconPropsType } from "./types/SvgIconPropsType";
+import { ColorsCls } from "./utils/ColorsCls";
 
 // id [[asau60]]
 // Ikonate Bold Interface Icons
 
-const SvgIconTrash = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => {
-
-  const svgClassName = 'asau60svg'
+const SvgIconTrash = ({
+  svgProps,
+  colors = new ColorsCls(),
+}: SvgIconPropsType) => {
+  const svgClassName = "asau60svg";
 
   return (
     <svg

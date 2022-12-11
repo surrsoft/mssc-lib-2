@@ -1,17 +1,18 @@
-import { MsscTagsGroupIdType } from './MsscTagsGroupIdType';
-import { RsuvTxChecked } from 'rsuv-lib';
+import { RsuvTxChecked } from "rsuv-lib";
+
+import { MsscTagsGroupIdType } from "./MsscTagsGroupIdType";
 
 /**
  * Представляет *группу-тегов всех
  */
 export interface MsscTagGroupType {
-  id: MsscTagsGroupIdType
+  id: MsscTagsGroupIdType;
   /**
    * сами теги
    */
-  elems: RsuvTxChecked[]
+  elems: RsuvTxChecked[];
   /**
    *
    */
-  visibleName: string
+  visibleName: string;
 }

@@ -1,5 +1,5 @@
-import { ColorsCls } from './ColorsCls';
-import { AnimateCls } from './AnimateCls';
+import { AnimateCls } from "./AnimateCls";
+import { ColorsCls } from "./ColorsCls";
 
 /**
  * ID [[asau72]]
@@ -8,20 +8,20 @@ export interface SvgPropsCls {
   /**
    * указанные здесь пропсы будут переопределять/добавляться к корневому svg
    */
-  svgProps?: any,
+  svgProps?: any;
   /**
    * цвета для состояний
    */
-  colors?: ColorsCls,
+  colors?: ColorsCls;
   /**
    * угол поворота: 180 - смотрит влево, 0 - вправо
    */
-  angle?: number,
+  angle?: number;
   /**
    * [[xx1]] если {enabled: true, ...} то в состоянии 'disabled' будет проигрываться анимация меняющая цвет с normal к
    * disable и обратно
    */
-  animate?: AnimateCls,
+  animate?: AnimateCls;
   /**
    * Текст который будет добавлен к идентификаторам CSS; может быть полезно для идентификации отдельных экземпляров.
    * Вообще лучше всега прописывать уникальный идентификатор здесь, т.к. иначе могут быть проблемы с анимациями -
@@ -29,5 +29,5 @@ export interface SvgPropsCls {
    * цвета, но т.к. имена одинаковые то один виджет может остановить анимацию у себя, а остальные при этом еще
    * свою анимацию не закончили
    */
-  uniqueId?: string
+  uniqueId?: string;
 }

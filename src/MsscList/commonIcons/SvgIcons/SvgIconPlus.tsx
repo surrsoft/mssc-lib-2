@@ -1,12 +1,16 @@
-import * as React from "react";
-import { ColorsCls } from './utils/ColorsCls';
-import { SvgIconPropsType } from './types/SvgIconPropsType';
+import React from "react";
+
+import { SvgIconPropsType } from "./types/SvgIconPropsType";
+import { ColorsCls } from "./utils/ColorsCls";
 
 // [[asau63]]
 // Ikonate Bold Interface Icons
 
-const SvgIconPlus = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => {
-  const svgClassName = 'asau63svg'
+const SvgIconPlus = ({
+  svgProps,
+  colors = new ColorsCls(),
+}: SvgIconPropsType) => {
+  const svgClassName = "asau63svg";
   return (
     <svg
       className={svgClassName}
@@ -22,7 +26,7 @@ const SvgIconPlus = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => 
       {...svgProps}
     >
       <style type="text/css">{ColorsCls.cssCreate(svgClassName, colors)}</style>
-      <path d="M20 12L4 12M12 4L12 20"/>
+      <path d="M20 12L4 12M12 4L12 20" />
     </svg>
   );
 };

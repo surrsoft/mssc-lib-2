@@ -1,6 +1,7 @@
 import React from 'react';
-import MsscPaginatorFCC from './MsscPaginatorFCC/MsscPaginatorFCC';
+
 import { MsscRefreshesType } from '../types/types/MsscRefreshesType';
+import MsscPaginatorFCC from './MsscPaginatorFCC/MsscPaginatorFCC';
 
 export interface PropsType {
   $pageNumBeforChangeSet: any

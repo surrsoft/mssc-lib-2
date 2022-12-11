@@ -2,17 +2,17 @@ import { RsuvTuTree } from "rsuv-lib";
 
 const VNCZ_ENABLED = process.env.REACT_APP_VNCZ_ENABLED;
 const VNCZ_PREFIX = "!!-!!-!!**";
-const VNCZ_PAD = ".";
 
+// noinspection JSUnusedGlobalSymbols
 export class Vncz {
-  static isEnabled(): boolean {
-    return !!VNCZ_ENABLED;
-  }
-
   /**
    * *накопитель
    */
   static cwrcStore: CwrcGroupOrLogElem[] = [];
+
+  static isEnabled(): boolean {
+    return !!VNCZ_ENABLED;
+  }
 
   static cwrcGroupAdd(
     groupIdParent: CwrcGroupId | null,
@@ -21,11 +21,11 @@ export class Vncz {
     callId?: CwrcCallId
   ) {
     if (VNCZ_ENABLED && groupId) {
-      const groupNew = {
-        groupId: groupId,
+      const groupNew: CwrcGroup = {
+        groupId,
         groupElems: [],
         callId,
-      } as CwrcGroup;
+      };
       if (groupIdParent) {
         const groupParent = Vncz.cwrcGroupFind(groupIdParent, callId);
         if (groupParent) {
@@ -34,7 +34,7 @@ export class Vncz {
       } else {
         Vncz.cwrcStore.push(groupNew);
       }
-      Vncz.cwrcLog(groupNew.groupId, "GROUP MSG: " + name, callId);
+      Vncz.cwrcLog(groupNew.groupId, `GROUP MSG: ${name ?? ""}`, callId);
     }
   }
 

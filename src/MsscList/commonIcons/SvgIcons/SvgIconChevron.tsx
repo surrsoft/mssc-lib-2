@@ -1,6 +1,7 @@
-import * as React from "react";
-import { ColorsCls } from './utils/ColorsCls';
-import { SvgPropsCls } from './utils/SvgPropsCls';
+import React from "react";
+
+import { ColorsCls } from "./utils/ColorsCls";
+import { SvgPropsCls } from "./utils/SvgPropsCls";
 
 /**
  *
@@ -12,18 +13,17 @@ import { SvgPropsCls } from './utils/SvgPropsCls';
  * @constructor
  */
 const SvgIconChevron = ({
-                          svgProps,
-                          colors = new ColorsCls(),
-                          angle = 180,
-                          animate,
-                          uniqueId = `${Date.now()}`
-                        }: SvgPropsCls) => {
-
+  svgProps,
+  colors = new ColorsCls(),
+  angle = 180,
+  animate,
+  uniqueId = `${Date.now()}`,
+}: SvgPropsCls) => {
   const cfg = {
-    clsName: 'asau53',
+    clsName: "asau53",
     w: 24,
-    h: 24
-  }
+    h: 24,
+  };
 
   return (
     <svg
@@ -35,10 +35,13 @@ const SvgIconChevron = ({
       {...svgProps}
     >
       <defs>
-        <style>{ColorsCls.cssCreateB(cfg.clsName, uniqueId, colors, animate)}</style>
+        <style>
+          {ColorsCls.cssCreateB(cfg.clsName, uniqueId, colors, animate)}
+        </style>
       </defs>
       <polyline
-        fill="none" strokeWidth="2"
+        fill="none"
+        strokeWidth="2"
         points="9 6 15 12 9 18"
         transform={`rotate(${angle}, ${cfg.w / 2}, ${cfg.h / 2})`}
       />

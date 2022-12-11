@@ -4,6 +4,7 @@
  */
 import { AnimateCls } from "./AnimateCls";
 
+// noinspection JSUnusedGlobalSymbols
 export class ColorsCls {
   /**
    * цвет в нормальном состоянии
@@ -21,26 +22,6 @@ export class ColorsCls {
    * цвет при нажатии
    */
   public click: string = "silver";
-
-  buNormal(color: string): ColorsCls {
-    this.normal = color;
-    return this;
-  }
-
-  buHover(color: string): ColorsCls {
-    this.hover = color;
-    return this;
-  }
-
-  buDisabled(color: string): ColorsCls {
-    this.disable = color;
-    return this;
-  }
-
-  buClick(color: string): ColorsCls {
-    this.click = color;
-    return this;
-  }
 
   /**
    * Создаёт типой CSS код для цветов (2) с именем CSS класса (1)
@@ -158,5 +139,25 @@ export class ColorsCls {
           `
           }
         `;
+  }
+
+  buNormal(color: string): ColorsCls {
+    this.normal = color;
+    return this;
+  }
+
+  buHover(color: string): ColorsCls {
+    this.hover = color;
+    return this;
+  }
+
+  buDisabled(color: string): ColorsCls {
+    this.disable = color;
+    return this;
+  }
+
+  buClick(color: string): ColorsCls {
+    this.click = color;
+    return this;
   }
 }

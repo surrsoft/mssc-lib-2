@@ -95,7 +95,7 @@ export default function BrInput({
         cbOnChange?.(val);
       }, debounceMillisec);
     }
-  }, []);
+  });
 
   function btnHandle() {
     $inputValueSet("");

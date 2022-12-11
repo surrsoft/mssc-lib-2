@@ -1,7 +1,7 @@
-import { MsscSourceType } from '../MsscSourceType';
-import { MsscFilterType } from './MsscFilterType';
 import { BrSelectSortDataType } from '../../commonUI/BrSelect/types';
+import { MsscSourceType } from '../MsscSourceType';
 import { MsscColumnNameType } from './MsscColumnNameType';
+import { MsscFilterType } from './MsscFilterType';
 
 /** входные параметры функции {@link elemsCountByFilterAndIf} */
 export interface MsscElemsCountParamsType {

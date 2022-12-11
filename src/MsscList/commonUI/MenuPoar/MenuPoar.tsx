@@ -1,8 +1,9 @@
-import SvgIconMenu from '../../commonIcons/SvgIcons/SvgIconMenu';
 import React, { useEffect, useRef, useState } from 'react';
+
+import SvgIconMenu from '../../commonIcons/SvgIcons/SvgIconMenu';
 import './stylesMenuPoar.css';
-import { IdActionPoarType } from './types/types';
 import { PropsAtPoarType } from './types/PropsAtPoarType';
+import { IdActionPoarType } from './types/types';
 
 // ID [[asau54]] [[poar]]
 // ИСПОЛЬЗОВАННЫЕ ТЕХНИКИ: [asau58]

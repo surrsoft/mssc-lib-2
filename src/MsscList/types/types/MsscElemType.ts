@@ -12,6 +12,7 @@ export interface MsscElemType {
   elemModel: object;
 }
 
+// noinspection JSUnusedGlobalSymbols
 export function isMsscElemType(data: any): data is MsscElemType {
   return !!(
     data?.id &&

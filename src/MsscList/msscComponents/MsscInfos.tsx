@@ -1,5 +1,6 @@
-import { MsscParamUiLocal } from './MsscParamUiLocal';
 import React from 'react';
+
+import { MsscParamUiLocal } from './MsscParamUiLocal';
 
 export interface PropsType {
   $elemsCountOnCurrPage: number

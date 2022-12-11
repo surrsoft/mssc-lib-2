@@ -1,7 +1,8 @@
+import _ from 'lodash';
 import React from 'react';
+
 import SvgIconChevron from '../../commonIcons/SvgIcons/SvgIconChevron';
 import SvgIconChevronDouble from '../../commonIcons/SvgIcons/SvgIconChevronDouble';
-import _ from 'lodash';
 
 export interface MsscPaginatorProps {
   pageCurrNum?: number

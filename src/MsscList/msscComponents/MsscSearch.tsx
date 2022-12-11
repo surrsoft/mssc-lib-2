@@ -1,5 +1,6 @@
-import BrInput, { BrInputEnIcon } from '../commonUI/BrFilter/BrInput';
 import React from 'react';
+
+import BrInput, { BrInputEnIcon } from '../commonUI/BrFilter/BrInput';
 import { MsscRefreshesType } from '../types/types/MsscRefreshesType';
 
 export interface PropsType {

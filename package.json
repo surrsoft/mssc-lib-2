@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.10.3",
+    "@types/node": "^18.11.13",
     "postcss": "^8.4.12"
   },
   "publishConfig": {

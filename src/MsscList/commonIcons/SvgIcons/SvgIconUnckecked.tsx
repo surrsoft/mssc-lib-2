@@ -1,12 +1,16 @@
-import * as React from "react";
-import { ColorsCls } from './utils/ColorsCls';
-import { SvgIconPropsType } from './types/SvgIconPropsType';
+import React from "react";
+
+import { SvgIconPropsType } from "./types/SvgIconPropsType";
+import { ColorsCls } from "./utils/ColorsCls";
 
 // [[asau64]]
 // Ikonate Bold Interface Icons
 
-const SvgIconUnckecked = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => {
-  const svgClassName = 'asau64svg'
+const SvgIconUnckecked = ({
+  svgProps,
+  colors = new ColorsCls(),
+}: SvgIconPropsType) => {
+  const svgClassName = "asau64svg";
   return (
     <svg
       className={svgClassName}
@@ -32,7 +36,7 @@ const SvgIconUnckecked = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType
         fill="none"
         transform="rotate(90 21 3)"
       />
-      <path d="M16 12H8"/>
+      <path d="M16 12H8" />
     </svg>
   );
 };

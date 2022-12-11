@@ -1,8 +1,9 @@
 import React from 'react';
+
 import SvgIconTrash from '../commonIcons/SvgIcons/SvgIconTrash';
 import { ListSelectingModelCls } from '../commonUtils/ListSelectingModelCls';
 import { MsscIconsConfType } from '../types/types/MsscIconsConfType';
-
+ 
 export interface PropsType {
   dialogDeleteShow: () => void
   listModel: ListSelectingModelCls

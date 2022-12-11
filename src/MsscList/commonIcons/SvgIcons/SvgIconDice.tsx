@@ -1,12 +1,16 @@
-import * as React from "react";
-import { ColorsCls } from './utils/ColorsCls';
-import { SvgIconPropsType } from './types/SvgIconPropsType';
+import React from "react";
+
+import { SvgIconPropsType } from "./types/SvgIconPropsType";
+import { ColorsCls } from "./utils/ColorsCls";
 
 // [[asau64]]
 // Ikonate Bold Interface Icons
 
-const SvgIconDice = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => {
-  const svgClassName = 'asau65svg'
+const SvgIconDice = ({
+  svgProps,
+  colors = new ColorsCls(),
+}: SvgIconPropsType) => {
+  const svgClassName = "asau65svg";
   return (
     <svg
       className={svgClassName}
@@ -20,12 +24,8 @@ const SvgIconDice = ({svgProps, colors = new ColorsCls()}: SvgIconPropsType) => 
       {...svgProps}
     >
       <style type="text/css">{ColorsCls.cssCreate(svgClassName, colors)}</style>
-      <path
-        d="M17.2 14.9431C16.0954 14.9431 15.2 15.8385 15.2 16.9431C15.2 18.0477 16.0954 18.9431 17.2 18.9431C18.3045 18.9431 19.2 18.0477 19.2 16.9431C19.2 15.8385 18.3045 14.9431 17.2 14.9431Z"
-      />
-      <path
-        d="M5.05518 7.05518C5.05518 5.95061 5.95061 5.05518 7.05518 5.05518C8.15975 5.05518 9.05518 5.95061 9.05518 7.05518C9.05518 8.15975 8.15975 9.05518 7.05518 9.05518C5.95061 9.05518 5.05518 8.15975 5.05518 7.05518Z"
-      />
+      <path d="M17.2 14.9431C16.0954 14.9431 15.2 15.8385 15.2 16.9431C15.2 18.0477 16.0954 18.9431 17.2 18.9431C18.3045 18.9431 19.2 18.0477 19.2 16.9431C19.2 15.8385 18.3045 14.9431 17.2 14.9431Z" />
+      <path d="M5.05518 7.05518C5.05518 5.95061 5.95061 5.05518 7.05518 5.05518C8.15975 5.05518 9.05518 5.95061 9.05518 7.05518C9.05518 8.15975 8.15975 9.05518 7.05518 9.05518C5.95061 9.05518 5.05518 8.15975 5.05518 7.05518Z" />
       <path
         fillRule="evenodd"
         clipRule="evenodd"

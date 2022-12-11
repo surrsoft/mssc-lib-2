@@ -1,6 +1,7 @@
-import * as React from "react";
-import { ColorsCls } from './utils/ColorsCls';
-import { SvgPropsCls } from './utils/SvgPropsCls';
+import React from "react";
+
+import { ColorsCls } from "./utils/ColorsCls";
+import { SvgPropsCls } from "./utils/SvgPropsCls";
 
 // [[asau70]]
 
@@ -14,18 +15,17 @@ import { SvgPropsCls } from './utils/SvgPropsCls';
  * @constructor
  */
 const SvgIconChevron = ({
-                          svgProps,
-                          colors = new ColorsCls(),
-                          angle = 180,
-                          animate,
-                          uniqueId = `${Date.now()}`
-                        }: SvgPropsCls) => {
-
+  svgProps,
+  colors = new ColorsCls(),
+  angle = 180,
+  animate,
+  uniqueId = `${Date.now()}`,
+}: SvgPropsCls) => {
   const cfg = {
-    clsName: 'asau70', // NEED UNIQUE
+    clsName: "asau70", // NEED UNIQUE
     w: 24,
-    h: 24
-  }
+    h: 24,
+  };
 
   return (
     <svg
@@ -37,13 +37,13 @@ const SvgIconChevron = ({
       {...svgProps}
     >
       <defs>
-        <style>{ColorsCls.cssCreateB(cfg.clsName, uniqueId, colors, animate)}</style>
+        <style>
+          {ColorsCls.cssCreateB(cfg.clsName, uniqueId, colors, animate)}
+        </style>
       </defs>
-      <g transform={`rotate(${angle}, ${16 / 2}, ${16 / 2})`} strokeWidth={0.5} >
-        <path
-          d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
-        <path
-          d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+      <g transform={`rotate(${angle}, ${16 / 2}, ${16 / 2})`} strokeWidth={0.5}>
+        <path d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z" />
+        <path d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z" />
       </g>
     </svg>
   );

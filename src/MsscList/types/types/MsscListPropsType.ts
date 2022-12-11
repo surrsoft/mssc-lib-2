@@ -1,9 +1,9 @@
-import { MsscSourceType } from '../MsscSourceType';
 import { BrSelectSortDataType } from '../../commonUI/BrSelect/types';
-import { MsscColumnNameType } from './MsscColumnNameType';
-import { MsscMultFieldsType } from './MsscMultFieldsType';
 import { MsscListAreaHeightCls } from '../../msscUtils/MsscListAreaHeightCls';
+import { MsscSourceType } from '../MsscSourceType';
+import { MsscColumnNameType } from './MsscColumnNameType';
 import { MsscListElemStructType } from './MsscListElemStructType';
+import { MsscMultFieldsType } from './MsscMultFieldsType';
 
 /** Пропсы для MsscListFCC */
 export interface MsscListPropsType {

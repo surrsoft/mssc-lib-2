@@ -10,6 +10,7 @@ export type ListSelectingElemIdType = string;
 /** идентификатор элемента или null */
 export type ListSelectingElemIdOrNullType = ListSelectingElemIdType | null;
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * Предназначен для хранения текущего состояния какого-либо списка.
  * Хранит 1) какие элементы выбраны (методы `select...()`) 2) какой элемент является сейчас активным (методы `active...()`)

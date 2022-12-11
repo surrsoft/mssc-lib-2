@@ -4,13 +4,13 @@ import "./source-styles.scss";
 import { EnAirField } from "./EnAirField";
 import { AirSource } from "../../../MsscList/commonUtils/airSource/AirSource";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
+import { string as yupString, object as yupObject } from "yup";
 import { AirSourceParams } from "../../../MsscList/commonUtils/airSource/AirSourceParams";
 import { RsuvTxStringAC } from "rsuv-lib";
 import { SquareBrackets } from "../../../MsscList/msscUtils/SquareBrackets";
 import { MsscFilterType } from "../../../MsscList/types/types/MsscFilterType";
 
-const airSourceParams = {
+const airSourceParams: AirSourceParams<any> = {
   dbKey: "appZoHaX4a5tRLJlv", // mssc-training-3
   // dbKey: 'appXv6ry7Vn262nGR', // sites
   // dbKey: 'appskGCKvIZEdVBTO',
@@ -111,14 +111,14 @@ const airSourceParams = {
       <div className="cls2326FormContainer">
         <Formik
           initialValues={initialValues0}
-          validationSchema={Yup.object({
-            [EnAirField.TITLE]: Yup.string().required("обязательное поле"),
+          validationSchema={yupObject({
+            [EnAirField.TITLE]: yupString().required("обязательное поле"),
           })}
           onSubmit={async (values) => {
             return btnHandlers.ok(values);
           }}
         >
-          {({ errors }) => (
+          {() => (
             <Form className="cls2326Form">
               <div className="cls2326Title">
                 {isCreateMode ? "Создание" : "Редактирование"} элемента
@@ -182,6 +182,6 @@ const airSourceParams = {
     }
     return null;
   },
-} as AirSourceParams<any>;
+};
 
-export const airSource = new AirSource(airSourceParams)
+export const airSource = new AirSource(airSourceParams);

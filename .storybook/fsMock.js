@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+// noinspection JSUnusedGlobalSymbols
 module.exports = {
 	readFile: () => {
 		const pathR = path.resolve(__dirname, 'main.js');
