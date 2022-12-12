@@ -1,6 +1,6 @@
 import { BrSelectSortDataType } from '../../commonUI/BrSelect/types';
 import { MsscListAreaHeightCls } from '../../msscUtils/MsscListAreaHeightCls';
-import { MsscSourceType } from '../MsscSourceType';
+import { VanxSourceType } from '../../vanx/VanxSourceType';
 import { MsscColumnNameType } from './MsscColumnNameType';
 import { MsscListElemStructType } from './MsscListElemStructType';
 import { MsscMultFieldsType } from './MsscMultFieldsType';
@@ -10,7 +10,7 @@ export interface MsscListPropsType {
   /**
    * источник данных (см. {@link umsscSOURCEu источник} )
    */
-  source: MsscSourceType<any> | null
+  source: VanxSourceType<any> | null
   /** SYNC [[221204124107]] */
   sortData?: BrSelectSortDataType<MsscColumnNameType>
   /**
@@ -30,4 +30,5 @@ export interface MsscListPropsType {
    * Высота области прокрутки списка
    */
   listAreaHeight?: MsscListAreaHeightCls
+  modelType?: any
 }

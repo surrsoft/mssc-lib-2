@@ -16,8 +16,8 @@ export { elemsCountByFilterAndIf } from "./MsscList/msscUtils/elemsCountByFilter
 export { tagsCookAndSet } from "./MsscList/msscUtils/tagsCookAndSet";
 export { sortsCreate } from "./MsscList/msscUtils/sortsCreate";
 export { SquareBrackets } from "./MsscList/msscUtils/SquareBrackets";
-export { MsscElemType } from "./MsscList/types/types/MsscElemType";
-export { MsscTagType } from "./MsscList/types/types/MsscTagType";
+export { VanxElemType } from "./MsscList/vanx/types/VanxElemType";
+export { VanxTagType } from "./MsscList/vanx/types/VanxTagType";
 export { MsscColumnNameType } from "./MsscList/types/types/MsscColumnNameType";
 export { MsscElemStructType } from "./MsscList/types/types/MsscElemStructType";
 export { MsscJsxExternalType } from "./MsscList/types/types/MsscJsxExternalType";

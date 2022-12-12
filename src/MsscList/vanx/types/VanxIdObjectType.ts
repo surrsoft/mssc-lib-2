@@ -1,4 +1,4 @@
 /**
  * Любой объект обладающий полем `id`
  */
-export interface MsscIdObjectType { id: string, [key: string]: any }
+export interface VanxIdObjectType { id: string, [key: string]: any }

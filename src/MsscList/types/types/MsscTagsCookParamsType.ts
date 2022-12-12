@@ -1,13 +1,13 @@
-import { MsscSourceType } from '../MsscSourceType';
-import { MsscFilterType } from './MsscFilterType';
+import { VanxFilterType } from '../../vanx/types/VanxFilterType';
+import { VanxSourceType } from '../../vanx/VanxSourceType';
 import { MsscMultFieldsType } from './MsscMultFieldsType';
 import { MsscTagGroupSelectedType } from './MsscTagGroupSelectedType';
 
 export interface MsscTagsCookParamsType {
   /** см. [220607221651] */
   tagsFieldNameArr?: MsscMultFieldsType[],
-  source: MsscSourceType<any>,
-  filters: MsscFilterType[],
+  source: VanxSourceType<any>,
+  filters: VanxFilterType[],
   tagGroupSelectedArr: MsscTagGroupSelectedType[],
   $tagGroupArrSet: any,
 }

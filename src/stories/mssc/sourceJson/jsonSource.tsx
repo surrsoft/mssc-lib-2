@@ -4,7 +4,7 @@ import { RsuvTxStringAC } from 'rsuv-lib';
 
 import { Asau88JsonSourceParams } from '../../../MsscList/commonUtils/jsonSource/Asau88JsonSourceParams';
 import { JsonSourceAsau88 } from '../../../MsscList/commonUtils/jsonSource/JsonSourceAsau88';
-import { MsscFilterType } from '../../../MsscList/types/types/MsscFilterType';
+import { VanxFilterType } from '../../../MsscList/vanx/types/VanxFilterType';
 import { EnJsonFieldName } from './EnJsonFieldName';
 
 const params: Asau88JsonSourceParams<any> = {
@@ -21,7 +21,7 @@ const params: Asau88JsonSourceParams<any> = {
       </div>
     )
   },
-  cbFilterFromSearchText: (searchText: string): MsscFilterType[] | null => {
+  cbFilterFromSearchText: (searchText: string): VanxFilterType[] | null => {
     if (searchText) {
       const rr1 = EnJsonFieldName.EMAIL
       const rr2 = EnJsonFieldName.USERNAME
@@ -34,11 +34,11 @@ const params: Asau88JsonSourceParams<any> = {
     }
     return null;
   },
-  cbFilterFromTags: (tags: string[], fieldName: string): MsscFilterType[] | null => {
+  cbFilterFromTags: (tags: string[], fieldName: string): VanxFilterType[] | null => {
     if (tags && tags.length > 0) {
-      const filters: MsscFilterType[] = []
+      const filters: VanxFilterType[] = []
       tags.forEach(elTag => {
-        const filter: MsscFilterType = {
+        const filter: VanxFilterType = {
           paramId: new RsuvTxStringAC('_'),
           paramIdB: fieldName,
           filterValue: elTag,

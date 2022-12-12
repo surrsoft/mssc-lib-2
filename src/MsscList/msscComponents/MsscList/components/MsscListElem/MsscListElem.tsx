@@ -4,14 +4,14 @@ import React from "react";
 import { SelectResultPoarType } from "../../../../commonUI/MenuPoar/types/SelectResultPoarType";
 import { menuDataSTA } from "../../../../msscUtils/menuDataSTA";
 import { MsscMenuActionEnum } from "../../../../types/enums/MsscMenuActionEnum";
-import { MsscElemType } from "../../../../types/types/MsscElemType";
+import { VanxElemType } from "../../../../vanx/types/VanxElemType";
 import { MsscListElemPropsBaseType } from "../../types/MsscListElemPropsBaseType";
 import { MsscRkBody } from "./components/MsscRkBody";
 import { MsscRkCheckbox } from "./components/MsscRkCheckbox";
 import { MsscRkMenu } from "./components/MsscRkMenu";
 
 export type MsscListElemPropsType = MsscListElemPropsBaseType & {
-  elem: MsscElemType;
+  elem: VanxElemType;
 };
 
 export function MsscListElem({
@@ -54,7 +54,7 @@ export function MsscListElem({
       case MsscMenuActionEnum.EDIT:
         if (obj.idElem) {
           const elem = elems.find(
-            (el: MsscElemType) => el.id.val === obj.idElem
+            (el: VanxElemType) => el.id.val === obj.idElem
           );
           if (elem) {
             listModel.activeIdSet(elem.id.val);

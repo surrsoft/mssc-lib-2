@@ -32,16 +32,16 @@ import { MsscListAreaHeightCls } from "./msscUtils/MsscListAreaHeightCls";
 import { sortsCreate } from "./msscUtils/sortsCreate";
 import { tagsCookAndSet } from "./msscUtils/tagsCookAndSet";
 import { MSSC_SETTINGS } from "./settings";
-import { MsscSourceType } from "./types/MsscSourceType";
 import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreateEditCallbacksType";
-import { MsscElemType } from "./types/types/MsscElemType";
-import { MsscFilterType } from "./types/types/MsscFilterType";
-import { MsscIdObjectType } from "./types/types/MsscIdObjectType";
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
 import { MsscTagGroupSelectedType } from "./types/types/MsscTagGroupSelectedType";
 import { MsscTagGroupType } from "./types/types/MsscTagGroupType";
+import { VanxElemType } from "./vanx/types/VanxElemType";
+import { VanxFilterType } from "./vanx/types/VanxFilterType";
+import { VanxIdObjectType } from "./vanx/types/VanxIdObjectType";
+import { VanxSourceType } from "./vanx/VanxSourceType";
 
 const scrollTop = 0;
 
@@ -52,6 +52,7 @@ const MsscListFCC = ({
   listElemStruct,
   tagsFieldNameArr,
   listAreaHeight = new MsscListAreaHeightCls(),
+  modelType
 }: MsscListPropsType): JSX.Element => {
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
@@ -60,7 +61,7 @@ const MsscListFCC = ({
   // всего страниц
   const [$pageCountAll, $pageCountAllSet] = useState(0);
   // текущие элементы для отображения
-  const [$elems, $elemsSet] = useState<MsscElemType[]>([]);
+  const [$elems, $elemsSet] = useState<Array<VanxElemType<typeof modelType>>>([]);
   // общее количество элементов хранилища (без учёта каких-либо фильтров)
   const [$elemsCountAll, $elemsCountAllSet] = useState(-1);
   // общее количество элементов хранилища по фильтру
@@ -120,7 +121,7 @@ const MsscListFCC = ({
      * @param ixStart (1) -- индекс
      * @param ixEnd (2) -- индекс
      */
-    elems(ixStart: number, ixEnd: number): MsscIdObjectType[] {
+    elems(ixStart: number, ixEnd: number): VanxIdObjectType[] {
       return $idsShuffled.slice(ixStart, ixEnd + 1).map((el) => ({ id: el }));
     },
   };
@@ -136,7 +137,7 @@ const MsscListFCC = ({
    * получение всех основных данных
    * @param sourcePrm
    */
-  const requestFirst = async (sourcePrm: MsscSourceType<any>): Promise<any> => {
+  const requestFirst = async (sourcePrm: VanxSourceType<any>): Promise<any> => {
     try {
       // --- общее кол-во элементов без учета фильтра
       $elemsCountAllSet(-1);
@@ -150,7 +151,7 @@ const MsscListFCC = ({
         });
       // --- готовка фильтров
       $isLoadingInitialSet(true);
-      const filters: MsscFilterType[] = filtersCreate({
+      const filters: VanxFilterType[] = filtersCreate({
         source: sourcePrm,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
@@ -196,7 +197,7 @@ const MsscListFCC = ({
    * получение данных конкретной страницы
    * @param source
    */
-  const requestTwo = async (source: MsscSourceType<any>): Promise<any> => {
+  const requestTwo = async (source: VanxSourceType<typeof modelType>): Promise<any> => {
     try {
       $isLoadingPageSet(true);
       // await fnWait(3000)
@@ -223,7 +224,7 @@ const MsscListFCC = ({
         tagsFieldNameArr,
       });
       // ---
-      let elemsResult: MsscElemType[];
+      let elemsResult: Array<VanxElemType<typeof modelType>>;
       if (!$randomEnabled) {
         elemsResult = await source.elems(
           new RsuvTxNumIntDiap(
@@ -237,8 +238,8 @@ const MsscListFCC = ({
         const idObjs = shuffleUtils.elems(ixStart, ixEnd);
         const res: any = await source?.elemsById(idObjs);
         elemsResult = res?.filter(
-          (el: MsscElemType | null) => el !== null
-        ) as MsscElemType[];
+          (el: Array<VanxElemType<typeof modelType>> | null) => el !== null
+        );
       }
       // --- ---
       $elemsCountOnCurrPageSet(elemsResult.length);

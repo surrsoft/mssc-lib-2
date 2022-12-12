@@ -9,14 +9,14 @@ export const umsscLIBu = "библиотека";
 export const umsscCOMPONENTu = "компонент";
 
 /**
- * *клиент - внешний клиент, который завязан с {@link umsscLIBu библиотекой} через интерфейс {@link MsscSourceType}.
+ * *клиент - внешний клиент, который завязан с {@link umsscLIBu библиотекой} через интерфейс {@link VanxSourceType}.
  * Формируется программистом задействующим {@link umsscLIBu библиотеку}
  */
 export const umsscCLIENTu = "клиент";
 
 /**
  * - *источник, *source
- * - сущность {@link umsscCLIENTu клиента} имплементирующая интерфейс {@link MsscSourceType}.
+ * - сущность {@link umsscCLIENTu клиента} имплементирующая интерфейс {@link VanxSourceType}.
  *
  * Передаётся в обязательный пропс `source` {@link umsscCOMPONENTu компонента} .
  *

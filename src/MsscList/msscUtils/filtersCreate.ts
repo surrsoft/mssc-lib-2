@@ -2,8 +2,8 @@ import _ from "lodash";
 import { RsuvTxChecked } from "rsuv-lib";
 
 import { MsscFiltersCreateParamsType } from "../types/types/MsscFiltersCreateParamsType";
-import { MsscFilterType } from "../types/types/MsscFilterType";
 import { MsscTagGroupSelectedType } from "../types/types/MsscTagGroupSelectedType";
+import { VanxFilterType } from "../vanx/types/VanxFilterType";
 
 /**
  * Готовит объекты фильтрации на базе текста-для-поиска {@param searchText}, тегов {@param tagGroupSelectedArr}
@@ -17,14 +17,14 @@ export function filtersCreate({
                                 tagGroupSelectedArr,
                                 searchText,
                                 tagsFieldNameArr,
-                              }: MsscFiltersCreateParamsType): MsscFilterType[] {
-  const filterTags: MsscFilterType[] = [];
+                              }: MsscFiltersCreateParamsType): VanxFilterType[] {
+  const filterTags: VanxFilterType[] = [];
   if (!_.isEmpty(tagsFieldNameArr)) {
     tagGroupSelectedArr.forEach((elTagGroup: MsscTagGroupSelectedType) => {
       const tags = elTagGroup.elems.map((el: RsuvTxChecked) => {
         return el.id;
       });
-      const filters: MsscFilterType[] =
+      const filters: VanxFilterType[] =
         source?.filterFromTags(tags, elTagGroup.id) ?? [];
       filterTags.push(...filters);
     });

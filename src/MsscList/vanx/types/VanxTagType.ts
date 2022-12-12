@@ -1,7 +1,7 @@
 /**
  * Представление для: "имя значения" (тега) + "количество таких значений"
  */
-export class MsscTagType {
+export class VanxTagType {
   value: string;
   count: number;
 

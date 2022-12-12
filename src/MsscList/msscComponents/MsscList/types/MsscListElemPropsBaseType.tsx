@@ -1,15 +1,15 @@
 import { ListSelectingModelCls } from "../../../commonUtils/ListSelectingModelCls";
 import { MsscDialogCreateEditCallbacksType } from "../../../types/types/MsscDialogCreateEditCallbacksType";
-import { MsscElemType } from "../../../types/types/MsscElemType";
 import { MsscListElemStructType } from "../../../types/types/MsscListElemStructType";
 import { MsscRefreshesType } from "../../../types/types/MsscRefreshesType";
-import { MsscSourceDialogCreateOrEditType } from "../../../types/types/MsscSourceDialogCreateOrEditType";
+import { VanxElemType } from "../../../vanx/types/VanxElemType";
+import { VanxSourceDialogCreateOrEditType } from "../../../vanx/types/VanxSourceDialogCreateOrEditType";
 
 export interface MsscListElemPropsBaseType {
-  elems: MsscElemType[];
+  elems: VanxElemType[];
   refreshes: MsscRefreshesType;
   listModel: ListSelectingModelCls;
-  dialogCreateOrEdit?: MsscSourceDialogCreateOrEditType<any>;
+  dialogCreateOrEdit?: VanxSourceDialogCreateOrEditType<any>;
   dialogDeleteShow: () => void;
   dialogCreateEditCallbacks: MsscDialogCreateEditCallbacksType;
   dialogCreateEditJsxSet: any;

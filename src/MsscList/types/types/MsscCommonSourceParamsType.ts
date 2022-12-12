@@ -1,4 +1,4 @@
-import { MsscFilterType } from './MsscFilterType';
+import { VanxFilterType } from '../../vanx/types/VanxFilterType';
 
 /**
  * Параметры специфичные для многих *источников
@@ -22,9 +22,9 @@ export class MsscCommonSourceParamsType<T> {
   /**
    * на базе (1) нужно сформировать MsscFilter (см. [220509113255])
    */
-  cbFilterFromSearchText?: (searchText: string) => MsscFilterType[] | null
+  cbFilterFromSearchText?: (searchText: string) => VanxFilterType[] | null
   /**
    * на базе тегов (1) нужно сформировать MsscFilter (см. [220514092623]).
    */
-  cbFilterFromTags?: (tags: string[], fieldName: string) => MsscFilterType[] | null
+  cbFilterFromTags?: (tags: string[], fieldName: string) => VanxFilterType[] | null
 }

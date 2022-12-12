@@ -23,11 +23,11 @@ import {
 } from 'rsuv-lib';
 import { PElemAsau66, RsuvAsau67 } from 'rsuv-lib/dist/RsuvTuPromiseAllSettled';
 
-import { MsscSourceType } from '../../types/MsscSourceType';
-import { MsscElemType } from '../../types/types/MsscElemType';
-import { MsscFilterType } from '../../types/types/MsscFilterType';
-import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
-import { MsscTagType } from '../../types/types/MsscTagType';
+import { VanxElemType } from '../../vanx/types/VanxElemType';
+import { VanxFilterType } from '../../vanx/types/VanxFilterType';
+import { VanxIdObjectType } from '../../vanx/types/VanxIdObjectType';
+import { VanxTagType } from '../../vanx/types/VanxTagType';
+import { VanxSourceType } from '../../vanx/VanxSourceType';
 import { AirSourceParams } from './AirSourceParams';
 
 interface IxtType {
@@ -40,10 +40,10 @@ interface FdType {
   direction: 'desc' | 'asc'
 }
 
-function msscFiltersToVuscFilter(filters: MsscFilterType[]) {
+function msscFiltersToVuscFilter(filters: VanxFilterType[]) {
   if (filters && filters.length > 0) {
     const rrTags: string[] = []
-    const rr0 = filters.reduce<string[]>((acc, elFilter: MsscFilterType) => {
+    const rr0 = filters.reduce<string[]>((acc, elFilter: VanxFilterType) => {
       if (elFilter.paramId?.val && elFilter.filterValue) {
         if (!elFilter.isArrElemFind) {
           acc.push(`(FIND(LOWER("${elFilter.filterValue as string}"),LOWER({${elFilter.paramId.val}})))`)
@@ -72,9 +72,9 @@ function msscFiltersToVuscFilter(filters: MsscFilterType[]) {
 }
 
 /**
- * Имплементация {@link MsscSourceType} для источника "airtable.com"
+ * Имплементация {@link VanxSourceType} для источника "airtable.com"
  */
-export class AirSource<T> implements MsscSourceType<T> {
+export class AirSource<T> implements VanxSourceType<T> {
 
   private readonly connector: HoggConnectorNT;
   private readonly thParams: AirSourceParams<T>
@@ -97,28 +97,7 @@ export class AirSource<T> implements MsscSourceType<T> {
     return await Promise.resolve(<div>no realised</div>)
   }
 
-  /**
-   * Для (1) и (2) возвращает соответствующие адаптации под Airtable API
-   * @param filters
-   * @param sorts
-   * @private
-   */
-  private fnFilterAndSort(filters: MsscFilterType[], sorts: RsuvTxSort[]) {
-    const filterVusc = msscFiltersToVuscFilter(filters)
-    let sortArrObj: FdType[] = []
-    if (sorts.length > 0) {
-      sortArrObj = sorts.map(el => {
-        const obj: FdType = {
-          field: el.id.val,
-          direction: el.sortDirect === RsuvEnSort.ASC ? 'asc' : 'desc'
-        }
-        return obj;
-      })
-    }
-    return { filterVusc, sortArrObj };
-  }
-
-  async idsAll(filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
+  async idsAll(filters: VanxFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
     // ---
     const { filterVusc, sortArrObj } = this.fnFilterAndSort(filters, sorts);
     // ---
@@ -140,7 +119,7 @@ export class AirSource<T> implements MsscSourceType<T> {
     return await Promise.resolve([]);
   }
 
-  async elemsById(ids: MsscIdObjectType[]): Promise<MsscElemType[]> {
+  async elemsById(ids: VanxIdObjectType[]): Promise<VanxElemType[]> {
     const promises = ids.map(async elId => {
       return await this.connector.queryOneById(elId.id)
     })
@@ -156,7 +135,7 @@ export class AirSource<T> implements MsscSourceType<T> {
     return await Promise.resolve([]);
   }
 
-  async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<MsscElemType[]> {
+  async elems(indexDiap: RsuvTxNumIntDiap, filters: VanxFilterType[], sorts: RsuvTxSort[]): Promise<VanxElemType[]> {
     const { filterVusc, sortArrObj } = this.fnFilterAndSort(filters, sorts);
     // ---
     const indexStart = indexDiap.indexStart.val;
@@ -172,20 +151,6 @@ export class AirSource<T> implements MsscSourceType<T> {
       return this.toMsscElems(queryResult);
     }
     return await Promise.resolve([]);
-  }
-
-  private toMsscElems(queryResult: HoggTupleNT[]) {
-    const objs = queryResult.map((elTuple: HoggTupleNT) => {
-      return tupleToObject(elTuple)
-    }).filter(elObj => elObj !== null)
-    return objs.map((elObj: any) => {
-      const obj: MsscElemType = {
-        id: new RsuvTxStringAB(elObj.tid),
-        elem: this.thParams?.elemJsx ? this.thParams.elemJsx(elObj) : (<div>{elObj.id} warn-[[220503114824]]</div>),
-        elemModel: elObj
-      }
-      return obj;
-    });
   }
 
   async elemsAdd(elems: T[]): Promise<Array<RsuvResultBoolPknz | T>> {
@@ -216,7 +181,7 @@ export class AirSource<T> implements MsscSourceType<T> {
     throw new Error(`${createResult.errCode ?? ''} : ${createResult.errMessage ?? ''}`);
   }
 
-  async elemsCountByFilter(filters: MsscFilterType[]): Promise<RsuvTxNumIntAB> {
+  async elemsCountByFilter(filters: VanxFilterType[]): Promise<RsuvTxNumIntAB> {
     let vuscFilter: string = '';
     if (filters.length > 0) {
       vuscFilter = msscFiltersToVuscFilter(filters);
@@ -225,7 +190,7 @@ export class AirSource<T> implements MsscSourceType<T> {
     return new RsuvTxNumIntAB(count)
   }
 
-  async elemsDelete(elems: MsscIdObjectType[]): Promise<MsscIdObjectType[]> {
+  async elemsDelete(elems: VanxIdObjectType[]): Promise<VanxIdObjectType[]> {
     const promises = elems.map(async (el: any) => {
       return await this.connector.delete([el.id || ''])
     })
@@ -282,22 +247,21 @@ export class AirSource<T> implements MsscSourceType<T> {
     return null;
   }
 
-  filterFromSearchText(searchText: string): MsscFilterType[] | null {
+  filterFromSearchText(searchText: string): VanxFilterType[] | null {
     if (searchText) {
       return this.thParams.cbFilterFromSearchText?.(searchText) ?? null
     }
     return null
   }
 
-  filterFromTags(tags: string[], fieldName: string): MsscFilterType[] | null {
+  filterFromTags(tags: string[], fieldName: string): VanxFilterType[] | null {
     if (tags && tags.length > 0) {
       return this.thParams.cbFilterFromTags?.(tags, fieldName) ?? null
     }
     return null;
   }
 
-
-  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagType[]> {
+  async tags(filters: VanxFilterType[], fieldName: string): Promise<VanxTagType[]> {
     const { filterVusc } = this.fnFilterAndSort(filters, []);
     // ---
     const hoggOffset = new HoggOffsetCount(true);
@@ -308,10 +272,45 @@ export class AirSource<T> implements MsscSourceType<T> {
     // ---
     if (queryResult && queryResult.length > 0) {
       return queryResult.map(el => {
-        return new MsscTagType(el.value, el.ids.length)
+        return new VanxTagType(el.value, el.ids.length)
       })
     }
     return [];
+  }
+
+  /**
+   * Для (1) и (2) возвращает соответствующие адаптации под Airtable API
+   * @param filters
+   * @param sorts
+   * @private
+   */
+  private fnFilterAndSort(filters: VanxFilterType[], sorts: RsuvTxSort[]) {
+    const filterVusc = msscFiltersToVuscFilter(filters)
+    let sortArrObj: FdType[] = []
+    if (sorts.length > 0) {
+      sortArrObj = sorts.map(el => {
+        const obj: FdType = {
+          field: el.id.val,
+          direction: el.sortDirect === RsuvEnSort.ASC ? 'asc' : 'desc'
+        }
+        return obj;
+      })
+    }
+    return { filterVusc, sortArrObj };
+  }
+
+  private toMsscElems(queryResult: HoggTupleNT[]) {
+    const objs = queryResult.map((elTuple: HoggTupleNT) => {
+      return tupleToObject(elTuple)
+    }).filter(elObj => elObj !== null)
+    return objs.map((elObj: any) => {
+      const obj: VanxElemType = {
+        id: new RsuvTxStringAB(elObj.tid),
+        elem: this.thParams?.elemJsx ? this.thParams.elemJsx(elObj) : (<div>{elObj.id} warn-[[220503114824]]</div>),
+        elemModel: elObj
+      }
+      return obj;
+    });
   }
 
 }

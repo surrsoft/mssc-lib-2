@@ -15,11 +15,11 @@ import {
 } from 'rsuv-lib';
 import { RsuvAsau89 } from 'rsuv-lib/src/RsuvTuTree';
 
-import { MsscSourceType } from '../../types/MsscSourceType';
-import { MsscElemType } from '../../types/types/MsscElemType';
-import { MsscFilterType } from '../../types/types/MsscFilterType';
-import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
-import { MsscTagType } from '../../types/types/MsscTagType';
+import { VanxElemType } from '../../vanx/types/VanxElemType';
+import { VanxFilterType } from '../../vanx/types/VanxFilterType';
+import { VanxIdObjectType } from '../../vanx/types/VanxIdObjectType';
+import { VanxTagType } from '../../vanx/types/VanxTagType';
+import { VanxSourceType } from '../../vanx/VanxSourceType';
 import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
 
 /*
@@ -38,7 +38,7 @@ class Cls1941 {
   }
 }
 
-export class JsonSourceAsau88<T> implements MsscSourceType<T> {
+export class JsonSourceAsau88<T> implements VanxSourceType<T> {
   private readonly thParams: Asau88JsonSourceParams<any>;
 
   constructor(params: Asau88JsonSourceParams<any>) {
@@ -56,19 +56,7 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     return null; // TODO
   }
 
-  /**
-   * Преобразование (1) к формату MsscElem[]
-   * @param data
-   * @private
-   */
-  private elemsToMsscElems(data: any[]): MsscElemType[] {
-    return data.map((el: any) => {
-      const rr = this.thParams.elemJsx?.(el) ?? (<div>BR err [[220508132145]]</div>);
-      return { id: el.id, elemModel: el, elem: rr }
-    })
-  }
-
-  async elems(indexDiap: RsuvTxNumIntDiap, filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<MsscElemType[]> {
+  async elems(indexDiap: RsuvTxNumIntDiap, filters: VanxFilterType[], sorts: RsuvTxSort[]): Promise<VanxElemType[]> {
     const { indexStart: { val: ixStart }, indexEnd: { val: ixEnd } } = indexDiap;
     if (filters.length < 1) {
       const data = await jsonServer?.elemsGet(ixStart, ixEnd - ixStart + 1);
@@ -89,6 +77,108 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     return []
   }
 
+  async elemsAdd(elems: T[]): Promise<Array<RsuvResultBoolPknz | T>> {
+    return await Promise.resolve([]); // TODO
+  }
+
+  async elemsById(ids: VanxIdObjectType[]): Promise<VanxElemType[]> {
+    const elemsAll = await jsonServer?.elemsGetAll()
+    let ret = []
+    if (elemsAll && elemsAll.length > 0) {
+      ret = elemsAll.filter((el: any) => {
+        return ids.some(el2 => el2.id === el.id)
+      })
+    }
+    return this.elemsToMsscElems(ret)
+  }
+
+  async elemsCountByFilter(filters: VanxFilterType[]): Promise<RsuvTxNumIntAB> {
+    if (filters.length < 1) {
+      const count = await jsonServer?.elemsCountGetAll()
+      return new RsuvTxNumIntAB(count || 0);
+    } else {
+      const elems = await Cls1941.elemsAll(jsonServer)
+      const elemsFiltered = this.elemsFiltered(elems, filters)
+      return new RsuvTxNumIntAB(elemsFiltered.length)
+    }
+  }
+
+  async elemsDelete(elems: VanxIdObjectType[]): Promise<VanxIdObjectType[]> {
+    const ids = elems.map(el => el.id)
+    const results = await jsonServer.elemsDeleteB(ids) // g8g
+
+    return await Promise.resolve([]); // TODO
+  }
+
+  async elemsSet(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
+    return await Promise.resolve([]); // TODO
+  }
+
+  async elemsUpsert(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
+    return await Promise.resolve([]); // TODO
+  }
+
+  filterFromSearchText(searchText: string): VanxFilterType[] | null {
+    if (searchText) {
+      return this.thParams.cbFilterFromSearchText?.(searchText) || null
+    }
+    return null
+  }
+
+  filterFromTags(tags: string[], fieldName: string): VanxFilterType[] | null {
+    if (tags && tags.length > 0) {
+      return this.thParams.cbFilterFromTags?.(tags, fieldName) || null
+    }
+    return null;
+  }
+
+  /**
+   *
+   * @param filters
+   * @param sorts -- не реализовано
+   */
+  async idsAll(filters: VanxFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
+    let retIds = []
+    const elemsAll = await jsonServer.elemsGetAll()
+    if (elemsAll && elemsAll.length > 0) {
+      // --- elemsFilteredAll - все элементы хранилища соответствующие фильтрам 'filters'
+      const elemsFilteredAll = this.elemsFiltered(elemsAll, filters);
+      // ---
+      retIds = elemsFilteredAll.map(el => el.id);
+    }
+    return retIds;
+  }
+
+  async tags(filters: VanxFilterType[], fieldName: string): Promise<VanxTagType[]> {
+    const elems = await Cls1941.elemsAll(jsonServer)
+    const elemsFiltered = this.elemsFiltered(elems, filters)
+    // ---
+    const tibo: RsuvResultTibo<RsuvAsau89[]> = RsuvTuTree.accum(elemsFiltered, fieldName, 'id', true)
+    const msscTags: VanxTagType[] = []
+    if (tibo.success) {
+      const elems: RsuvAsau89[] | undefined = tibo.value
+      elems!.forEach(el1 => {
+        const val = el1.value;
+        const count = el1.ids.length;
+        const msscTag = { value: val, count } as VanxTagType;
+        msscTags.push(msscTag)
+      })
+    }
+    return msscTags;
+  }
+
+  /**
+   * Преобразование (1) к формату MsscElem[]
+   * @param data
+   * @private
+   */
+  private elemsToMsscElems(data: any[]): VanxElemType[] {
+    return data.map((el: any) => {
+      const rr = this.thParams.elemJsx?.(el) ?? (<div>BR err [[220508132145]]</div>);
+      return { id: el.id, elemModel: el, elem: rr }
+    })
+  }
+
   /**
    * Отбор из массива объектов (1) объектов удовлетворяющих фильтрам (2).
    * Видео-объяснение: https://www.notion.so/surr/video-220522-1353-4ddd18b05a85422fa9855c8afa836f73 .
@@ -96,7 +186,7 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
    * @param filters (2) -- фильтры. Если пустой массив, возвращает элементы из (1) в виде нового массива
    * @private
    */
-  private elemsFiltered(elemsAll: any[], filters: MsscFilterType[]) {
+  private elemsFiltered(elemsAll: any[], filters: VanxFilterType[]) {
     if (filters.length < 1) {
       return [...elemsAll]
     }
@@ -117,7 +207,7 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
       // здесь будет TRUE если элемент соответствует хотя бы одному из фильтров filtersByOne
       const isFindedByString = fp.anyPass([
         fp.isEmpty,
-        fp.some((elFilter: MsscFilterType) => {
+        fp.some((elFilter: VanxFilterType) => {
           if (elFilter.filterValue) {
             const val = _.get(elElem, elFilter.paramIdB ?? '')
             if (_.isString(val)) {
@@ -146,96 +236,6 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
       }
     })
     return retElemsFiltered;
-  }
-
-  async elemsAdd(elems: T[]): Promise<Array<RsuvResultBoolPknz | T>> {
-    return await Promise.resolve([]); // TODO
-  }
-
-  async elemsById(ids: MsscIdObjectType[]): Promise<MsscElemType[]> {
-    const elemsAll = await jsonServer?.elemsGetAll()
-    let ret = []
-    if (elemsAll && elemsAll.length > 0) {
-      ret = elemsAll.filter((el: any) => {
-        return ids.some(el2 => el2.id === el.id)
-      })
-    }
-    return this.elemsToMsscElems(ret)
-  }
-
-  async elemsCountByFilter(filters: MsscFilterType[]): Promise<RsuvTxNumIntAB> {
-    if (filters.length < 1) {
-      const count = await jsonServer?.elemsCountGetAll()
-      return new RsuvTxNumIntAB(count || 0);
-    } else {
-      const elems = await Cls1941.elemsAll(jsonServer)
-      const elemsFiltered = this.elemsFiltered(elems, filters)
-      return new RsuvTxNumIntAB(elemsFiltered.length)
-    }
-  }
-
-  async elemsDelete(elems: MsscIdObjectType[]): Promise<MsscIdObjectType[]> {
-    const ids = elems.map(el => el.id)
-    const results = await jsonServer.elemsDeleteB(ids) // g8g
-
-    return await Promise.resolve([]); // TODO
-  }
-
-  async elemsSet(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
-    return await Promise.resolve([]); // TODO
-  }
-
-  async elemsUpsert(elems: T[]): Promise<Array<RsuvResultTibo<RsuvEnResultCrudSet>>> {
-    return await Promise.resolve([]); // TODO
-  }
-
-  filterFromSearchText(searchText: string): MsscFilterType[] | null {
-    if (searchText) {
-      return this.thParams.cbFilterFromSearchText?.(searchText) || null
-    }
-    return null
-  }
-
-  filterFromTags(tags: string[], fieldName: string): MsscFilterType[] | null {
-    if (tags && tags.length > 0) {
-      return this.thParams.cbFilterFromTags?.(tags, fieldName) || null
-    }
-    return null;
-  }
-
-  /**
-   *
-   * @param filters
-   * @param sorts -- не реализовано
-   */
-  async idsAll(filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
-    let retIds = []
-    const elemsAll = await jsonServer.elemsGetAll()
-    if (elemsAll && elemsAll.length > 0) {
-      // --- elemsFilteredAll - все элементы хранилища соответствующие фильтрам 'filters'
-      const elemsFilteredAll = this.elemsFiltered(elemsAll, filters);
-      // ---
-      retIds = elemsFilteredAll.map(el => el.id);
-    }
-    return retIds;
-  }
-
-  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagType[]> {
-    const elems = await Cls1941.elemsAll(jsonServer)
-    const elemsFiltered = this.elemsFiltered(elems, filters)
-    // ---
-    const tibo: RsuvResultTibo<RsuvAsau89[]> = RsuvTuTree.accum(elemsFiltered, fieldName, 'id', true)
-    const msscTags: MsscTagType[] = []
-    if (tibo.success) {
-      const elems: RsuvAsau89[] | undefined = tibo.value
-      elems!.forEach(el1 => {
-        const val = el1.value;
-        const count = el1.ids.length;
-        const msscTag = { value: val, count } as MsscTagType;
-        msscTags.push(msscTag)
-      })
-    }
-    return msscTags;
   }
 
 }

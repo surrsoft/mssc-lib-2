@@ -3,13 +3,13 @@ import React from "react";
 import { SvgIconPlus } from "../commonIcons/SvgIcons/SvgIconPlus";
 import { MSSC_SETTINGS } from '../settings';
 import { MsscDialogCreateEditCallbacksType } from "../types/types/MsscDialogCreateEditCallbacksType";
-import { MsscSourceDialogCreateOrEditType } from "../types/types/MsscSourceDialogCreateOrEditType";
+import { VanxSourceDialogCreateOrEditType } from "../vanx/types/VanxSourceDialogCreateOrEditType";
 
 interface PropsType<T> {
   dialogCreateEditCallbacks: MsscDialogCreateEditCallbacksType;
   $dialogCreateEditJsxSet: any;
   $isDialogCreateEditShowedSet: any;
-  sourceDialogCreateOrEdit?: MsscSourceDialogCreateOrEditType<T>;
+  sourceDialogCreateOrEdit?: VanxSourceDialogCreateOrEditType<T>;
 }
 
 export function ButtonCreateLocal<T>({

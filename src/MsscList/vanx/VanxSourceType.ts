@@ -7,26 +7,30 @@ import {
   RsuvTxSort,
 } from "rsuv-lib";
 
-import { MsscElemType } from "./types/MsscElemType";
-import { MsscFilterType } from "./types/MsscFilterType";
-import { MsscIdObjectType } from "./types/MsscIdObjectType";
-import { MsscSourceDialogCreateOrEditType } from "./types/MsscSourceDialogCreateOrEditType";
-import { MsscSourceElemsDeleteType } from "./types/MsscSourceElemsDeleteType";
-import { MsscTagType } from "./types/MsscTagType";
+import { VanxElemType } from "./types/VanxElemType";
+import { VanxFilterType } from "./types/VanxFilterType";
+import { VanxIdObjectType } from "./types/VanxIdObjectType";
+import { VanxSourceDialogCreateOrEditType } from "./types/VanxSourceDialogCreateOrEditType";
+import { VanxSourceElemsDeleteType } from "./types/VanxSourceElemsDeleteType";
+import { VanxTagType } from "./types/VanxTagType";
 
 /**
- * Интерфейс {@link umsscSOURCEu источника}. Через него {@link umsscLIBu библиотека} получает почти всю нужную ему информацию
+ * [vanx]-интерфейс
  */
-export interface MsscSourceType<TModel> {
+export interface VanxSourceType<TModel> {
   /**
-   * DESC Возвращает общее количество элементов или если {@link filters} не пустой - количество элементов удовлетворяющих фильтру.
+   * DESC Возвращает сколько всего *элементов в *списке или сколько *элементов удовлетворяющих указанным фильтрам.
+   *
+   * Должен вернуть сколько в {@link uvanxLISTu списке} есть элементов удовлетворяющих
+   * фильтрам {@param filters}.
+   * Если {@param filters} это пустой массив, то должен вернуть общее кол-во элементов.
    *
    * @param filters
    */
-  elemsCountByFilter: (filters: MsscFilterType[]) => Promise<RsuvTxNumIntAB>;
+  elemsCountByFilter: (filters: VanxFilterType[]) => Promise<RsuvTxNumIntAB>;
 
   /**
-   * Возвращает элементы удовлетворяющие фильтрам (2) с сортировкой согласно (3) в количестве (1)
+   * DESC Из *элементов удовлетворяющие фильтрам (2), возвращает элементы из диапазона (1), с сортировкой согласно (3)
    *
    * @param indexDiap (1) -- начальный и конечный индексы, рассматриваются "включительно", т.е. например для
    * диапазона [0..1] должно вернуться 2 элемента (при условии что в хранилище элементов больше одного)
@@ -35,23 +39,23 @@ export interface MsscSourceType<TModel> {
    */
   elems: (
     indexDiap: RsuvTxNumIntDiap,
-    filters: MsscFilterType[],
+    filters: VanxFilterType[],
     sorts: RsuvTxSort[]
-  ) => Promise<MsscElemType[]>;
+  ) => Promise<Array<VanxElemType<TModel>>>;
 
   /**
-   * Возвращает элементы соответствующие ids из (1).
+   * DESC Возвращает элементы соответствующие ids (1).
    *
-   * Для не найденных элементов в ячейке итогового массива будет значение null
+   * Для не найденных элементов в ячейке итогового массива должно быть значение null
    * @param ids
    */
-  elemsById: (ids: MsscIdObjectType[]) => Promise<Array<MsscElemType | null>>;
+  elemsById: (ids: VanxIdObjectType[]) => Promise<Array<VanxElemType<TModel> | null>>;
 
   /**
    * Создаёт записи для элементов из (1).
    *
    * Возвращает список той же длины что (1), с теми же элементами, но в месте
-   * расположения элементов для которых не удалось создать запись, будет содержаться объект {@link RsuvResultBoolPknz}
+   * расположения элементов для которых не удалось создать запись, должен содержаться объект {@link RsuvResultBoolPknz}
    * с информацией о причинах проблемы.
    * У элементов для которых удалось создать запись, будет поле id с индентификатором созданной записи
    *
@@ -67,7 +71,7 @@ export interface MsscSourceType<TModel> {
    * или список тех элементов (1) записи которых удалить не удалось.
    * @param elems (1) -- любой объект обладающий полем `id`
    */
-  elemsDelete: MsscSourceElemsDeleteType;
+  elemsDelete: VanxSourceElemsDeleteType;
 
   /**
    * Выполняет set operation (см. [asau138]) для элементов из (1).
@@ -109,7 +113,7 @@ export interface MsscSourceType<TModel> {
    * @param cbCancel (2) -- колбэк, который *клиент должен вызвать по нажатию Cancel
    * @param initialValues (3) -- начальные данные для диалога редактирования
    */
-  dialogCreateOrEdit: MsscSourceDialogCreateOrEditType<TModel>;
+  dialogCreateOrEdit: VanxSourceDialogCreateOrEditType<TModel>;
 
   /**
    * {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы подготовить объект (1) к передаче в диалог создания/редактирования ({@link dialogCreateOrEdit})
@@ -120,28 +124,28 @@ export interface MsscSourceType<TModel> {
 
   /**
    * [[220509113255]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscCLIENTu клиент}
-   * на базе (1) подготовил {@link MsscFilterType[]}
+   * на базе (1) подготовил {@link VanxFilterType[]}
    * @param searchText
    */
-  filterFromSearchText: (searchText: string) => MsscFilterType[] | null;
+  filterFromSearchText: (searchText: string) => VanxFilterType[] | null;
 
   /**
    * [[220514092623]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscCLIENTu клиент}
-   * на базе тегов (1) подготовил {@link MsscFilterType[]}
+   * на базе тегов (1) подготовил {@link VanxFilterType[]}
    * @param tags (1) --
    * @param fieldName (2) -- поле в котором нужно искать теги (1)
    */
   filterFromTags: (
     tags: string[],
     fieldName: string
-  ) => MsscFilterType[] | null;
+  ) => VanxFilterType[] | null;
 
   /**
    * Получение ID всех элементов хранилища удовлетворяющих (1) и (2). Требуется только для random-режима
    * @param filters (1) -- пустой или не пустой массив
    * @param sorts (2) --пустой или не пустой массив
    */
-  idsAll: (filters: MsscFilterType[], sorts: RsuvTxSort[]) => Promise<string[]>;
+  idsAll: (filters: VanxFilterType[], sorts: RsuvTxSort[]) => Promise<string[]>;
 
   /**
    * Возвращает теги (значения поля (2)) для виджета тегов, после фильтрации всех данных по (1)
@@ -149,7 +153,7 @@ export interface MsscSourceType<TModel> {
    * @param fieldName (2) -- поле в котором нужно искать теги
    */
   tags: (
-    filters: MsscFilterType[],
+    filters: VanxFilterType[],
     fieldName: string
-  ) => Promise<MsscTagType[]>;
+  ) => Promise<VanxTagType[]>;
 }

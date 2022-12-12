@@ -1,16 +1,16 @@
 import React from 'react';
 
 import { ListSelectingElemIdType, ListSelectingModelCls } from '../commonUtils/ListSelectingModelCls';
-import { MsscIdObjectType } from '../types/types/MsscIdObjectType';
 import { MsscRefreshesType } from '../types/types/MsscRefreshesType';
-import { MsscSourceElemsDeleteType } from '../types/types/MsscSourceElemsDeleteType';
+import { VanxIdObjectType } from '../vanx/types/VanxIdObjectType';
+import { VanxSourceElemsDeleteType } from '../vanx/types/VanxSourceElemsDeleteType';
 import MsscDialog from './MsscDialog/MsscDialog';
 
 export interface PropsType {
   listModel: ListSelectingModelCls
   isDialogDeleteShowedSet: any
   loadingDialogSet: any
-  elemsDelete?: MsscSourceElemsDeleteType
+  elemsDelete?: VanxSourceElemsDeleteType
   fnError: () => void
   refreshes: MsscRefreshesType
   scrollFixFn: (isFix: boolean) => void
@@ -41,7 +41,7 @@ export function MsscDialogDelete({
     },
     ok: async () => {
       if (listModel.selectElemsCount() > 0) {
-        const ids: MsscIdObjectType[] = listModel.selectElems().map((el: ListSelectingElemIdType) => ({id: el}))
+        const ids: VanxIdObjectType[] = listModel.selectElems().map((el: ListSelectingElemIdType) => ({id: el}))
         try {
           loadingDialogSet(true)
           const noDeletedElems = await elemsDelete?.(ids)

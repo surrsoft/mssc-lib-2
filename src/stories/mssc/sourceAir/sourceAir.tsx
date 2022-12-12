@@ -8,7 +8,7 @@ import { string as yupString, object as yupObject } from "yup";
 import { AirSourceParams } from "../../../MsscList/commonUtils/airSource/AirSourceParams";
 import { RsuvTxStringAC } from "rsuv-lib";
 import { SquareBrackets } from "../../../MsscList/msscUtils/SquareBrackets";
-import { MsscFilterType } from "../../../MsscList/types/types/MsscFilterType";
+import { VanxFilterType } from "../../../MsscList/vanx/types/VanxFilterType";
 
 const airSourceParams: AirSourceParams<any> = {
   dbKey: "appZoHaX4a5tRLJlv", // mssc-training-3
@@ -150,15 +150,15 @@ const airSourceParams: AirSourceParams<any> = {
       </div>
     );
   },
-  cbFilterFromSearchText: (searchText: string): MsscFilterType[] | null => {
+  cbFilterFromSearchText: (searchText: string): VanxFilterType[] | null => {
     if (searchText) {
       const fieldNameTitle = new RsuvTxStringAC(EnAirField.TITLE);
       const fieldNameComm = new RsuvTxStringAC(EnAirField.COMM);
       const fieldNameUrl = new RsuvTxStringAC(EnAirField.URL);
       return [
-        { paramId: fieldNameTitle, filterValue: searchText } as MsscFilterType,
-        { paramId: fieldNameComm, filterValue: searchText } as MsscFilterType,
-        { paramId: fieldNameUrl, filterValue: searchText } as MsscFilterType,
+        { paramId: fieldNameTitle, filterValue: searchText } as VanxFilterType,
+        { paramId: fieldNameComm, filterValue: searchText } as VanxFilterType,
+        { paramId: fieldNameUrl, filterValue: searchText } as VanxFilterType,
       ];
     }
     return null;
@@ -166,16 +166,16 @@ const airSourceParams: AirSourceParams<any> = {
   cbFilterFromTags: (
     tags: string[],
     fieldName: string
-  ): MsscFilterType[] | null => {
+  ): VanxFilterType[] | null => {
     if (tags && tags.length > 0) {
-      const filters: MsscFilterType[] = [];
+      const filters: VanxFilterType[] = [];
       tags.map((elTag) => {
         const fieldNameTags = new RsuvTxStringAC(fieldName);
         const filter = {
           paramId: fieldNameTags,
           filterValue: elTag,
           isArrElemFind: true,
-        } as MsscFilterType;
+        } as VanxFilterType;
         filters.push(filter);
       });
       return filters;

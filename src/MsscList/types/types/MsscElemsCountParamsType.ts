@@ -1,12 +1,12 @@
 import { BrSelectSortDataType } from '../../commonUI/BrSelect/types';
-import { MsscSourceType } from '../MsscSourceType';
+import { VanxFilterType } from '../../vanx/types/VanxFilterType';
+import { VanxSourceType } from '../../vanx/VanxSourceType';
 import { MsscColumnNameType } from './MsscColumnNameType';
-import { MsscFilterType } from './MsscFilterType';
 
 /** входные параметры функции {@link elemsCountByFilterAndIf} */
 export interface MsscElemsCountParamsType {
-  source: MsscSourceType<any>,
-  filters: MsscFilterType[],
+  source: VanxSourceType<any>,
+  filters: VanxFilterType[],
   randomEnabled: boolean,
   sortData?: BrSelectSortDataType<MsscColumnNameType>,
   sortIdCurr?: string,

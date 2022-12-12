@@ -3,7 +3,7 @@ import React, { CSSProperties, useEffect, useMemo, useRef } from "react";
 import { BrSpinner } from "../../commonUI/BrSpinner/BrSpinner";
 import { MsscListAreaHeightCls } from "../../msscUtils/MsscListAreaHeightCls";
 import { MsscListAreaHeightModeEnum } from "../../types/enums/MsscListAreaHeightModeEnum";
-import { MsscElemType } from "../../types/types/MsscElemType";
+import { VanxElemType } from "../../vanx/types/VanxElemType";
 import { MsscListElem } from "./components/MsscListElem/MsscListElem";
 import { MsscListElemPropsBaseType } from "./types/MsscListElemPropsBaseType";
 
@@ -54,7 +54,7 @@ export function MsscList({
       onScroll={onScrollHandler}
     >
       <BrSpinner show={$isLoadingPage} fullscreen={false} />
-      {mainList.elems.map((elObj: MsscElemType) => {
+      {mainList.elems.map((elObj: VanxElemType) => {
         return (
           <MsscListElem
             key={elObj.id.val}
