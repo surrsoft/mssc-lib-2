@@ -11,7 +11,7 @@ import { VanxElemType } from "./types/VanxElemType";
 import { VanxFilterType } from "./types/VanxFilterType";
 import { VanxIdObjectType } from "./types/VanxIdObjectType";
 import { VanxSourceDialogCreateOrEditType } from "./types/VanxSourceDialogCreateOrEditType";
-import { VanxSourceElemsDeleteType } from "./types/VanxSourceElemsDeleteType";
+import { VanxSourceElemsDeleteType } from './types/VanxSourceElemsDeleteFnType';
 import { VanxTagType } from "./types/VanxTagType";
 
 /**
