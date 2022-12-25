@@ -27,9 +27,9 @@ export const arr: AElemType[] = [
 
 export const nxxTemp = () => {
   const col = new Collection(arr);
-  const result = col.findMulti(["id4", null, "", "id1"]);
-  console.log("!!-!!-!!  result {221225220344}\n", result); // del+
+  // const result = col.findMulti(["id4", null, "", "id1"]);
+  // console.log("!!-!!-!!  result {221225220344}\n", result); // del+
 
-  // const findResult = find(arr, "");
-  // console.log("!!-!!-!!  findResult {221225133507}\n", findResult); // del+
+  const findResult = find(arr, "");
+  console.log("!!-!!-!!  findResult {221225133507}\n", findResult); // del+
 };

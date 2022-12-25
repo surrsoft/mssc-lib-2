@@ -8,7 +8,7 @@ import { IdType } from "../types";
 /**
  * DESC
  */
-export type FnFindType<C> = <T extends IdType>(
+export type FnFindType<T extends IdType, C> = (
   id: string
 ) => FindResultType<T, C>;
 
