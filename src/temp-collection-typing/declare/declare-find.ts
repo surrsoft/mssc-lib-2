@@ -2,8 +2,12 @@ import { IdType } from "../types";
 
 /**
  * MAIN: {@link FnFindType}
+ * MAIN: {@link FnFindMultiType}
  */
 
+/**
+ * DESC
+ */
 export type FnFindType<C> = <T extends IdType>(
   id: string
 ) => FindResultType<T, C>;
@@ -13,6 +17,11 @@ export type FnFindTypeB<C> = <T extends IdType>(
   id: string
 ) => FindResultType<T, C>;
 
+/**
+ * DESC поиск нескольких элементов
+ *
+ * Возвращает массив той же длины что и длина {@param ids}
+ */
 export type FnFindMultiType<C> = <T extends IdType>(
   ids: string[]
 ) => Array<FindResultType<T, C>>;
