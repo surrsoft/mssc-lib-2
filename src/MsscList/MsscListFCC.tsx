@@ -10,6 +10,7 @@ import {
 import { useScrollFix } from "ueur-lib";
 
 import "./msscListStyles.scss";
+import { nxxTemp } from "../temp-collection-typing/types";
 import { SvgIconDice } from "./commonIcons/SvgIcons/SvgIconDice";
 import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
@@ -53,6 +54,8 @@ const MsscListFCC = ({
   tagsFieldNameArr,
   listAreaHeight = new MsscListAreaHeightCls(),
 }: MsscListPropsType): JSX.Element => {
+  nxxTemp();
+
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
   // номер страницы который был перед тем как изменить его на новый
