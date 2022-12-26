@@ -1,14 +1,9 @@
-import { IdType } from "../types";
-
-/**
- * добавление элемента {@param elem} в конец коллекции
- */
-export type FnAddType<T extends IdType, C> = (elem: T) => AddResultType<T, C>;
+import { IdType } from "../../types";
 
 export enum AddResultEnum {
-  SUCCESS = 'success',
-  ALREADY_EXIST = 'already_exist',
-  ERROR = 'error'
+  SUCCESS = "success",
+  ALREADY_EXIST = "already_exist",
+  ERROR = "error",
 }
 
 export type AddResultType<T extends IdType, C> =

@@ -1,25 +1,31 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from "crypto";
 
-import { AddResultEnum, AddResultType, FnAddType } from '../declare/declare-add';
-import { FindResultType, FnFindMultiType, FnFindType } from "../declare/declare-find";
+import { FnAddMultiType } from "../declare/FnAddMultiType/FnAddMultiType";
+import { FnAddType } from "../declare/FnAddType/FnAddType";
+import { AddResultEnum, AddResultType } from "../declare/FnAddType/types";
+import { FnFindMultiType } from "../declare/FnFindMultiType/FnFindMultiType";
+import { FnFindType } from "../declare/FnFindType/FnFindType";
+import { FindResultType } from "../declare/FnFindType/types";
 import { IdType } from "../types";
-import { ImplFindErrorEnum } from "./find/enums";
+import { ImplAddErrorEnum, ImplFindErrorEnum } from "./enums";
 
 export interface CollectionType<T extends IdType, C, AC> {
   find: FnFindType<T, C>;
-  findMulti: FnFindMultiType<T, C>
-  add: FnAddType<T, AC>
+  findMulti: FnFindMultiType<T, C>;
+  add: FnAddType<T, AC>;
+  addMulti: FnAddMultiType<T, AC>;
 }
 
 export class Collection<T extends IdType>
-  implements CollectionType<T, ImplFindErrorEnum, string> {
+  implements CollectionType<T, ImplFindErrorEnum, ImplAddErrorEnum>
+{
   _elems: T[] = [];
 
   constructor(elems: T[]) {
     this._elems = elems;
   }
 
-  find(id: string): FindResultType<T, ImplFindErrorEnum> {
+  async find(id: string): Promise<FindResultType<T, ImplFindErrorEnum>> {
     if (id.length < 1) {
       return { _tag: "find_error", code: ImplFindErrorEnum.ID_WRONG, desc: "" };
     }
@@ -30,29 +36,59 @@ export class Collection<T extends IdType>
     return { _tag: "no_finded" };
   }
 
-  findMulti(ids: string[]): Array<FindResultType<T, ImplFindErrorEnum>> {
-    return ids.reduce<Array<FindResultType<T, ImplFindErrorEnum>>>((acc, id) => {
+  async findMulti(
+    ids: string[]
+  ): Promise<Array<FindResultType<T, ImplFindErrorEnum>>> {
+    const ret = [];
+    for (const id of ids) {
       try {
-        const findResult: any = this.find(id);
-        acc.push(findResult);
+        const findResult: any = await this.find(id);
+        ret.push(findResult);
       } catch (err: any) {
-        acc.push({ _tag: "find_error", code: ImplFindErrorEnum.OTHER, desc: err?.message ?? "", });
+        ret.push({
+          _tag: "find_error",
+          code: ImplFindErrorEnum.OTHER,
+          desc: err?.message ?? "",
+        });
       }
-      return acc;
-    }, []);
+    }
+    return ret;
   }
 
-  add(elem: T): AddResultType<T, string> {
-    const findResult = this.find(elem.id)
-    if (findResult._tag === 'finded') {
+  async add(elem: T): Promise<AddResultType<T, ImplAddErrorEnum>> {
+    const findResult = await this.find(elem.id);
+    if (findResult._tag === "finded") {
       return { _tag: AddResultEnum.ALREADY_EXIST };
     }
-    if (findResult._tag === 'no_finded') {
+    if (findResult._tag === "no_finded") {
       const uuid = randomUUID();
       elem.id = uuid;
       this._elems.push(elem);
-      return { _tag: AddResultEnum.SUCCESS, id: uuid, addedElem: elem }
+      return { _tag: AddResultEnum.SUCCESS, id: uuid, addedElem: elem };
     }
-    return { _tag: AddResultEnum.ERROR, code: '' }
+    return {
+      _tag: AddResultEnum.ERROR,
+      code: ImplAddErrorEnum.OTHER_1,
+      desc: findResult.desc,
+    };
+  }
+
+  async addMulti(
+    elems: T[]
+  ): Promise<Array<AddResultType<T, ImplAddErrorEnum>>> {
+    const ret: Array<AddResultType<T, ImplAddErrorEnum>> = [];
+    for (const elem of elems) {
+      try {
+        const addResult: any = await this.add(elem);
+        ret.push(addResult);
+      } catch (err: any) {
+        ret.push({
+          _tag: AddResultEnum.ERROR,
+          code: ImplAddErrorEnum.OTHER_2,
+          desc: "",
+        });
+      }
+    }
+    return ret;
   }
 }

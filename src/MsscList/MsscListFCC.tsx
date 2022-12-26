@@ -10,7 +10,7 @@ import {
 import { useScrollFix } from "ueur-lib";
 
 import "./msscListStyles.scss";
-import { nxxTemp } from "../temp-collection-typing/types";
+import { nxxTemp } from '../temp-collection-typing/temp';
 import { SvgIconDice } from "./commonIcons/SvgIcons/SvgIconDice";
 import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
