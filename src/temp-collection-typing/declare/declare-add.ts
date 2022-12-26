@@ -1,6 +1,15 @@
 import { IdType } from "../types";
 
-export type FnAddType<C> = <T extends IdType>(elem: T) => AddResultType<T, C>;
+/**
+ * добавление элемента {@param elem} в конец коллекции
+ */
+export type FnAddType<T extends IdType, C> = (elem: T) => AddResultType<T, C>;
+
+export enum AddResultEnum {
+  SUCCESS = 'success',
+  ALREADY_EXIST = 'already_exist',
+  ERROR = 'error'
+}
 
 export type AddResultType<T extends IdType, C> =
   | AddSuccessType<T>
@@ -8,7 +17,7 @@ export type AddResultType<T extends IdType, C> =
   | AddErrorType<C>;
 
 export interface AddSuccessType<T extends IdType> {
-  _tag: "add_success";
+  _tag: AddResultEnum.SUCCESS;
   /** идентификатор добавленного(созданного) элемента */
   id: string;
   /** добавленный(созданный) элемент */
@@ -16,11 +25,11 @@ export interface AddSuccessType<T extends IdType> {
 }
 
 export interface AddAlreadyExistType {
-  _tag: "add_already_exist";
+  _tag: AddResultEnum.ALREADY_EXIST;
 }
 
 export interface AddErrorType<C> {
-  _tag: "add_error";
+  _tag: AddResultEnum.ERROR;
   code: C;
   desc?: string;
 }

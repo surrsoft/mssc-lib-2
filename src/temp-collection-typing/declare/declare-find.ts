@@ -22,7 +22,7 @@ export type FnFindTypeB<C> = <T extends IdType>(
  *
  * Возвращает массив той же длины что и длина {@param ids}
  */
-export type FnFindMultiType<C> = <T extends IdType>(
+export type FnFindMultiType<T extends IdType, C> = (
   ids: string[]
 ) => Array<FindResultType<T, C>>;
 
