@@ -1,5 +1,11 @@
 import { IdType } from "../../types";
 
+export enum FindResultEnum {
+  FINDED = 'finded',
+  NO_FINDED = 'no_finded',
+  FIND_ERROR = 'find_error'
+}
+
 /**
  * MAIN: {@link FnFindType}
  * MAIN: {@link FnFindMultiType}
@@ -11,17 +17,17 @@ export type FindResultType<T extends IdType, C> =
   | FindErrorType<C>;
 
 export interface FindSuccessType<T extends IdType> {
-  _tag: "finded";
+  _tag: FindResultEnum.FINDED;
   elemIndex: number;
   elem: T;
 }
 
 export interface FindNoType {
-  _tag: "no_finded";
+  _tag: FindResultEnum.NO_FINDED;
 }
 
 export interface FindErrorType<C> {
-  _tag: "find_error";
+  _tag: FindResultEnum.FIND_ERROR;
   code: C;
   desc?: string;
 }

@@ -5,7 +5,7 @@ import { FnAddType } from "../declare/FnAddType/FnAddType";
 import { AddResultEnum, AddResultType } from "../declare/FnAddType/types";
 import { FnFindMultiType } from "../declare/FnFindMultiType/FnFindMultiType";
 import { FnFindType } from "../declare/FnFindType/FnFindType";
-import { FindResultType } from "../declare/FnFindType/types";
+import { FindResultEnum, FindResultType } from "../declare/FnFindType/types";
 import { IdType } from "../types";
 import { ImplAddErrorEnum, ImplFindErrorEnum } from "./enums";
 
@@ -17,8 +17,7 @@ export interface CollectionType<T extends IdType, C, AC> {
 }
 
 export class Collection<T extends IdType>
-  implements CollectionType<T, ImplFindErrorEnum, ImplAddErrorEnum>
-{
+  implements CollectionType<T, ImplFindErrorEnum, ImplAddErrorEnum> {
   _elems: T[] = [];
 
   constructor(elems: T[]) {
@@ -27,13 +26,13 @@ export class Collection<T extends IdType>
 
   async find(id: string): Promise<FindResultType<T, ImplFindErrorEnum>> {
     if (id.length < 1) {
-      return { _tag: "find_error", code: ImplFindErrorEnum.ID_WRONG, desc: "" };
+      return { _tag: FindResultEnum.FIND_ERROR, code: ImplFindErrorEnum.ID_WRONG, desc: "" };
     }
     const index = this._elems.findIndex((el) => el.id === id);
     if (index !== -1) {
-      return { _tag: "finded", elemIndex: index, elem: this._elems[index] };
+      return { _tag: FindResultEnum.FINDED, elemIndex: index, elem: this._elems[index] };
     }
-    return { _tag: "no_finded" };
+    return { _tag: FindResultEnum.NO_FINDED };
   }
 
   async findMulti(

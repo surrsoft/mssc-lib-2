@@ -6,6 +6,9 @@ export enum AddResultEnum {
   ERROR = "error",
 }
 
+/**
+ * discriminated union type
+ */
 export type AddResultType<T extends IdType, C> =
   | AddSuccessType<T>
   | AddAlreadyExistType
