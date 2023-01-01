@@ -56,10 +56,10 @@ export class Collection<T extends IdType>
 
   async add(elem: T): Promise<AddResultType<T, ImplAddErrorEnum>> {
     const findResult = await this.find(elem.id);
-    if (findResult._tag === "finded") {
+    if (findResult._tag === FindResultEnum.FINDED) {
       return { _tag: AddResultEnum.ALREADY_EXIST };
     }
-    if (findResult._tag === "no_finded") {
+    if (findResult._tag === FindResultEnum.NO_FINDED) {
       const uuid = randomUUID();
       elem.id = uuid;
       this._elems.push(elem);
