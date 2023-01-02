@@ -30,7 +30,7 @@ export type ElemsGetResultType<T, C> = ElemsGetSuccessType<T> | ElemsGetErrorTyp
  * Должен вернуть содержимое ячеек расположенных между индексами {@param indexStart} и {@param indexEnd}.
  *
  * Если {@param indexEnd} больше чем "длина коллекции", то должны быть возвращены элементы
- * от {@param indexStart} и до конца коллекции.
+ * от {@param indexStart} до конца коллекции.
  * При этом в комментариях должен быть {@link ElemsGetCommentEnum#INDEX_END_OUT_OF_RANGE}
  *
  * Если {@param indexEnd} меньше {@param indexStart} то должен вернуться один элемент расположенный на
