@@ -44,7 +44,9 @@ export function MsscDialogDelete({
         const ids: MsscIdObjectType[] = listModel.selectElems().map((el: ListSelectingElemIdType) => ({id: el}))
         try {
           loadingDialogSet(true)
+          // --- deleting
           const noDeletedElems = await elemsDelete?.(ids)
+          // ---
           if (noDeletedElems) {
             if (noDeletedElems.length === 0) {
               listModel.selectElemsClear()

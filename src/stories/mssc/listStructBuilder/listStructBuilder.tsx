@@ -31,8 +31,8 @@ export const listStructBuilder = ({
         {infosJsx}
       </div>
       <div className="blk-tags">
-        {multiselectJsxArr?.map(el => {
-          return (<div className="block1948">{el}</div>)
+        {multiselectJsxArr?.map((el, index) => {
+          return (<div key={index} className="block1948">{el}</div>)
         })}
       </div>
       {listJsx}

@@ -10,8 +10,9 @@ import {
 import _ from 'lodash';
 import React from 'react';
 import {
+  RsuvAsau67,
   RsuvEnResultCrudSet,
-  RsuvEnSort,
+  RsuvEnSort, RsuvPElemAsau66,
   RsuvResultBoolPknz,
   RsuvResultTibo,
   RsuvTu,
@@ -21,7 +22,6 @@ import {
   RsuvTxSort,
   RsuvTxStringAB
 } from 'rsuv-lib';
-import { PElemAsau66, RsuvAsau67 } from 'rsuv-lib/dist/RsuvTuPromiseAllSettled';
 
 import { MsscSourceType } from '../../types/MsscSourceType';
 import { MsscElemType } from '../../types/types/MsscElemType';
@@ -97,27 +97,6 @@ export class AirSource<T> implements MsscSourceType<T> {
     return await Promise.resolve(<div>no realised</div>)
   }
 
-  /**
-   * Для (1) и (2) возвращает соответствующие адаптации под Airtable API
-   * @param filters
-   * @param sorts
-   * @private
-   */
-  private fnFilterAndSort(filters: MsscFilterType[], sorts: RsuvTxSort[]) {
-    const filterVusc = msscFiltersToVuscFilter(filters)
-    let sortArrObj: FdType[] = []
-    if (sorts.length > 0) {
-      sortArrObj = sorts.map(el => {
-        const obj: FdType = {
-          field: el.id.val,
-          direction: el.sortDirect === RsuvEnSort.ASC ? 'asc' : 'desc'
-        }
-        return obj;
-      })
-    }
-    return { filterVusc, sortArrObj };
-  }
-
   async idsAll(filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
     // ---
     const { filterVusc, sortArrObj } = this.fnFilterAndSort(filters, sorts);
@@ -144,13 +123,13 @@ export class AirSource<T> implements MsscSourceType<T> {
     const promises = ids.map(async elId => {
       return await this.connector.queryOneById(elId.id)
     })
-    const rr = await Promise.allSettled(promises)
-    if (!RsuvTuPromiseAllSettled.isAllSuccess(rr as PElemAsau66[])) {
+    const results = await Promise.allSettled(promises)
+    if (!RsuvTuPromiseAllSettled.isAllSuccess(results as RsuvPElemAsau66[])) {
       throw new Error('[[220130215035]] not all successed')
     }
-    const results: RsuvAsau67[] = RsuvTuPromiseAllSettled.fulfilled(rr as PElemAsau66[])
-    if (results && results.length > 0) {
-      const tuples: HoggTupleNT[] = results.map((el: RsuvAsau67) => el.value as HoggTupleNT)
+    const resultsNext: RsuvAsau67[] = RsuvTuPromiseAllSettled.fulfilled(results as RsuvPElemAsau66[])
+    if (resultsNext && resultsNext.length > 0) {
+      const tuples: HoggTupleNT[] = resultsNext.map((el: RsuvAsau67) => el.value as HoggTupleNT)
       return this.toMsscElems(tuples);
     }
     return await Promise.resolve([]);
@@ -172,20 +151,6 @@ export class AirSource<T> implements MsscSourceType<T> {
       return this.toMsscElems(queryResult);
     }
     return await Promise.resolve([]);
-  }
-
-  private toMsscElems(queryResult: HoggTupleNT[]) {
-    const objs = queryResult.map((elTuple: HoggTupleNT) => {
-      return tupleToObject(elTuple)
-    }).filter(elObj => elObj !== null)
-    return objs.map((elObj: any) => {
-      const obj: MsscElemType = {
-        id: new RsuvTxStringAB(elObj.tid),
-        elem: this.thParams?.elemJsx ? this.thParams.elemJsx(elObj) : (<div>{elObj.id} warn-[[220503114824]]</div>),
-        elemModel: elObj
-      }
-      return obj;
-    });
   }
 
   async elemsAdd(elems: T[]): Promise<Array<RsuvResultBoolPknz | T>> {
@@ -230,7 +195,7 @@ export class AirSource<T> implements MsscSourceType<T> {
       return await this.connector.delete([el.id || ''])
     })
     const pResults = await Promise.allSettled(promises)
-    const rejectedList = RsuvTuPromiseAllSettled.rejected(pResults as PElemAsau66[])
+    const rejectedList = RsuvTuPromiseAllSettled.rejected(pResults as RsuvPElemAsau66[])
     return rejectedList.map(el => {
       return elems[el.ix]
     })
@@ -296,7 +261,6 @@ export class AirSource<T> implements MsscSourceType<T> {
     return null;
   }
 
-
   async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagType[]> {
     const { filterVusc } = this.fnFilterAndSort(filters, []);
     // ---
@@ -312,6 +276,41 @@ export class AirSource<T> implements MsscSourceType<T> {
       })
     }
     return [];
+  }
+
+  /**
+   * Для (1) и (2) возвращает соответствующие адаптации под Airtable API
+   * @param filters
+   * @param sorts
+   * @private
+   */
+  private fnFilterAndSort(filters: MsscFilterType[], sorts: RsuvTxSort[]) {
+    const filterVusc = msscFiltersToVuscFilter(filters)
+    let sortArrObj: FdType[] = []
+    if (sorts.length > 0) {
+      sortArrObj = sorts.map(el => {
+        const obj: FdType = {
+          field: el.id.val,
+          direction: el.sortDirect === RsuvEnSort.ASC ? 'asc' : 'desc'
+        }
+        return obj;
+      })
+    }
+    return { filterVusc, sortArrObj };
+  }
+
+  private toMsscElems(queryResult: HoggTupleNT[]) {
+    const objs = queryResult.map((elTuple: HoggTupleNT) => {
+      return tupleToObject(elTuple)
+    }).filter(elObj => elObj !== null)
+    return objs.map((elObj: any) => {
+      const obj: MsscElemType = {
+        id: new RsuvTxStringAB(elObj.tid),
+        elem: this.thParams?.elemJsx ? this.thParams.elemJsx(elObj) : (<div>{elObj.id} warn-[[220503114824]]</div>),
+        elemModel: elObj
+      }
+      return obj;
+    });
   }
 
 }

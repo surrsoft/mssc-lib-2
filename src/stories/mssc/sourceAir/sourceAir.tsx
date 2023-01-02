@@ -1,14 +1,15 @@
-import React from "react";
-import _ from "lodash";
-import "./source-styles.scss";
-import { EnAirField } from "./EnAirField";
-import { AirSource } from "../../../MsscList/commonUtils/airSource/AirSource";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { string as yupString, object as yupObject } from "yup";
-import { AirSourceParams } from "../../../MsscList/commonUtils/airSource/AirSourceParams";
+import _ from "lodash";
+import React from "react";
+import "./source-styles.scss";
 import { RsuvTxStringAC } from "rsuv-lib";
+import { object as yupObject, string as yupString } from "yup";
+
+import { AirSource } from "../../../MsscList/commonUtils/airSource/AirSource";
+import { AirSourceParams } from "../../../MsscList/commonUtils/airSource/AirSourceParams";
 import { SquareBrackets } from "../../../MsscList/msscUtils/SquareBrackets";
 import { MsscFilterType } from "../../../MsscList/types/types/MsscFilterType";
+import { EnAirField } from "./EnAirField";
 
 const airSourceParams: AirSourceParams<any> = {
   dbKey: "appZoHaX4a5tRLJlv", // mssc-training-3
@@ -35,7 +36,12 @@ const airSourceParams: AirSourceParams<any> = {
       <div className="list-elem" key={elObj.tid}>
         <div className="list-elem__title">{elObj.title}</div>
         <div>
-          <a className="list-elem__url" href={elObj.url} target="_blank">
+          <a
+            className="list-elem__url"
+            href={elObj.url}
+            target="_blank"
+            rel="noreferrer"
+          >
             {elObj.url}
           </a>
         </div>
@@ -115,7 +121,7 @@ const airSourceParams: AirSourceParams<any> = {
             [EnAirField.TITLE]: yupString().required("обязательное поле"),
           })}
           onSubmit={async (values) => {
-            return btnHandlers.ok(values);
+            return await btnHandlers.ok(values);
           }}
         >
           {() => (
@@ -156,9 +162,9 @@ const airSourceParams: AirSourceParams<any> = {
       const fieldNameComm = new RsuvTxStringAC(EnAirField.COMM);
       const fieldNameUrl = new RsuvTxStringAC(EnAirField.URL);
       return [
-        { paramId: fieldNameTitle, filterValue: searchText } as MsscFilterType,
-        { paramId: fieldNameComm, filterValue: searchText } as MsscFilterType,
-        { paramId: fieldNameUrl, filterValue: searchText } as MsscFilterType,
+        { paramId: fieldNameTitle, filterValue: searchText },
+        { paramId: fieldNameComm, filterValue: searchText },
+        { paramId: fieldNameUrl, filterValue: searchText },
       ];
     }
     return null;
@@ -169,13 +175,13 @@ const airSourceParams: AirSourceParams<any> = {
   ): MsscFilterType[] | null => {
     if (tags && tags.length > 0) {
       const filters: MsscFilterType[] = [];
-      tags.map((elTag) => {
+      tags.forEach((elTag) => {
         const fieldNameTags = new RsuvTxStringAC(fieldName);
-        const filter = {
+        const filter: MsscFilterType = {
           paramId: fieldNameTags,
           filterValue: elTag,
           isArrElemFind: true,
-        } as MsscFilterType;
+        };
         filters.push(filter);
       });
       return filters;
