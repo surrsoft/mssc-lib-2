@@ -1,11 +1,11 @@
-export enum DisEnum {
-  /** см. {@link BaseType} */
+export enum TG1TDisEnum {
+  /** см. {@link TG1TBaseType} */
   BASE = "BASE",
-  /** см. {@link ResultEmptyArrType} */
+  /** см. {@link TG1TResultEmptyArrType} */
   EMPTY_ARR = "EMPTY_ARR",
 }
 
-export enum InfoEnum {
+export enum TG1TInfoEnum {
   /** indexStart больше и равен чем "длина множества" */
   INDEX_START_GREAT_OR_EQ_LEN = "INDEX_START_GREAT_OR_EQ_LEN",
   /** indexStart меньше нуля */
@@ -22,8 +22,8 @@ export enum InfoEnum {
  * Наличие этого типа в результате, означает что входные данные не удалось адаптировать, и поэтому следует
  * просто вернуть пользователю пустой массив, не выполняя реальных выборок данных
  */
-export interface ResultEmptyArrType {
-  _tag: DisEnum.EMPTY_ARR;
+export interface TG1TResultEmptyArrType {
+  _tag: TG1TDisEnum.EMPTY_ARR;
 }
 
 /**
@@ -31,12 +31,12 @@ export interface ResultEmptyArrType {
  * Если поле {@link infos} не пустое, то значит выполнялись некоторые корректировки, информация о которых
  * и содержится в этом поле
  */
-export interface BaseType {
-  _tag: DisEnum.BASE;
+export interface TG1TBaseType {
+  _tag: TG1TDisEnum.BASE;
   indexStart: number;
   indexEnd: number;
-  infos: InfoEnum[];
+  infos: TG1TInfoEnum[];
 }
 
 /** discriminated union */
-export type ResultType = BaseType | ResultEmptyArrType;
+export type TG1TResultType = TG1TBaseType | TG1TResultEmptyArrType;
