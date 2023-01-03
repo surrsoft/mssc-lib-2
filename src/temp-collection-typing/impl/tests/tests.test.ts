@@ -1,4 +1,5 @@
 import { AddResultEnum } from "../../declare/FnAddType/types";
+import { ElemsGetResultEnum } from "../../declare/FnElemsGet/FnElemsGetType";
 import { FindResultEnum } from "../../declare/FnFindType/types";
 import { IdType } from "../../types";
 import { Collection } from "../collection";
@@ -76,6 +77,17 @@ describe("add", () => {
       expect(result.id).toBeTruthy();
       expect(result.addedElem.id).toBeTruthy();
       expect(result.addedElem.some).toEqual(val);
+    }
+  });
+});
+
+describe("elemsGet", () => {
+  it("standard", async () => {
+    const result = await collection.elemsGet(1, 2);
+    expect(result._tag).toEqual(ElemsGetResultEnum.SUCCESS);
+    if (result._tag === ElemsGetResultEnum.SUCCESS) {
+      expect(result.elems).toHaveLength(1)
+      expect(result.elems[0].id).toEqual(elems[1].id)
     }
   });
 });

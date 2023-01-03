@@ -3,23 +3,30 @@ import { randomUUID } from "crypto";
 import { FnAddMultiType } from "../declare/FnAddMultiType/FnAddMultiType";
 import { FnAddType } from "../declare/FnAddType/FnAddType";
 import { AddResultEnum, AddResultType } from "../declare/FnAddType/types";
-import { ElemsGetResultType, FnElemsGetType } from '../declare/FnElemsGet/FnElemsGetType';
+import {
+  ElemsGetResultEnum,
+  ElemsGetResultType,
+  FnElemsGetType,
+} from "../declare/FnElemsGet/FnElemsGetType";
 import { FnFindMultiType } from "../declare/FnFindMultiType/FnFindMultiType";
 import { FnFindType } from "../declare/FnFindType/FnFindType";
 import { FindResultEnum, FindResultType } from "../declare/FnFindType/types";
 import { IdType } from "../types";
 import { ImplAddErrorEnum, ImplFindErrorEnum } from "./enums";
+import { indexesDiapAdapter } from "./utils/indexesDiapAdapter/indexesDiapAdapter";
+import { TG1TDisEnum } from "./utils/indexesDiapAdapter/types";
 
 export interface CollectionType<T extends IdType, C, AC, EC> {
   find: FnFindType<T, C>;
   findMulti: FnFindMultiType<T, C>;
   add: FnAddType<T, AC>;
   addMulti: FnAddMultiType<T, AC>;
-  elemsGet: FnElemsGetType<T, EC>
+  elemsGet: FnElemsGetType<T, EC>;
 }
 
 export class Collection<T extends IdType>
-  implements CollectionType<T, ImplFindErrorEnum, ImplAddErrorEnum, string> {
+  implements CollectionType<T, ImplFindErrorEnum, ImplAddErrorEnum, string>
+{
   _elems: T[] = [];
 
   constructor(elems: T[]) {
@@ -28,11 +35,19 @@ export class Collection<T extends IdType>
 
   async find(id: string): Promise<FindResultType<T, ImplFindErrorEnum>> {
     if (id.length < 1) {
-      return { _tag: FindResultEnum.FIND_ERROR, code: ImplFindErrorEnum.ID_WRONG, desc: "" };
+      return {
+        _tag: FindResultEnum.FIND_ERROR,
+        code: ImplFindErrorEnum.ID_WRONG,
+        desc: "",
+      };
     }
     const index = this._elems.findIndex((el) => el.id === id);
     if (index !== -1) {
-      return { _tag: FindResultEnum.FINDED, elemIndex: index, elem: this._elems[index] };
+      return {
+        _tag: FindResultEnum.FINDED,
+        elemIndex: index,
+        elem: this._elems[index],
+      };
     }
     return { _tag: FindResultEnum.NO_FINDED };
   }
@@ -93,10 +108,24 @@ export class Collection<T extends IdType>
     return ret;
   }
 
-  async elemsGet(indexStart: number, indexEnd: number): Promise<ElemsGetResultType<T, string>> {
-    const indexStartActual = indexStart < 0 ? 0 : indexStart;
-    const len = this._elems.length;
-    const indexEndActual = indexEnd <= indexStart ? indexStart + 1 : indexEnd;
-
+  async elemsGet(
+    indexStart: number,
+    indexEnd: number
+  ): Promise<ElemsGetResultType<T, string>> {
+    const ixResult = indexesDiapAdapter(
+      indexStart,
+      indexEnd,
+      this._elems.length
+    );
+    if (ixResult._tag === TG1TDisEnum.EMPTY_ARR) {
+      return { _tag: ElemsGetResultEnum.SUCCESS, elems: [] };
+    }
+    const { indexStart: indexStartNext, indexEnd: indexEndNext } = ixResult;
+    try {
+      const elems = this._elems.slice(indexStartNext, indexEndNext);
+      return { _tag: ElemsGetResultEnum.SUCCESS, elems };
+    } catch (err) {
+      return { _tag: ElemsGetResultEnum.ERROR, code: "err [[230103200244]]" };
+    }
   }
 }

@@ -3,17 +3,9 @@ export enum ElemsGetResultEnum {
   ERROR = "ERROR",
 }
 
-export enum ElemsGetCommentEnum {
-  INDEX_END_OUT_OF_RANGE = 'INDEX_END_OUT_OF_RANGE',
-  INDEX_END_GREATER = 'INDEX_END_GREATER',
-  INDEX_START_NIL = 'INDEX_START_NIL',
-  INDEX_START_GREATER = 'INDEX_START_GREATER',
-}
-
 export interface ElemsGetSuccessType<T> {
   _tag: ElemsGetResultEnum.SUCCESS;
   elems: T[];
-  comments: ElemsGetCommentEnum[]
 }
 
 export interface ElemsGetErrorType<C> {
@@ -27,24 +19,13 @@ export type ElemsGetResultType<T, C> = ElemsGetSuccessType<T> | ElemsGetErrorTyp
 /**
  * SHORT DESC возвращает элементы указанного диапазона
  *
- * Должен вернуть содержимое ячеек расположенных между индексами {@param indexStart} и {@param indexEnd}.
+ * Должен вернуть содержимое ячеек расположенных между индексами {@param indexStart}*1 и {@param indexEnd}*1.
  *
- * Если {@param indexEnd} больше чем "длина коллекции", то должны быть возвращены элементы
- * от {@param indexStart} до конца коллекции.
- * При этом в комментариях должен быть {@link ElemsGetCommentEnum#INDEX_END_OUT_OF_RANGE}
+ * (*1) это индексы полученные после пропуска входных параметров (1)(2) через {@link indexesDiapAdapter}
+ * (ID [230103175044] rev.1 1.0.0).
  *
- * Если {@param indexEnd} меньше {@param indexStart} то должен вернуться один элемент расположенный на
- * {@param indexStart}.
- * При этом в комментариях должен быть {@link ElemsGetCommentEnum#INDEX_END_GREATER}
- *
- * Если indexStart меньше нуля, то indexStart должен считаться равным нулю.
- * При этом в комментариях должен быть {@link ElemsGetCommentEnum#INDEX_START_NIL}.
- *
- * Если indexStart больше чем "длина коллекции", то должен быть возвращён последний элемент.
- * При этом в комментариях должен быть {@link ElemsGetCommentEnum#INDEX_START_GREATER}.
- *
- * Если indexEnd === indexStart то indexEnd принимается равным indexStart+1
- *
+ * @param indexStart (1) начальный индекс диапазона
+ * @param indexEnd (2) конечный индекс диапазона
  */
 export type FnElemsGetType<T, C> = (
   indexStart: number,
