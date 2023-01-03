@@ -43,6 +43,8 @@ export type ElemsGetResultType<T, C> = ElemsGetSuccessType<T> | ElemsGetErrorTyp
  * Если indexStart больше чем "длина коллекции", то должен быть возвращён последний элемент.
  * При этом в комментариях должен быть {@link ElemsGetCommentEnum#INDEX_START_GREATER}.
  *
+ * Если indexEnd === indexStart то indexEnd принимается равным indexStart+1
+ *
  */
 export type FnElemsGetType<T, C> = (
   indexStart: number,
