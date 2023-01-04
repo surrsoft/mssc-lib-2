@@ -17,29 +17,29 @@ import { TG1TDisEnum, TG1TInfoEnum, TG1TResultType } from './types';
  */
 export function indexesDiapAdapter(indexStart: number, indexEnd: number, len: number): TG1TResultType {
   if (len < 0 || len === 0) {
-    return { _tag: TG1TDisEnum.EMPTY_ARR }
+    return { _tag: TG1TDisEnum.TG1T_DIS_EMPTY_ARR }
   }
   if (indexStart >= len) {
-    return { _tag: TG1TDisEnum.BASE, indexStart: len - 1, indexEnd: len, infos: [TG1TInfoEnum.INDEX_START_GREAT_OR_EQ_LEN] }
+    return { _tag: TG1TDisEnum.TG1T_DIS_BASE, indexStart: len - 1, indexEnd: len, infos: [TG1TInfoEnum.TG1T_INF_INDEX_START_GREAT_OR_EQ_LEN] }
   }
   const infos: TG1TInfoEnum[] = []
   let indexStartActual = indexStart
   if (indexStart < 0) {
     indexStartActual = 0
-    infos.push(TG1TInfoEnum.INDEX_START_LESS_NIL)
+    infos.push(TG1TInfoEnum.TG1T_INF_INDEX_START_LESS_NIL)
   }
   let indexEndActual = indexEnd;
   if (indexEnd > len) {
     indexEndActual = len
-    infos.push(TG1TInfoEnum.INDEX_END_GREAT_LEN)
+    infos.push(TG1TInfoEnum.TG1T_INF_INDEX_END_GREAT_LEN)
   }
   if (indexEndActual < indexStartActual) {
-    infos.push(TG1TInfoEnum.END_GREAT_START)
+    infos.push(TG1TInfoEnum.TG1T_INF_END_GREAT_START)
     indexEndActual = indexStartActual + 1
   }
   if (indexEndActual === indexStartActual) {
-    infos.push(TG1TInfoEnum.END_EQUAL_START)
+    infos.push(TG1TInfoEnum.TG1T_INF_END_EQUAL_START)
     indexEndActual = indexStartActual + 1
   }
-  return { _tag: TG1TDisEnum.BASE, indexStart: indexStartActual, indexEnd: indexEndActual, infos }
+  return { _tag: TG1TDisEnum.TG1T_DIS_BASE, indexStart: indexStartActual, indexEnd: indexEndActual, infos }
 }

@@ -1,7 +1,7 @@
 import { Collection } from "./impl/collection";
-import { IdType } from "./types";
+import { T5TIdType } from "./types";
 
-export type AElemType = IdType & {
+export type AElemType = T5TIdType & {
   some: string;
 };
 export const arr: AElemType[] = [

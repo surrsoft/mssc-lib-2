@@ -1,4 +1,4 @@
-import { IdType } from '../../types';
-import { AddResultType } from '../FnAddType/types';
+import { T5TIdType } from '../../types';
+import { TG4TResultType } from '../FnAddType/types';
 
-export type FnAddMultiType<T extends IdType, C> = (elems: T[]) => Promise<Array<AddResultType<T, C>>>;
+export type FnAddMultiType<T extends T5TIdType, C> = (elems: T[]) => Promise<Array<TG4TResultType<T, C>>>;

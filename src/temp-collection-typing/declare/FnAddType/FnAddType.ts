@@ -1,8 +1,8 @@
-import { IdType } from "../../types";
-import { AddResultType } from "./types";
+import { T5TIdType } from "../../types";
+import { TG4TResultType } from "./types";
 
 /**
  * добавление элемента {@param elem} в конец коллекции
  */
-export type FnAddType<T extends IdType, C> = (elem: T) => Promise<AddResultType<T, C>>;
+export type FnAddType<T extends T5TIdType, C> = (elem: T) => Promise<TG4TResultType<T, C>>;
 

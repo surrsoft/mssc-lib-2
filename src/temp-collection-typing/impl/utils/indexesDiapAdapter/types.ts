@@ -1,21 +1,21 @@
 export enum TG1TDisEnum {
   /** см. {@link TG1TBaseType} */
-  BASE = "BASE",
+  TG1T_DIS_BASE = "TG1T_DIS_BASE",
   /** см. {@link TG1TResultEmptyArrType} */
-  EMPTY_ARR = "EMPTY_ARR",
+  TG1T_DIS_EMPTY_ARR = "TG1T_DIS_EMPTY_ARR",
 }
 
 export enum TG1TInfoEnum {
   /** indexStart больше и равен чем "длина множества" */
-  INDEX_START_GREAT_OR_EQ_LEN = "INDEX_START_GREAT_OR_EQ_LEN",
+  TG1T_INF_INDEX_START_GREAT_OR_EQ_LEN = "TG1T_INF_INDEX_START_GREAT_OR_EQ_LEN",
   /** indexStart меньше нуля */
-  INDEX_START_LESS_NIL = "INDEX_START_LESS_NIL",
+  TG1T_INF_INDEX_START_LESS_NIL = "TG1T_INF_INDEX_START_LESS_NIL",
   /** indexEnd больше "длины множества" */
-  INDEX_END_GREAT_LEN = "INDEX_END_GREAT_LEN",
+  TG1T_INF_INDEX_END_GREAT_LEN = "TG1T_INF_INDEX_END_GREAT_LEN",
   /** indexEnd меньше indexStart */
-  END_GREAT_START = "END_GREAT_START",
+  TG1T_INF_END_GREAT_START = "TG1T_INF_END_GREAT_START",
   /** indexEnd равен indexStart */
-  END_EQUAL_START = "END_EQUAL_START",
+  TG1T_INF_END_EQUAL_START = "TG1T_INF_END_EQUAL_START",
 }
 
 /**
@@ -23,7 +23,7 @@ export enum TG1TInfoEnum {
  * просто вернуть пользователю пустой массив, не выполняя реальных выборок данных
  */
 export interface TG1TResultEmptyArrType {
-  _tag: TG1TDisEnum.EMPTY_ARR;
+  _tag: TG1TDisEnum.TG1T_DIS_EMPTY_ARR;
 }
 
 /**
@@ -32,7 +32,7 @@ export interface TG1TResultEmptyArrType {
  * и содержится в этом поле
  */
 export interface TG1TBaseType {
-  _tag: TG1TDisEnum.BASE;
+  _tag: TG1TDisEnum.TG1T_DIS_BASE;
   indexStart: number;
   indexEnd: number;
   infos: TG1TInfoEnum[];

@@ -1,20 +1,26 @@
-export enum ElemsGetResultEnum {
-  SUCCESS = "SUCCESS",
-  ERROR = "ERROR",
+import { TG1TResultType } from '../../impl/utils/indexesDiapAdapter/types';
+
+export enum TG2TDisEnum {
+  TG2T_DIS_SUCCESS = "TG2T_DIS_SUCCESS",
+  TG2T_DIS_ERROR = "TG2T_DIS_ERROR",
 }
 
-export interface ElemsGetSuccessType<T> {
-  _tag: ElemsGetResultEnum.SUCCESS;
+export interface TG2TSuccessType<T> {
+  _tag: TG2TDisEnum.TG2T_DIS_SUCCESS;
   elems: T[];
+  /** результат работы {@link indexesDiapAdapter} */
+  indexAdaptInfo: TG1TResultType;
 }
 
-export interface ElemsGetErrorType<C> {
-  _tag: ElemsGetResultEnum.ERROR
+export interface TG2TErrorType<C> {
+  _tag: TG2TDisEnum.TG2T_DIS_ERROR
   code: C,
   desc?: string
+  /** результат работы {@link indexesDiapAdapter} */
+  indexAdaptInfo: TG1TResultType;
 }
 
-export type ElemsGetResultType<T, C> = ElemsGetSuccessType<T> | ElemsGetErrorType<C>;
+export type TG2TResultType<T, C> = TG2TSuccessType<T> | TG2TErrorType<C>;
 
 /**
  * SHORT DESC возвращает элементы указанного диапазона
@@ -30,4 +36,4 @@ export type ElemsGetResultType<T, C> = ElemsGetSuccessType<T> | ElemsGetErrorTyp
 export type FnElemsGetType<T, C> = (
   indexStart: number,
   indexEnd: number
-) => Promise<ElemsGetResultType<T, C>>;
+) => Promise<TG2TResultType<T, C>>;

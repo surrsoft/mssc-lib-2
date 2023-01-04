@@ -1,33 +1,28 @@
-import { IdType } from "../../types";
+import { T5TIdType } from "../../types";
 
-export enum FindResultEnum {
-  FINDED = 'finded',
-  NO_FINDED = 'no_finded',
-  FIND_ERROR = 'find_error'
+export enum TG3TDisEnum {
+  TG3T_DIS_FINDED = 'TG3T_DIS_FINDED',
+  TG3T_DIS_NO_FINDED = 'TG3T_DIS_NO_FINDED',
+  TG3T_DIS_FIND_ERROR = 'TG3T_DIS_FIND_ERROR'
 }
 
-/**
- * MAIN: {@link FnFindType}
- * MAIN: {@link FnFindMultiType}
- */
+export type TG3TResultType<T extends T5TIdType, C> =
+  | TG3TSuccessType<T>
+  | TG3TNoType
+  | TG3TErrorType<C>;
 
-export type FindResultType<T extends IdType, C> =
-  | FindSuccessType<T>
-  | FindNoType
-  | FindErrorType<C>;
-
-export interface FindSuccessType<T extends IdType> {
-  _tag: FindResultEnum.FINDED;
+export interface TG3TSuccessType<T extends T5TIdType> {
+  _tag: TG3TDisEnum.TG3T_DIS_FINDED;
   elemIndex: number;
   elem: T;
 }
 
-export interface FindNoType {
-  _tag: FindResultEnum.NO_FINDED;
+export interface TG3TNoType {
+  _tag: TG3TDisEnum.TG3T_DIS_NO_FINDED;
 }
 
-export interface FindErrorType<C> {
-  _tag: FindResultEnum.FIND_ERROR;
+export interface TG3TErrorType<C> {
+  _tag: TG3TDisEnum.TG3T_DIS_FIND_ERROR;
   code: C;
   desc?: string;
 }
