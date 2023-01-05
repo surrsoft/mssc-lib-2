@@ -4,7 +4,7 @@ import {BrSelectIdType, BrSelectItemType, BrSelectSortDataType} from "../commonU
 import { MsscColumnNameType } from '../types/types/MsscColumnNameType';
 
 /** создаёт массив стандартных объектов описывающих сортировку */
-export function sortsCreate(sortData?: BrSelectSortDataType<MsscColumnNameType>, sortIdCurr?: BrSelectIdType): RsuvTxSort[] {
+export function msscSortsCreate(sortData?: BrSelectSortDataType<MsscColumnNameType>, sortIdCurr?: BrSelectIdType): RsuvTxSort[] {
     function fnRsuvTxSort(sortItem: BrSelectItemType<string>) {
         if (!sortItem.payload) {
             return null;

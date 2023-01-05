@@ -1,34 +1,41 @@
-import _ from "lodash";
 import { RsuvTxChecked } from "rsuv-lib";
 
-import { MsscFiltersCreateParamsType } from "../types/types/MsscFiltersCreateParamsType";
+import { MsscSourceType } from "../types/MsscSourceType";
 import { MsscFilterType } from "../types/types/MsscFilterType";
 import { MsscTagGroupSelectedType } from "../types/types/MsscTagGroupSelectedType";
+
+export interface ParamsType {
+  source: MsscSourceType<any>;
+  tagGroupSelectedArr: MsscTagGroupSelectedType[];
+  /** текст введённый пользователем в строку поиска */
+  searchText: string;
+  isTagsCreate: boolean;
+}
 
 /**
  * Готовит объекты фильтрации на базе текста-для-поиска {@param searchText}, тегов {@param tagGroupSelectedArr}
  * @param source
  * @param tagGroupSelectedArr
  * @param searchText - текст поиска введённый пользователем
- * @param tagsFieldNameArr - описания полей с тегами, см. [220607221651]
+ * @param isTagsCreate
  */
-export function filtersCreate({
-                                source,
-                                tagGroupSelectedArr,
-                                searchText,
-                                tagsFieldNameArr,
-                              }: MsscFiltersCreateParamsType): MsscFilterType[] {
+export function msscFiltersCreate({
+  source,
+  tagGroupSelectedArr,
+  searchText,
+  isTagsCreate
+}: ParamsType): MsscFilterType[] {
+  // --- filterTags
   const filterTags: MsscFilterType[] = [];
-  if (!_.isEmpty(tagsFieldNameArr)) {
+  if (isTagsCreate) {
     tagGroupSelectedArr.forEach((elTagGroup: MsscTagGroupSelectedType) => {
-      const tags = elTagGroup.elems.map((el: RsuvTxChecked) => {
-        return el.id;
-      });
+      const tags = elTagGroup.elems.map((el: RsuvTxChecked) => el.id);
       const filters: MsscFilterType[] =
         source?.filterFromTags(tags, elTagGroup.id) ?? [];
       filterTags.push(...filters);
     });
   }
+  // ---
   const filterSearchText = source?.filterFromSearchText(searchText) ?? [];
   // ---
   return [...filterTags, ...filterSearchText];

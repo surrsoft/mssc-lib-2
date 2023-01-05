@@ -2,7 +2,7 @@
 /**
  *
  */
-export class SquareBrackets {
+export class MsscSquareBracketsCls {
     static bracketsRemove(str: string): string {
         if (str && str.length > 0) {
             return str.replace('[', '').replace(']', '')

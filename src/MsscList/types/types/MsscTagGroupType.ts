@@ -1,18 +1,11 @@
-import { RsuvTxChecked } from "rsuv-lib";
+import { MsscTagsGroupIdType } from './MsscTagsGroupIdType';
 
-import { MsscTagsGroupIdType } from "./MsscTagsGroupIdType";
-
-/**
- * Представляет *группу-тегов всех
- */
+/** Тип представляющий {@link umsscTAGGROUPu группу-тегов} */
 export interface MsscTagGroupType {
-  id: MsscTagsGroupIdType;
-  /**
-   * сами теги
-   */
-  elems: RsuvTxChecked[];
-  /**
-   *
-   */
-  visibleName: string;
+  /** идентификатор *группы-тегов */
+  id: MsscTagsGroupIdType
+  /** имя поля в "источника" с которым эта *группа-тегов ассоциирована */
+  fieldName: string
+  /** имя *группы-тегов для отображения в UI */
+  visibleName: string
 }

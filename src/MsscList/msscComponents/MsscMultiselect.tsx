@@ -4,8 +4,8 @@ import { RsuvTxChecked } from "rsuv-lib";
 
 import BrMultiselect from "../commonUI/BrMultiselect/BrMultiselect";
 import { MsscRefreshesType } from "../types/types/MsscRefreshesType";
+import { MsscTagGroupAllType } from "../types/types/MsscTagGroupAllType";
 import { MsscTagGroupSelectedType } from "../types/types/MsscTagGroupSelectedType";
-import { MsscTagGroupType } from "../types/types/MsscTagGroupType";
 import { MsscTagsGroupIdType } from "../types/types/MsscTagsGroupIdType";
 
 export interface PropsType {
@@ -13,7 +13,7 @@ export interface PropsType {
   refreshes: MsscRefreshesType;
   $tagGroupSelectedArr: MsscTagGroupSelectedType[];
   $tagGroupSelectedArrSet: any;
-  $tagGroupArr: MsscTagGroupType[];
+  $tagGroupArr: MsscTagGroupAllType[];
 }
 
 export function MsscMultiselect({
@@ -46,8 +46,8 @@ export function MsscMultiselect({
     refreshes.whole();
   };
 
-  const tagGroups: MsscTagGroupType | undefined = $tagGroupArr.find(
-    (ell: MsscTagGroupType) => ell.id === tagsGroupId
+  const tagGroups: MsscTagGroupAllType | undefined = $tagGroupArr.find(
+    (ell: MsscTagGroupAllType) => ell.id === tagsGroupId
   );
   const tagGroup = $tagGroupSelectedArr.find((el) => el.id === tagsGroupId);
   tagGroups?.elems.forEach((el: RsuvTxChecked) => {

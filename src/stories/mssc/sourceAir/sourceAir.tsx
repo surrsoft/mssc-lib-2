@@ -7,9 +7,9 @@ import { object as yupObject, string as yupString } from "yup";
 
 import { AirSource } from "../../../MsscList/commonUtils/airSource/AirSource";
 import { AirSourceParams } from "../../../MsscList/commonUtils/airSource/AirSourceParams";
-import { SquareBrackets } from "../../../MsscList/msscUtils/SquareBrackets";
+import { MsscSquareBracketsCls } from "../../../MsscList/msscUtils/MsscSquareBracketsCls";
 import { MsscFilterType } from "../../../MsscList/types/types/MsscFilterType";
-import { EnAirField } from "./EnAirField";
+import { AirtableFieldEnum } from "./AirtableFieldEnum";
 
 const airSourceParams: AirSourceParams<any> = {
   dbKey: "appZoHaX4a5tRLJlv", // mssc-training-3
@@ -19,17 +19,17 @@ const airSourceParams: AirSourceParams<any> = {
   tableName: "main",
   columns: [
     "id",
-    EnAirField.URL,
-    EnAirField.TITLE,
-    EnAirField.COMM,
+    AirtableFieldEnum.URL,
+    AirtableFieldEnum.TITLE,
+    AirtableFieldEnum.COMM,
     "body",
     "trans_count",
     "trans_date_last",
     "show_date_last",
-    EnAirField.TIME_CREATED,
-    EnAirField.TIME_LAST_MODIFIED,
-    EnAirField.TAGS,
-    EnAirField.TAGS2,
+    AirtableFieldEnum.TIME_CREATED,
+    AirtableFieldEnum.TIME_LAST_MODIFIED,
+    AirtableFieldEnum.TAGS,
+    AirtableFieldEnum.TAGS2,
   ],
   elemJsx: (elObj: any) => {
     return (
@@ -45,25 +45,25 @@ const airSourceParams: AirSourceParams<any> = {
             {elObj.url}
           </a>
         </div>
-        <div className="list-elem__comm">{elObj[EnAirField.COMM] || ""}</div>
+        <div className="list-elem__comm">{elObj[AirtableFieldEnum.COMM] || ""}</div>
         <div className="list-elem__tags-con">
           {!elObj.tags || elObj.tags.length < 0 ? null : (
             <div className="list-elem__tags">
               {elObj.tags.map((elTag: string) => {
                 return (
                   <div key={elTag} className="list-elem__tag">
-                    {SquareBrackets.bracketsRemove(elTag)}
+                    {MsscSquareBracketsCls.bracketsRemove(elTag)}
                   </div>
                 );
               })}
             </div>
           )}
-          {_.isEmpty(elObj[EnAirField.TAGS2]) ? null : (
+          {_.isEmpty(elObj[AirtableFieldEnum.TAGS2]) ? null : (
             <div className="list-elem__tags2">
-              {elObj[EnAirField.TAGS2].map((elTag: string) => {
+              {elObj[AirtableFieldEnum.TAGS2].map((elTag: string) => {
                 return (
                   <div key={elTag} className="list-elem__tag2">
-                    {SquareBrackets.bracketsRemove(elTag)}
+                    {MsscSquareBracketsCls.bracketsRemove(elTag)}
                   </div>
                 );
               })}
@@ -73,11 +73,11 @@ const airSourceParams: AirSourceParams<any> = {
         <div className="list-elem__times">
           <div className="list-elem__time-lastmodif">
             <span className="list-elem__name">last modif:</span>{" "}
-            {elObj[EnAirField.TIME_LAST_MODIFIED] || ""}
+            {elObj[AirtableFieldEnum.TIME_LAST_MODIFIED] || ""}
           </div>
           <div className="list-elem__time-created">
             <span className="list-elem__name">created:</span>{" "}
-            {elObj[EnAirField.TIME_CREATED] || ""}
+            {elObj[AirtableFieldEnum.TIME_CREATED] || ""}
           </div>
         </div>
         <div className="list-elem__id">{elObj.tid}</div>
@@ -105,7 +105,7 @@ const airSourceParams: AirSourceParams<any> = {
       },
     };
 
-    const fieldNames = [EnAirField.TITLE, EnAirField.COMM, EnAirField.URL];
+    const fieldNames = [AirtableFieldEnum.TITLE, AirtableFieldEnum.COMM, AirtableFieldEnum.URL];
     const initialValues0 = fieldNames.reduce((acc: any, elFieldName) => {
       acc[elFieldName] = initialValues
         ? (initialValues as any)[elFieldName] || ""
@@ -118,7 +118,7 @@ const airSourceParams: AirSourceParams<any> = {
         <Formik
           initialValues={initialValues0}
           validationSchema={yupObject({
-            [EnAirField.TITLE]: yupString().required("обязательное поле"),
+            [AirtableFieldEnum.TITLE]: yupString().required("обязательное поле"),
           })}
           onSubmit={async (values) => {
             return await btnHandlers.ok(values);
@@ -130,21 +130,21 @@ const airSourceParams: AirSourceParams<any> = {
                 {isCreateMode ? "Создание" : "Редактирование"} элемента
               </div>
               <div className="cls2326ELem">
-                <label>{EnAirField.TITLE}</label>
-                <Field type="text" name={EnAirField.TITLE} />
+                <label>{AirtableFieldEnum.TITLE}</label>
+                <Field type="text" name={AirtableFieldEnum.TITLE} />
                 <ErrorMessage
                   className="cls2326FieldError"
-                  name={EnAirField.TITLE}
+                  name={AirtableFieldEnum.TITLE}
                   component="div"
                 />
               </div>
               <div className="cls2326ELem">
-                <label>{EnAirField.COMM}</label>
-                <Field type="text" name={EnAirField.COMM} />
+                <label>{AirtableFieldEnum.COMM}</label>
+                <Field type="text" name={AirtableFieldEnum.COMM} />
               </div>
               <div className="cls2326ELem">
-                <label>{EnAirField.URL}</label>
-                <Field type="text" name={EnAirField.URL} />
+                <label>{AirtableFieldEnum.URL}</label>
+                <Field type="text" name={AirtableFieldEnum.URL} />
               </div>
               <div className="cls2326Buttons">
                 <button onClick={btnHandlers.cancel}>Отмена</button>
@@ -158,9 +158,9 @@ const airSourceParams: AirSourceParams<any> = {
   },
   cbFilterFromSearchText: (searchText: string): MsscFilterType[] | null => {
     if (searchText) {
-      const fieldNameTitle = new RsuvTxStringAC(EnAirField.TITLE);
-      const fieldNameComm = new RsuvTxStringAC(EnAirField.COMM);
-      const fieldNameUrl = new RsuvTxStringAC(EnAirField.URL);
+      const fieldNameTitle = new RsuvTxStringAC(AirtableFieldEnum.TITLE);
+      const fieldNameComm = new RsuvTxStringAC(AirtableFieldEnum.COMM);
+      const fieldNameUrl = new RsuvTxStringAC(AirtableFieldEnum.URL);
       return [
         { paramId: fieldNameTitle, filterValue: searchText },
         { paramId: fieldNameComm, filterValue: searchText },

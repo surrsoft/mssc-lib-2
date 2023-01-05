@@ -17,7 +17,7 @@ import { jsonTagsFieldNameArr } from "./sourceJson/jsonTagsFieldNameArr";
 const exp: ComponentMeta<typeof MsscListFCC> = {
   /* title опционален.
    * См. https://storybook.js.org/docs/react/configure/overview#configure-story-loading
-   * чтобы узнать как генерировать  to learn how to generate automatic titles
+   * чтобы узнать как генерировать автоматические titles
    */
   title: "MsscListFCC",
   component: MsscListFCC,

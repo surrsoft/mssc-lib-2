@@ -15,12 +15,12 @@ import { MsscSourceElemsDeleteType } from "./types/MsscSourceElemsDeleteType";
 import { MsscTagType } from "./types/MsscTagType";
 
 /**
- * Интерфейс {@link umsscSOURCEu источника}. Через него {@link umsscLIBu библиотека} получает почти всю нужную
+ * Интерфейс {@link umsscSOURCEu источника}. Через него {@link umsscCOMPONENTu компонент} получает почти всю нужную
  * ему информацию
  */
 export interface MsscSourceType<TModel> {
   /**
-   * DESC Возвращает общее количество элементов или если {@link filters} не пустой - количество элементов
+   * SHORT DESC Возвращает общее количество элементов или, если {@link filters} не пустой, количество элементов
    * удовлетворяющих фильтру.
    *
    * @param filters
@@ -28,7 +28,7 @@ export interface MsscSourceType<TModel> {
   elemsCountByFilter: (filters: MsscFilterType[]) => Promise<RsuvTxNumIntAB>;
 
   /**
-   * Возвращает элементы удовлетворяющие фильтрам (2) с сортировкой согласно (3) в количестве (1)
+   * Должен вернуть элементы удовлетворяющие фильтрам (2) с сортировкой согласно (3) в количестве (1)
    *
    * @param indexDiap (1) -- начальный и конечный индексы, рассматриваются "включительно", т.е. например для
    * диапазона [0..1] должно вернуться 2 элемента (при условии что в хранилище элементов больше одного)
@@ -123,14 +123,14 @@ export interface MsscSourceType<TModel> {
   dialogMiddleware: (obj?: TModel) => object | TModel | null;
 
   /**
-   * [[220509113255]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscCLIENTu клиент}
+   * [[220509113255]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscSOURCEu источник}
    * на базе (1) подготовил {@link MsscFilterType[]}
-   * @param searchText
+   * @param searchText текст который пользовтаель ввёл в поисковый инпут
    */
   filterFromSearchText: (searchText: string) => MsscFilterType[] | null;
 
   /**
-   * [[220514092623]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscCLIENTu клиент}
+   * [[220514092623]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscSOURCEu источник}
    * на базе тегов (1) подготовил {@link MsscFilterType[]}
    * @param tags (1) --
    * @param fieldName (2) -- поле в котором нужно искать теги (1)

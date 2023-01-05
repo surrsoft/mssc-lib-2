@@ -27,11 +27,11 @@ import { MsscMultiselect } from "./msscComponents/MsscMultiselect";
 import { MsscPaginator } from "./msscComponents/MsscPaginator/MsscPaginator";
 import { MsscSearch } from "./msscComponents/MsscSearch";
 import { MsscSort } from "./msscComponents/MsscSort";
-import { elemsCountByFilterAndIf } from "./msscUtils/elemsCountByFilterAndIf";
-import { filtersCreate } from "./msscUtils/filtersCreate";
+import { msscElemsCountByFilterAndIf } from "./msscUtils/msscElemsCountByFilterAndIf";
+import { msscFiltersCreate } from "./msscUtils/msscFiltersCreate";
 import { MsscListAreaHeightCls } from "./msscUtils/MsscListAreaHeightCls";
-import { sortsCreate } from "./msscUtils/sortsCreate";
-import { tagsCookAndSet } from "./msscUtils/tagsCookAndSet";
+import { msscSortsCreate } from "./msscUtils/msscSortsCreate";
+import { msscTagsCookAndSet } from "./msscUtils/msscTagsCookAndSet";
 import { MSSC_SETTINGS } from "./settings";
 import { MsscSourceType } from "./types/MsscSourceType";
 import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreateEditCallbacksType";
@@ -41,8 +41,8 @@ import { MsscIdObjectType } from "./types/types/MsscIdObjectType";
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
+import { MsscTagGroupAllType } from "./types/types/MsscTagGroupAllType";
 import { MsscTagGroupSelectedType } from "./types/types/MsscTagGroupSelectedType";
-import { MsscTagGroupType } from "./types/types/MsscTagGroupType";
 
 const scrollTop = 0;
 
@@ -108,8 +108,8 @@ const MsscListFCC = ({
   const [$idsShuffled, $idsShuffledSet] = useState<string[]>([]);
   // --- теги (мультивыбор)
   // все *группы-тегов
-  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupType[]>([]);
-  // *группы-тегов только с выбранными тегами (отмеченными галками)
+  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupAllType[]>([]);
+  // *группы-тегов {@link umsscTAGGROUPu} только с выбранными тегами (отмеченными галками)
   const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
     MsscTagGroupSelectedType[]
   >([]);
@@ -153,14 +153,14 @@ const MsscListFCC = ({
         });
       // --- готовка фильтров
       $isLoadingInitialSet(true);
-      const filters: MsscFilterType[] = filtersCreate({
+      const filters: MsscFilterType[] = msscFiltersCreate({
         source: sourcePrm,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        tagsFieldNameArr,
+        isTagsCreate: !_.isEmpty(tagsFieldNameArr)
       });
       // --- получение общего количества элементов с учетом фильтров; в random-режиме также получаем список всех ids
-      const { elemsCountByFilter, ids } = await elemsCountByFilterAndIf({
+      const { elemsCountByFilter, ids } = await msscElemsCountByFilterAndIf({
         source: sourcePrm,
         filters,
         randomEnabled: $randomEnabled,
@@ -172,7 +172,7 @@ const MsscListFCC = ({
         $idsShuffledSet(idsShuffled);
       }
       // --- получение тегов
-      await tagsCookAndSet({
+      await msscTagsCookAndSet({
         source: sourcePrm,
         filters,
         tagGroupSelectedArr: $tagGroupSelectedArr,
@@ -217,13 +217,13 @@ const MsscListFCC = ({
       const ixEnd = indexes.indexLast;
       // --- --- получение элементов из source
       // --- сортировка
-      const sorts: RsuvTxSort[] = sortsCreate(sortData, $sortIdCurr);
+      const sorts: RsuvTxSort[] = msscSortsCreate(sortData, $sortIdCurr);
       // --- filters
-      const filter0 = filtersCreate({
+      const filter0 = msscFiltersCreate({
         source,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        tagsFieldNameArr,
+        isTagsCreate: !_.isEmpty(tagsFieldNameArr)
       });
       // ---
       let elemsResult: MsscElemType[];

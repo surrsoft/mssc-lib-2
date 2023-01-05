@@ -3,7 +3,7 @@ import { MsscListAreaHeightCls } from '../../msscUtils/MsscListAreaHeightCls';
 import { MsscSourceType } from '../MsscSourceType';
 import { MsscColumnNameType } from './MsscColumnNameType';
 import { MsscListElemStructType } from './MsscListElemStructType';
-import { MsscMultFieldsType } from './MsscMultFieldsType';
+import { MsscTagGroupType } from './MsscTagGroupType';
 
 /** Пропсы для MsscListFCC */
 export interface MsscListPropsType {
@@ -25,7 +25,7 @@ export interface MsscListPropsType {
    * [[220607221651]] Описание полей содержащих теги. Сколько здесь будет элементов, столько будет показываться
    * выпадающих списков
    */
-  tagsFieldNameArr?: MsscMultFieldsType[]
+  tagsFieldNameArr?: MsscTagGroupType[]
   /**
    * Высота области прокрутки списка
    */

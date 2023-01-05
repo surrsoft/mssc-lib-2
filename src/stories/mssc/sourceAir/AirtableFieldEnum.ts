@@ -1,4 +1,5 @@
-export enum EnAirField {
+/** имена полей */
+export enum AirtableFieldEnum {
   TITLE = 'title',
   COMM = 'comm',
   URL = 'url',

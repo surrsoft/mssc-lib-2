@@ -1,15 +1,16 @@
-import { MsscMultFieldsType } from "../../../MsscList/types/types/MsscMultFieldsType";
-import { EnAirField } from "./EnAirField";
+import { MsscTagGroupType } from "../../../MsscList/types/types/MsscFieldGroupType";
+import { AirtableFieldEnum } from "./AirtableFieldEnum";
 
-export const airTagsFieldNameArr: MsscMultFieldsType[] = [
+/**  */
+export const airTagsFieldNameArr: MsscTagGroupType[] = [
   {
-    id: EnAirField.TAGS,
-    fieldName: EnAirField.TAGS,
+    id: AirtableFieldEnum.TAGS,
+    fieldName: AirtableFieldEnum.TAGS,
     visibleName: "теги",
   },
   {
-    id: EnAirField.TAGS2,
-    fieldName: EnAirField.TAGS2,
+    id: AirtableFieldEnum.TAGS2,
+    fieldName: AirtableFieldEnum.TAGS2,
     visibleName: "теги-2",
   },
 ];

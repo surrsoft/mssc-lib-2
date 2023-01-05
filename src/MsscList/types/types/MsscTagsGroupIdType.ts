@@ -1,4 +1,4 @@
 /**
- * идентификатор группы тегов
+ * идентификатор {@link umsscTAGGROUPu группы-тегов}
  */
 export type MsscTagsGroupIdType = string

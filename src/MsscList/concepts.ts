@@ -9,19 +9,13 @@ export const umsscLIBu = "библиотека";
 export const umsscCOMPONENTu = "компонент";
 
 /**
- * *клиент - внешний клиент, который завязан с {@link umsscLIBu библиотекой} через интерфейс {@link MsscSourceType}.
- * Формируется программистом задействующим {@link umsscLIBu библиотеку}
- */
-export const umsscCLIENTu = "клиент";
-
-/**
  * - *источник, *source
- * - сущность {@link umsscCLIENTu клиента} имплементирующая интерфейс {@link MsscSourceType}.
+ * - сущность имплементурующая интерфейс {@link MsscSourceType}.
  *
  * Передаётся в обязательный пропс `source` {@link umsscCOMPONENTu компонента} .
  *
- * По запросу {@link umsscLIBu библиотеки}, *источник предоставляет разные данные и в том числе готовую JSX разметку
- * отдельного элемента списка.
+ * По запросу {@link umsscCOMPONENTu компонента}, *источник предоставляет разные данные и в том числе
+ * готовую JSX разметку отдельного элемента списка.
  *
  * - в составе текущей библиотеке поставляются готовые имплементации
  * - имплементация для сервиса Airtable - см. класс `AirSource`. Для использования, нужно прописать
@@ -30,3 +24,8 @@ export const umsscCLIENTu = "клиент";
  * - `AirSource` принимает в конструктор тип `AirSourceParams`
  */
 export const umsscSOURCEu = "источник";
+
+/**
+ * *группа-тегов
+ */
+export const umsscTAGGROUPu = "группа-тегов";

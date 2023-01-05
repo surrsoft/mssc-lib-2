@@ -1,7 +1,7 @@
-import { MsscMultFieldsType } from "../../../MsscList/types/types/MsscMultFieldsType";
+import { MsscTagGroupType } from "../../../MsscList/types/types/MsscFieldGroupType";
 import { EnJsonFieldName } from "./EnJsonFieldName";
 
-export const jsonTagsFieldNameArr: MsscMultFieldsType[] = [
+export const jsonTagsFieldNameArr: MsscTagGroupType[] = [
   {
     id: EnJsonFieldName.ROLES,
     fieldName: EnJsonFieldName.ROLES,
