@@ -2,7 +2,7 @@ import { T5TIdType } from "../../types";
 import { TG3TResultType } from "./types";
 
 /**
- * DESC поиск элемента
+ * SHORT DESC поиск элемента
  *
  * Должен выполнить поиск элемент по идентификатору {@param id}
  */

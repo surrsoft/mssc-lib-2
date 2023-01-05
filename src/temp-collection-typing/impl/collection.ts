@@ -12,6 +12,11 @@ import { FnFindMultiType } from "../declare/FnFindMultiType/FnFindMultiType";
 import { FnFindType } from "../declare/FnFindType/FnFindType";
 import { TG3TDisEnum, TG3TResultType } from "../declare/FnFindType/types";
 import {
+  FnLengthGetType,
+  TG7TDisEnum,
+  TG7TResultType,
+} from "../declare/FnLenghtGetType/FnLengthGetType";
+import {
   FnSetType,
   TG5TDisEnum,
   TG5TResultType,
@@ -26,7 +31,7 @@ import { ImplAddErrorEnum, ImplFindErrorEnum } from "./enums";
 import { indexesDiapAdapter } from "./utils/indexesDiapAdapter/indexesDiapAdapter";
 import { TG1TDisEnum } from "./utils/indexesDiapAdapter/types";
 
-export interface CollectionType<T extends T5TIdType, C, AC, EC, SC, UC> {
+export interface CollectionType<T extends T5TIdType, C, AC, EC, SC, UC, LC> {
   find: FnFindType<T, C>;
   findMulti: FnFindMultiType<T, C>;
   add: FnAddType<T, AC>;
@@ -34,6 +39,7 @@ export interface CollectionType<T extends T5TIdType, C, AC, EC, SC, UC> {
   elemsGet: FnElemsGetType<T, EC>;
   elemSet: FnSetType<T, SC>;
   elemUpdate: FnUpdateType<T, UC>;
+  lengthGet: FnLengthGetType<T, LC>;
 }
 
 export class Collection<T extends T5TIdType>
@@ -42,6 +48,7 @@ export class Collection<T extends T5TIdType>
       T,
       ImplFindErrorEnum,
       ImplAddErrorEnum,
+      string,
       string,
       string,
       string
@@ -178,11 +185,24 @@ export class Collection<T extends T5TIdType>
     const fndResult = await this.find(elem.id);
     if (fndResult._tag === TG3TDisEnum.TG3T_DIS_FINDED) {
       const ix = fndResult.elemIndex;
-      this._elems.splice(ix, 1, elem); // TODO
+      const elemUpdated = Object.assign({}, fndResult.elem, elem);
+      this._elems.splice(ix, 1, elemUpdated);
       return { _tag: TG6TDisEnum.TG6T_DIS_SUCCESS, elem };
     } else if (fndResult._tag === TG3TDisEnum.TG3T_DIS_NO_FINDED) {
       return { _tag: TG6TDisEnum.TG6T_DIS_NO_FIND };
     }
     return { _tag: TG6TDisEnum.TG6T_DIS_ERROR, code: "err [[230104223144]]" };
+  }
+
+  async lengthGet(): Promise<TG7TResultType<T, string>> {
+    try {
+      return { _tag: TG7TDisEnum.TG7T_DIS_SUCCESS, count: this._elems.length };
+    } catch (err) {
+      return {
+        _tag: TG7TDisEnum.TG7T_DIS_ERROR,
+        code: "err [[230105155438]]",
+        desc: "try catch err",
+      };
+    }
   }
 }
