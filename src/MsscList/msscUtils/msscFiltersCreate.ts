@@ -2,11 +2,11 @@ import { RsuvTxChecked } from "rsuv-lib";
 
 import { MsscSourceType } from "../types/MsscSourceType";
 import { MsscFilterType } from "../types/types/MsscFilterType";
-import { MsscTagGroupSelectedType } from "../types/types/MsscTagGroupSelectedType";
+import { MsscTagGroupElemsType } from "../types/types/MsscTagGroupElemsType";
 
 export interface ParamsType {
   source: MsscSourceType<any>;
-  tagGroupSelectedArr: MsscTagGroupSelectedType[];
+  tagGroupSelectedArr: MsscTagGroupElemsType[];
   /** текст введённый пользователем в строку поиска */
   searchText: string;
   isTagsCreate: boolean;
@@ -28,7 +28,7 @@ export function msscFiltersCreate({
   // --- filterTags
   const filterTags: MsscFilterType[] = [];
   if (isTagsCreate) {
-    tagGroupSelectedArr.forEach((elTagGroup: MsscTagGroupSelectedType) => {
+    tagGroupSelectedArr.forEach((elTagGroup: MsscTagGroupElemsType) => {
       const tags = elTagGroup.elems.map((el: RsuvTxChecked) => el.id);
       const filters: MsscFilterType[] =
         source?.filterFromTags(tags, elTagGroup.id) ?? [];

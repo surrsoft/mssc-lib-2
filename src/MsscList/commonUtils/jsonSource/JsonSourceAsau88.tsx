@@ -19,7 +19,7 @@ import { MsscSourceType } from '../../types/MsscSourceType';
 import { MsscElemType } from '../../types/types/MsscElemType';
 import { MsscFilterType } from '../../types/types/MsscFilterType';
 import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
-import { MsscTagType } from '../../types/types/MsscTagType';
+import { MsscTagCls } from '../../types/types/MsscTagCls';
 import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
 
 /*
@@ -149,18 +149,18 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     return retIds;
   }
 
-  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagType[]> {
+  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagCls[]> {
     const elems = await Cls1941.elemsAll(jsonServer)
     const elemsFiltered = this.elemsFiltered(elems, filters)
     // ---
     const tibo: RsuvResultTibo<RsuvAsau89[]> = RsuvTuTree.accum(elemsFiltered, fieldName, 'id', true)
-    const msscTags: MsscTagType[] = []
+    const msscTags: MsscTagCls[] = []
     if (tibo.success) {
       const elems: RsuvAsau89[] | undefined = tibo.value
       elems!.forEach(el1 => {
         const val = el1.value;
         const count = el1.ids.length;
-        const msscTag: MsscTagType = { value: val, count };
+        const msscTag: MsscTagCls = { value: val, count };
         msscTags.push(msscTag)
       })
     }

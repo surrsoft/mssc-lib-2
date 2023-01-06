@@ -17,7 +17,7 @@ export { msscTagsCookAndSet } from "./MsscList/msscUtils/msscTagsCookAndSet";
 export { msscSortsCreate } from "./MsscList/msscUtils/msscSortsCreate";
 export { MsscSquareBracketsCls } from "./MsscList/msscUtils/MsscSquareBracketsCls";
 export { MsscElemType } from "./MsscList/types/types/MsscElemType";
-export { MsscTagType } from "./MsscList/types/types/MsscTagType";
+export { MsscTagCls } from "./MsscList/types/types/MsscTagCls";
 export { MsscColumnNameType } from "./MsscList/types/types/MsscColumnNameType";
 export { MsscElemStructType } from "./MsscList/types/types/MsscElemStructType";
 export { MsscJsxExternalType } from "./MsscList/types/types/MsscJsxExternalType";

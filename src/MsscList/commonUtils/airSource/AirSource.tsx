@@ -27,7 +27,7 @@ import { MsscSourceType } from '../../types/MsscSourceType';
 import { MsscElemType } from '../../types/types/MsscElemType';
 import { MsscFilterType } from '../../types/types/MsscFilterType';
 import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
-import { MsscTagType } from '../../types/types/MsscTagType';
+import { MsscTagCls } from '../../types/types/MsscTagCls';
 import { AirSourceParams } from './AirSourceParams';
 
 interface IxtType {
@@ -261,7 +261,7 @@ export class AirSource<T> implements MsscSourceType<T> {
     return null;
   }
 
-  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagType[]> {
+  async tags(filters: MsscFilterType[], fieldName: string): Promise<MsscTagCls[]> {
     const { filterVusc } = this.fnFilterAndSort(filters, []);
     // ---
     const hoggOffset = new HoggOffsetCount(true);
@@ -272,7 +272,7 @@ export class AirSource<T> implements MsscSourceType<T> {
     // ---
     if (queryResult && queryResult.length > 0) {
       return queryResult.map(el => {
-        return new MsscTagType(el.value, el.ids.length)
+        return new MsscTagCls(el.value, el.ids.length)
       })
     }
     return [];

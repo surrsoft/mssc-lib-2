@@ -12,7 +12,7 @@ import { MsscFilterType } from "./types/MsscFilterType";
 import { MsscIdObjectType } from "./types/MsscIdObjectType";
 import { MsscSourceDialogCreateOrEditType } from "./types/MsscSourceDialogCreateOrEditType";
 import { MsscSourceElemsDeleteType } from "./types/MsscSourceElemsDeleteType";
-import { MsscTagType } from "./types/MsscTagType";
+import { MsscTagCls } from "./types/MsscTagCls";
 
 /**
  * Интерфейс {@link umsscSOURCEu источника}. Через него {@link umsscCOMPONENTu компонент} получает почти всю нужную
@@ -148,12 +148,14 @@ export interface MsscSourceType<TModel> {
   idsAll: (filters: MsscFilterType[], sorts: RsuvTxSort[]) => Promise<string[]>;
 
   /**
-   * Возвращает теги (значения поля (2)) для виджета тегов, после фильтрации всех данных по (1)
+   * Должен вернуть теги (то есть значения поля (2) {@link umsscSOURCEu источника}) для виджета тегов, после
+   * фильтрации всех данных по (1)
+   *
    * @param filters (1) --
-   * @param fieldName (2) -- поле в котором нужно искать теги
+   * @param fieldName (2) -- поле {@link umsscSOURCEu источника} в котором нужно искать теги. {@link umsscCOMPONENTu компонент} его берёт из {@link umsscTAGGROUPu т-группы}
    */
   tags: (
     filters: MsscFilterType[],
     fieldName: string
-  ) => Promise<MsscTagType[]>;
+  ) => Promise<MsscTagCls[]>;
 }

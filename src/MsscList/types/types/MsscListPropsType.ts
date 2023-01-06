@@ -14,16 +14,17 @@ export interface MsscListPropsType {
   /** SYNC [[221204124107]] */
   sortData?: BrSelectSortDataType<MsscColumnNameType>
   /**
-   * *клиент определяет как должны распологаться элементы отдельного элемента списка
-   * @param checkboxJsx
-   * @param bodyJsx
-   * @param menuJsx
+   * {@link umsscCLIENTu клиент} здесь определяет как должны распологаться элементы отдельного элемента списка.
+   * Если is falsy то используется структура по умолчанию.
    */
   listElemStruct?: MsscListElemStructType
   children?: any
   /**
-   * [[220607221651]] Описание полей содержащих теги. Сколько здесь будет элементов, столько будет показываться
-   * выпадающих списков
+   * *т-группы
+   *
+   * см. {@link umsscTAGGROUPu}
+   *
+   * Сколько здесь будет элементов, столько будет показываться выпадающих списков
    */
   tagsFieldNameArr?: MsscTagGroupType[]
   /**

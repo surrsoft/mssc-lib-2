@@ -3,32 +3,41 @@ import { RsuvTxChecked } from "rsuv-lib";
 
 import { MsscSourceType } from "../types/MsscSourceType";
 import { MsscFilterType } from "../types/types/MsscFilterType";
-import { MsscTagGroupAllType } from "../types/types/MsscTagGroupAllType";
-import { MsscTagGroupSelectedType } from "../types/types/MsscTagGroupSelectedType";
+import { MsscTagGroupElemsPlusType } from "../types/types/MsscTagGroupElemsPlusType";
+import { MsscTagGroupElemsType } from "../types/types/MsscTagGroupElemsType";
 import { MsscTagGroupType } from "../types/types/MsscTagGroupType";
 import { MsscSquareBracketsCls } from "./MsscSquareBracketsCls";
 
 export interface ParamsType {
-  /** см. [220607221651] */
-  tagsFieldNameArr?: MsscTagGroupType[];
+  /** массив *т-групп, см. {@link umsscTAGGROUPu} */
+  tgroups?: MsscTagGroupType[];
   source: MsscSourceType<any>;
   filters: MsscFilterType[];
-  tagGroupSelectedArr: MsscTagGroupSelectedType[];
-  $tagGroupArrSet: any;
+  $selectedTags: MsscTagGroupElemsType[];
+  $selectedTagsSet: any;
 }
 
+/**
+ * Формирует массив сущностей типа {@link MsscTagGroupElemsType} и пишет её в стейт
+ * с помощью {@param $tagGroupArrSet}
+ *
+ * @param tgroups
+ * @param source
+ * @param filters
+ * @param tagGroupSelectedArr
+ */
 export async function msscTagsCookAndSet({
-  tagsFieldNameArr,
+  tgroups,
   source,
   filters,
-  tagGroupSelectedArr,
-  $tagGroupArrSet,
+  $selectedTags,
+  $selectedTagsSet,
 }: ParamsType) {
-  if (tagsFieldNameArr && tagsFieldNameArr.length > 0) {
-    const tagsTotal: MsscTagGroupAllType[] = [];
-    for (const elTg of tagsFieldNameArr) {
-      // LOOP
-      let tags = await source?.tags(filters, elTg.fieldName);
+  if (tgroups && tgroups.length > 0) {
+    const tagsTotal: MsscTagGroupElemsPlusType[] = [];
+    for (const elTagGroup of tgroups) {
+      // ---
+      let tags = await source?.tags(filters, elTagGroup.fieldName);
       // --- sort
       tags = _.orderBy(tags, ["count", "value"], ["desc", "asc"]);
       // ---
@@ -37,19 +46,19 @@ export async function msscTagsCookAndSet({
       });
       // ---
       tags0.forEach((elTag) => {
-        if (tagGroupSelectedArr.find((el) => el.id === elTag.id)) {
+        if ($selectedTags.find((el) => el.id === elTag.id)) {
           elTag.checked = true;
         }
         elTag.visibleText = MsscSquareBracketsCls.bracketsRemove(elTag.visibleText);
       });
       // ---
-      const group: MsscTagGroupAllType = {
-        id: elTg.id,
+      const group: MsscTagGroupElemsPlusType = {
+        id: elTagGroup.id,
         elems: tags0,
-        visibleName: elTg.visibleName,
+        visibleName: elTagGroup.visibleName,
       };
       tagsTotal.push(group);
-    } // LOOP
-    $tagGroupArrSet(tagsTotal);
+    }
+    $selectedTagsSet(tagsTotal);
   }
 }

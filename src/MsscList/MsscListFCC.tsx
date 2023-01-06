@@ -41,8 +41,8 @@ import { MsscIdObjectType } from "./types/types/MsscIdObjectType";
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
-import { MsscTagGroupAllType } from "./types/types/MsscTagGroupAllType";
-import { MsscTagGroupSelectedType } from "./types/types/MsscTagGroupSelectedType";
+import { MsscTagGroupElemsPlusType } from "./types/types/MsscTagGroupElemsPlusType";
+import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 
 const scrollTop = 0;
 
@@ -108,10 +108,10 @@ const MsscListFCC = ({
   const [$idsShuffled, $idsShuffledSet] = useState<string[]>([]);
   // --- теги (мультивыбор)
   // все *группы-тегов
-  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupAllType[]>([]);
+  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>([]);
   // *группы-тегов {@link umsscTAGGROUPu} только с выбранными тегами (отмеченными галками)
   const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
-    MsscTagGroupSelectedType[]
+    MsscTagGroupElemsType[]
   >([]);
 
   // ---
@@ -175,9 +175,9 @@ const MsscListFCC = ({
       await msscTagsCookAndSet({
         source: sourcePrm,
         filters,
-        tagGroupSelectedArr: $tagGroupSelectedArr,
-        tagsFieldNameArr,
-        $tagGroupArrSet,
+        $selectedTags: $tagGroupSelectedArr,
+        tgroups: tagsFieldNameArr,
+        $selectedTagsSet: $tagGroupArrSet,
       });
       // --- pagination - pageCountAll
       const pagination = new RsuvPaginationGyth(

@@ -3,9 +3,9 @@ import { RsuvTxChecked } from "rsuv-lib";
 import { MsscTagsGroupIdType } from "./MsscTagsGroupIdType";
 
 /**
- * Представляет {@link umsscTAGGROUPu группу-тегов} выбранных
+ * Представляет информацию об элементах {@link umsscTAGGROUPu т-группы}
  */
-export interface MsscTagGroupSelectedType {
+export interface MsscTagGroupElemsType {
   /** идентификатор *группы-тегов */
   id: MsscTagsGroupIdType;
   /**

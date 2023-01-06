@@ -1,7 +1,7 @@
 /**
  * Представление для: "имя значения" (тега) + "количество таких значений"
  */
-export class MsscTagType {
+export class MsscTagCls { // TODO зачем класс?
   value: string;
   count: number;
 

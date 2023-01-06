@@ -4,16 +4,16 @@ import { RsuvTxChecked } from "rsuv-lib";
 
 import BrMultiselect from "../commonUI/BrMultiselect/BrMultiselect";
 import { MsscRefreshesType } from "../types/types/MsscRefreshesType";
-import { MsscTagGroupAllType } from "../types/types/MsscTagGroupAllType";
-import { MsscTagGroupSelectedType } from "../types/types/MsscTagGroupSelectedType";
+import { MsscTagGroupElemsPlusType } from "../types/types/MsscTagGroupElemsPlusType";
+import { MsscTagGroupElemsType } from "../types/types/MsscTagGroupElemsType";
 import { MsscTagsGroupIdType } from "../types/types/MsscTagsGroupIdType";
 
 export interface PropsType {
   tagsGroupId: MsscTagsGroupIdType;
   refreshes: MsscRefreshesType;
-  $tagGroupSelectedArr: MsscTagGroupSelectedType[];
+  $tagGroupSelectedArr: MsscTagGroupElemsType[];
   $tagGroupSelectedArrSet: any;
-  $tagGroupArr: MsscTagGroupAllType[];
+  $tagGroupArr: MsscTagGroupElemsPlusType[];
 }
 
 export function MsscMultiselect({
@@ -31,12 +31,12 @@ export function MsscMultiselect({
   const onChangeHandle = (checkedElems: RsuvTxChecked[]) => {
     const tagGroups = _.cloneDeep($tagGroupSelectedArr);
     const group = tagGroups.find(
-      (el: MsscTagGroupSelectedType) => el.id === tagsGroupId
+      (el: MsscTagGroupElemsType) => el.id === tagsGroupId
     );
     if (group) {
       group.elems = checkedElems;
     } else {
-      const newGroup: MsscTagGroupSelectedType = {
+      const newGroup: MsscTagGroupElemsType = {
         id: tagsGroupId,
         elems: checkedElems,
       };
@@ -46,8 +46,8 @@ export function MsscMultiselect({
     refreshes.whole();
   };
 
-  const tagGroups: MsscTagGroupAllType | undefined = $tagGroupArr.find(
-    (ell: MsscTagGroupAllType) => ell.id === tagsGroupId
+  const tagGroups: MsscTagGroupElemsPlusType | undefined = $tagGroupArr.find(
+    (ell: MsscTagGroupElemsPlusType) => ell.id === tagsGroupId
   );
   const tagGroup = $tagGroupSelectedArr.find((el) => el.id === tagsGroupId);
   tagGroups?.elems.forEach((el: RsuvTxChecked) => {
