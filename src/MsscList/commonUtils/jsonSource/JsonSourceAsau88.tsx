@@ -20,6 +20,7 @@ import { MsscElemType } from '../../types/types/MsscElemType';
 import { MsscFilterType } from '../../types/types/MsscFilterType';
 import { MsscIdObjectType } from '../../types/types/MsscIdObjectType';
 import { MsscTagCls } from '../../types/types/MsscTagCls';
+import { MsscTagsGroupIdType } from '../../types/types/MsscTagsGroupIdType';
 import { Asau88JsonSourceParams } from './Asau88JsonSourceParams';
 
 /*
@@ -125,9 +126,9 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
     return null
   }
 
-  filterFromTags(tags: string[], fieldName: string): MsscFilterType[] | null {
+  filterFromTags(tags: string[], tagGroupId: MsscTagsGroupIdType): MsscFilterType[] | null {
     if (tags && tags.length > 0) {
-      return this.thParams.cbFilterFromTags?.(tags, fieldName) ?? null
+      return this.thParams.cbFilterFromTags?.(tags, tagGroupId) ?? null
     }
     return null;
   }

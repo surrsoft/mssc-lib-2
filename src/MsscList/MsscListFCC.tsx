@@ -102,6 +102,7 @@ const MsscListFCC = ({
   const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(
     sortData?.selectedId
   );
+  // текст введённый в поле поиска
   const [$searchText, $searchTextSet] = useState("");
   const [$randomEnabled, $randomEnabledSet] = useState(false);
   // ids элементов в случайном порядке
@@ -109,7 +110,7 @@ const MsscListFCC = ({
   // --- теги (мультивыбор)
   // все *группы-тегов
   const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>([]);
-  // *группы-тегов {@link umsscTAGGROUPu} только с выбранными тегами (отмеченными галками)
+  // информация о выбранных-тегах каждой *т-группы
   const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
     MsscTagGroupElemsType[]
   >([]);
@@ -157,7 +158,7 @@ const MsscListFCC = ({
         source: sourcePrm,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        isTagsCreate: !_.isEmpty(tagsFieldNameArr)
+        isTagsExist: !_.isEmpty(tagsFieldNameArr)
       });
       // --- получение общего количества элементов с учетом фильтров; в random-режиме также получаем список всех ids
       const { elemsCountByFilter, ids } = await msscElemsCountByFilterAndIf({
@@ -223,7 +224,7 @@ const MsscListFCC = ({
         source,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        isTagsCreate: !_.isEmpty(tagsFieldNameArr)
+        isTagsExist: !_.isEmpty(tagsFieldNameArr)
       });
       // ---
       let elemsResult: MsscElemType[];
@@ -484,10 +485,10 @@ const MsscListFCC = ({
         mainList={mainListObj}
       />
     ),
-    multiselectJsxArr: tagsFieldNameArr?.map((el) => (
+    multiselectJsxArr: tagsFieldNameArr?.map((elTagGroup) => (
       <MsscMultiselect
-        key={el.id}
-        tagsGroupId={el.id}
+        key={elTagGroup.id}
+        tagsGroupId={elTagGroup.id}
         $tagGroupSelectedArr={$tagGroupSelectedArr}
         $tagGroupSelectedArrSet={$tagGroupSelectedArrSet}
         $tagGroupArr={$tagGroupArr}

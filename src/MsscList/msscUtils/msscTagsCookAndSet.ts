@@ -24,7 +24,6 @@ export interface ParamsType {
  * @param tgroups
  * @param source
  * @param filters
- * @param tagGroupSelectedArr
  */
 export async function msscTagsCookAndSet({
   tgroups,
@@ -36,17 +35,17 @@ export async function msscTagsCookAndSet({
   if (tgroups && tgroups.length > 0) {
     const tagsTotal: MsscTagGroupElemsPlusType[] = [];
     for (const elTagGroup of tgroups) {
-      // ---
-      let tags = await source?.tags(filters, elTagGroup.fieldName);
+      // --- получает с бэка список тегов для текущей *т-группы
+      let tagObjArr = await source?.tags(filters, elTagGroup.fieldName);
       // --- sort
-      tags = _.orderBy(tags, ["count", "value"], ["desc", "asc"]);
-      // ---
-      const tags0: RsuvTxChecked[] = tags.map((el) => {
+      tagObjArr = _.orderBy(tagObjArr, ["count", "value"], ["desc", "asc"]);
+      // --- представляет теги в виде RsuvTxChecked[]
+      const tagsNext: RsuvTxChecked[] = tagObjArr.map((el) => {
         return new RsuvTxChecked(el.value, `${el.value} (${el.count})`);
       });
       // ---
-      tags0.forEach((elTag) => {
-        if ($selectedTags.find((el) => el.id === elTag.id)) {
+      tagsNext.forEach((elTag) => {
+        if ($selectedTags.some((el) => el.id === elTag.id)) {
           elTag.checked = true;
         }
         elTag.visibleText = MsscSquareBracketsCls.bracketsRemove(elTag.visibleText);
@@ -54,7 +53,7 @@ export async function msscTagsCookAndSet({
       // ---
       const group: MsscTagGroupElemsPlusType = {
         id: elTagGroup.id,
-        elems: tags0,
+        elems: tagsNext,
         visibleName: elTagGroup.visibleName,
       };
       tagsTotal.push(group);

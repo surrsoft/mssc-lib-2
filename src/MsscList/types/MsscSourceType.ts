@@ -13,6 +13,8 @@ import { MsscIdObjectType } from "./types/MsscIdObjectType";
 import { MsscSourceDialogCreateOrEditType } from "./types/MsscSourceDialogCreateOrEditType";
 import { MsscSourceElemsDeleteType } from "./types/MsscSourceElemsDeleteType";
 import { MsscTagCls } from "./types/MsscTagCls";
+import { MsscFieldNameType } from './types/MsscTagGroupType';
+import { MsscTagsGroupIdType } from './types/MsscTagsGroupIdType';
 
 /**
  * Интерфейс {@link umsscSOURCEu источника}. Через него {@link umsscCOMPONENTu компонент} получает почти всю нужную
@@ -132,12 +134,12 @@ export interface MsscSourceType<TModel> {
   /**
    * [[220514092623]] {@link umsscCOMPONENTu компонент} вызывает эту функцию чтобы {@link umsscSOURCEu источник}
    * на базе тегов (1) подготовил {@link MsscFilterType[]}
-   * @param tags (1) --
-   * @param fieldName (2) -- поле в котором нужно искать теги (1)
+   * @param tagValues (1) -- значения тегов
+   * @param tagGroupId (2) -- идентификатор *т-группы {@link umsscTAGGROUPu}
    */
   filterFromTags: (
-    tags: string[],
-    fieldName: string
+    tagValues: string[],
+    tagGroupId: MsscTagsGroupIdType
   ) => MsscFilterType[] | null;
 
   /**
@@ -152,10 +154,11 @@ export interface MsscSourceType<TModel> {
    * фильтрации всех данных по (1)
    *
    * @param filters (1) --
-   * @param fieldName (2) -- поле {@link umsscSOURCEu источника} в котором нужно искать теги. {@link umsscCOMPONENTu компонент} его берёт из {@link umsscTAGGROUPu т-группы}
+   * @param fieldName (2) -- поле {@link umsscSOURCEu источника} в котором нужно искать теги.
+   * {@link umsscCOMPONENTu компонент} его берёт из {@link umsscTAGGROUPu т-группы}
    */
   tags: (
     filters: MsscFilterType[],
-    fieldName: string
+    fieldName: MsscFieldNameType
   ) => Promise<MsscTagCls[]>;
 }

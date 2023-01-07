@@ -9,7 +9,7 @@ export interface ParamsType {
   tagGroupSelectedArr: MsscTagGroupElemsType[];
   /** текст введённый пользователем в строку поиска */
   searchText: string;
-  isTagsCreate: boolean;
+  isTagsExist: boolean;
 }
 
 /**
@@ -23,15 +23,15 @@ export function msscFiltersCreate({
   source,
   tagGroupSelectedArr,
   searchText,
-  isTagsCreate
+  isTagsExist
 }: ParamsType): MsscFilterType[] {
   // --- filterTags
   const filterTags: MsscFilterType[] = [];
-  if (isTagsCreate) {
-    tagGroupSelectedArr.forEach((elTagGroup: MsscTagGroupElemsType) => {
-      const tags = elTagGroup.elems.map((el: RsuvTxChecked) => el.id);
+  if (isTagsExist) {
+    tagGroupSelectedArr.forEach((elTagGroupElems: MsscTagGroupElemsType) => {
+      const tagValues = elTagGroupElems.elems.map((el: RsuvTxChecked) => el.id);
       const filters: MsscFilterType[] =
-        source?.filterFromTags(tags, elTagGroup.id) ?? [];
+        source?.filterFromTags(tagValues, elTagGroupElems.id) ?? [];
       filterTags.push(...filters);
     });
   }

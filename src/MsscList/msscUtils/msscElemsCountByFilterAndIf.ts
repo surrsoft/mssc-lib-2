@@ -18,7 +18,7 @@ export interface ParamsType {
 
 /**
  * Получение общего количества элементов с учетом фильтров {@param filters}.
- * Также возвращает все всех ids если {@param randomEnabled} is THRUTHY
+ * Также возвращает все ids если {@param randomEnabled} is THRUTHY
  * @param source *источник
  * @param filters
  * @param randomEnabled
