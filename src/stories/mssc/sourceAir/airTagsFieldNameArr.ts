@@ -1,4 +1,4 @@
-import { MsscTagGroupType } from "../../../MsscList/types/types/MsscFieldGroupType";
+import { MsscTagGroupType } from '../../../MsscList/types/types/MsscTagGroupType';
 import { AirtableFieldEnum } from "./AirtableFieldEnum";
 
 /**  */

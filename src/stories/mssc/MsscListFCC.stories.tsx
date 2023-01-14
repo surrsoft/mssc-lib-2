@@ -13,6 +13,11 @@ import { airTagsFieldNameArr } from "./sourceAir/airTagsFieldNameArr";
 import { airSource } from "./sourceAir/sourceAir";
 import { jsonSource } from "./sourceJson/jsonSource";
 import { jsonTagsFieldNameArr } from "./sourceJson/jsonTagsFieldNameArr";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+// --- ---
+
+const queryClient = new QueryClient()
 
 const exp: ComponentMeta<typeof MsscListFCC> = {
   /* title опционален.
@@ -28,7 +33,9 @@ export default exp;
 
 // 👇 Мы создаём “template” того как args мапится на рендеринг
 const Template: ComponentStory<typeof MsscListFCC> = (args) => (
-  <MsscListFCC {...args} />
+  <QueryClientProvider client={queryClient}>
+    <MsscListFCC {...args} />
+  </QueryClientProvider>
 );
 
 export const StoryAirSource = Template.bind({});
@@ -46,6 +53,8 @@ StoryAirSource.args = {
   tagsFieldNameArr: airTagsFieldNameArr,
   listAreaHeight,
 };
+
+// --- ---
 
 export const StoryArraySource = Template.bind({});
 

@@ -1,4 +1,5 @@
 import _ from "lodash";
+import loIsEmpty from "lodash/isEmpty";
 import React, { useEffect, useState } from "react";
 import {
   RsuvEnResultCrudSet,
@@ -10,12 +11,13 @@ import {
 import { useScrollFix } from "ueur-lib";
 
 import "./msscListStyles.scss";
-import { nxxTemp } from '../temp-collection-typing/temp';
+import { nxxTemp } from "../temp-collection-typing/temp";
 import { SvgIconDice } from "./commonIcons/SvgIcons/SvgIconDice";
 import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
 import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
 import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
+import { useReqData } from "./hooks/useReqData";
 import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
 import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
 import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
@@ -109,7 +111,9 @@ const MsscListFCC = ({
   const [$idsShuffled, $idsShuffledSet] = useState<string[]>([]);
   // --- теги (мультивыбор)
   // все *группы-тегов
-  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>([]);
+  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>(
+    []
+  );
   // информация о выбранных-тегах каждой *т-группы
   const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
     MsscTagGroupElemsType[]
@@ -136,6 +140,9 @@ const MsscListFCC = ({
     }, 2000);
   };
 
+  const reqResult = useReqData({ enabled: true, source });
+  console.log("!!-!!-!!  reqResult {230114121219}\n", reqResult); // del+
+
   /**
    * получение всех основных данных
    * @param sourcePrm
@@ -158,7 +165,7 @@ const MsscListFCC = ({
         source: sourcePrm,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        isTagsExist: !_.isEmpty(tagsFieldNameArr)
+        isTagsExist: !loIsEmpty(tagsFieldNameArr),
       });
       // --- получение общего количества элементов с учетом фильтров; в random-режиме также получаем список всех ids
       const { elemsCountByFilter, ids } = await msscElemsCountByFilterAndIf({
@@ -224,7 +231,7 @@ const MsscListFCC = ({
         source,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        isTagsExist: !_.isEmpty(tagsFieldNameArr)
+        isTagsExist: !loIsEmpty(tagsFieldNameArr),
       });
       // ---
       let elemsResult: MsscElemType[];
