@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 
 import { SelectResultPoarType } from "../../../../commonUI/MenuPoar/types/SelectResultPoarType";
-import { menuDataSTA } from "../../../../msscUtils/menuDataSTA";
+import { menuDataSta } from "../../../../msscUtils/menuDataSta";
 import { MsscMenuActionEnum } from "../../../../types/enums/MsscMenuActionEnum";
 import { MsscElemType } from "../../../../types/types/MsscElemType";
 import { MsscListElemPropsBaseType } from "../../types/MsscListElemPropsBaseType";
@@ -104,7 +104,7 @@ export function MsscListElem({
 
   const MenuJsx = (
     <MsscRkMenu
-      data={Object.assign({}, menuDataSTA, { id: elem.id.val })}
+      data={Object.assign({}, menuDataSta, { id: elem.id.val })}
       menuElemOnSelected={menuElemOnSelected}
     />
   );

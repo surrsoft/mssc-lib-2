@@ -1,4 +1,5 @@
-import _ from "lodash";
+import loIsEmpty from 'lodash/isEmpty';
+import loShuffle from 'lodash/shuffle';
 import React, { useEffect, useState } from "react";
 import {
   RsuvEnResultCrudSet,
@@ -10,7 +11,7 @@ import {
 import { useScrollFix } from "ueur-lib";
 
 import "./msscListStyles.scss";
-import { nxxTemp } from '../temp-collection-typing/temp';
+import { nxxTemp } from "../temp-collection-typing/temp"; // del+
 import { SvgIconDice } from "./commonIcons/SvgIcons/SvgIconDice";
 import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
@@ -54,7 +55,7 @@ const MsscListFCC = ({
   tagsFieldNameArr,
   listAreaHeight = new MsscListAreaHeightCls(),
 }: MsscListPropsType): JSX.Element => {
-  nxxTemp();
+  nxxTemp(); // del+
 
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
@@ -109,7 +110,9 @@ const MsscListFCC = ({
   const [$idsShuffled, $idsShuffledSet] = useState<string[]>([]);
   // --- теги (мультивыбор)
   // все *группы-тегов
-  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>([]);
+  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>(
+    []
+  );
   // информация о выбранных-тегах каждой *т-группы
   const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
     MsscTagGroupElemsType[]
@@ -142,7 +145,7 @@ const MsscListFCC = ({
    */
   const requestFirst = async (sourcePrm: MsscSourceType<any>): Promise<any> => {
     try {
-      // --- общее кол-во элементов без учета фильтра
+      // --- получаем общее кол-во элементов без учета фильтра
       $elemsCountAllSet(-1);
       sourcePrm
         ?.elemsCountByFilter([])
@@ -151,6 +154,7 @@ const MsscListFCC = ({
         })
         .catch((err) => {
           console.log("!!-!!-!! err {220130133850}\n", err);
+          fnError();
         });
       // --- готовка фильтров
       $isLoadingInitialSet(true);
@@ -158,7 +162,7 @@ const MsscListFCC = ({
         source: sourcePrm,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        isTagsExist: !_.isEmpty(tagsFieldNameArr)
+        isTagsExist: loIsEmpty(tagsFieldNameArr),
       });
       // --- получение общего количества элементов с учетом фильтров; в random-режиме также получаем список всех ids
       const { elemsCountByFilter, ids } = await msscElemsCountByFilterAndIf({
@@ -169,10 +173,10 @@ const MsscListFCC = ({
         sortIdCurr: $sortIdCurr,
       });
       if ($randomEnabled) {
-        const idsShuffled = _.shuffle(ids);
+        const idsShuffled = loShuffle(ids);
         $idsShuffledSet(idsShuffled);
       }
-      // --- получение тегов
+      // --- получение тегов и передача их в стейт через $tagGroupArrSet
       await msscTagsCookAndSet({
         source: sourcePrm,
         filters,
@@ -180,7 +184,7 @@ const MsscListFCC = ({
         tgroups: tagsFieldNameArr,
         $selectedTagsSet: $tagGroupArrSet,
       });
-      // --- pagination - pageCountAll
+      // --- pagination
       const pagination = new RsuvPaginationGyth(
         elemsCountByFilter,
         MSSC_SETTINGS.elemsOnPage
@@ -224,7 +228,7 @@ const MsscListFCC = ({
         source,
         tagGroupSelectedArr: $tagGroupSelectedArr,
         searchText: $searchText,
-        isTagsExist: !_.isEmpty(tagsFieldNameArr)
+        isTagsExist: loIsEmpty(tagsFieldNameArr),
       });
       // ---
       let elemsResult: MsscElemType[];

@@ -13,9 +13,11 @@ export interface ParamsType {
 }
 
 /**
- * Готовит объекты фильтрации на базе текста-для-поиска {@param searchText}, тегов {@param tagGroupSelectedArr}
+ * Готовит объекты фильтрации на базе текста-для-поиска {@param searchText} и выбранных
+ * тегов {@param tagGroupSelectedArr}
+ *
  * @param source
- * @param tagGroupSelectedArr
+ * @param tagGroupSelectedArr - теги выбранные пользователем
  * @param searchText - текст поиска введённый пользователем
  * @param isTagsCreate
  */

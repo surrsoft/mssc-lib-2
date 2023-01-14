@@ -18,7 +18,7 @@ export interface ParamsType {
 }
 
 /**
- * Формирует массив сущностей типа {@link MsscTagGroupElemsType} и пишет её в стейт
+ * Формирует массив сущностей типа {@link MsscTagGroupElemsPlusType} и пишет его в стейт
  * с помощью {@param $tagGroupArrSet}
  *
  * @param tgroups
@@ -35,15 +35,15 @@ export async function msscTagsCookAndSet({
   if (tgroups && tgroups.length > 0) {
     const tagsTotal: MsscTagGroupElemsPlusType[] = [];
     for (const elTagGroup of tgroups) {
-      // --- получает с бэка список тегов для текущей *т-группы
+      // ^ цикл по *т-группам
+      // --- получаем с бэка список тегов для текущей *т-группы
       let tagObjArr = await source?.tags(filters, elTagGroup.fieldName);
       // --- sort
       tagObjArr = _.orderBy(tagObjArr, ["count", "value"], ["desc", "asc"]);
-      // --- представляет теги в виде RsuvTxChecked[]
+      // --- представляем теги в виде RsuvTxChecked[]
       const tagsNext: RsuvTxChecked[] = tagObjArr.map((el) => {
         return new RsuvTxChecked(el.value, `${el.value} (${el.count})`);
       });
-      // ---
       tagsNext.forEach((elTag) => {
         if ($selectedTags.some((el) => el.id === elTag.id)) {
           elTag.checked = true;
