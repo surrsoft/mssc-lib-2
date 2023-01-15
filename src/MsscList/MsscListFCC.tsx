@@ -140,7 +140,17 @@ const MsscListFCC = ({
     }, 2000);
   };
 
-  const reqResult = useReqData({ enabled: true, source });
+  const reqResult = useReqData({
+    enabled: true,
+    source,
+    searchText: $searchText,
+    isTagsExist: !loIsEmpty(tagsFieldNameArr),
+    tagGroupSelectedArr: $tagGroupSelectedArr,
+    randomEnabled: $randomEnabled,
+    sortData,
+    sortIdCurr: $sortIdCurr,
+    tagsFieldNameArr
+  });
   console.log("!!-!!-!!  reqResult {230114121219}\n", reqResult); // del+
 
   /**
