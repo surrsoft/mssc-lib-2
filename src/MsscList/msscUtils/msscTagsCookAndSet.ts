@@ -25,13 +25,15 @@ export interface ParamsType {
  * @param source
  * @param filters
  */
-export async function msscTagsCookAndSet({
-  tgroups,
-  source,
-  filters,
-  $selectedTags,
-  $selectedTagsSet,
-}: ParamsType) {
+export async function msscTagsCookAndSet(
+  {
+    tgroups,
+    source,
+    filters,
+    $selectedTags,
+    $selectedTagsSet,
+  }: ParamsType
+): Promise<MsscTagGroupElemsPlusType[] | null> {
   if (tgroups && tgroups.length > 0) {
     const tagsTotal: MsscTagGroupElemsPlusType[] = [];
     for (const elTagGroup of tgroups) {
@@ -39,7 +41,7 @@ export async function msscTagsCookAndSet({
       let tagObjArr = await source?.tags(filters, elTagGroup.fieldName);
       // --- sort
       tagObjArr = _.orderBy(tagObjArr, ["count", "value"], ["desc", "asc"]);
-      // --- представляет теги в виде RsuvTxChecked[]
+      // --- преобразование тегов к виду RsuvTxChecked[]
       const tagsNext: RsuvTxChecked[] = tagObjArr.map((el) => {
         return new RsuvTxChecked(el.value, `${el.value} (${el.count})`);
       });
@@ -58,6 +60,8 @@ export async function msscTagsCookAndSet({
       };
       tagsTotal.push(group);
     }
-    $selectedTagsSet(tagsTotal);
+    $selectedTagsSet(tagsTotal); // TODO в дальнейшем это будет не нужно
+    return tagsTotal;
   }
+  return null;
 }

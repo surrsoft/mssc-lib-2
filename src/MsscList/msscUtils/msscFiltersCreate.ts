@@ -5,7 +5,7 @@ import { MsscFilterType } from "../types/types/MsscFilterType";
 import { MsscTagGroupElemsType } from "../types/types/MsscTagGroupElemsType";
 
 export interface ParamsType {
-  source: MsscSourceType<any>;
+  source?: MsscSourceType<any> | null;
   tagGroupSelectedArr: MsscTagGroupElemsType[];
   /** текст введённый пользователем в строку поиска */
   searchText: string;
@@ -19,12 +19,17 @@ export interface ParamsType {
  * @param searchText - текст поиска введённый пользователем
  * @param isTagsCreate
  */
-export function msscFiltersCreate({
-  source,
-  tagGroupSelectedArr,
-  searchText,
-  isTagsExist
-}: ParamsType): MsscFilterType[] {
+export function msscFiltersCreate(
+  {
+    source,
+    tagGroupSelectedArr,
+    searchText,
+    isTagsExist
+  }: ParamsType
+): MsscFilterType[] {
+  if (!source) {
+    return []
+  }
   // --- filterTags
   const filterTags: MsscFilterType[] = [];
   if (isTagsExist) {
