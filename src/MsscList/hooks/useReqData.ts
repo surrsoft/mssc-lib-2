@@ -131,7 +131,7 @@ export function useReqData(
       if (randomEnabled) {
         idsShuffled = loShuffle(ids);
       }
-      // --- pagination - pageCountAll
+      // --- pageCount
       const pagination: RsuvPaginationGyth = new RsuvPaginationGyth(
         countByFilter,
         MSSC_SETTINGS.elemsOnPage
