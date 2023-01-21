@@ -136,9 +136,8 @@ export class JsonSourceAsau88<T> implements MsscSourceType<T> {
   /**
    *
    * @param filters
-   * @param sorts -- не реализовано
    */
-  async idsAll(filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
+  async idsAll(filters: MsscFilterType[]): Promise<string[]> {
     let retIds = []
     const elemsAll = await jsonServer.elemsGetAll()
     if (elemsAll && elemsAll.length > 0) {

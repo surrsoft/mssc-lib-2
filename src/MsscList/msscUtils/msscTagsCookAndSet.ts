@@ -14,7 +14,7 @@ export interface ParamsType {
   source: MsscSourceType<any>;
   filters: MsscFilterType[];
   $selectedTags: MsscTagGroupElemsType[];
-  $selectedTagsSet: any;
+  $selectedTagsSet?: any;
 }
 
 /**
@@ -25,15 +25,13 @@ export interface ParamsType {
  * @param source
  * @param filters
  */
-export async function msscTagsCookAndSet(
-  {
-    tgroups,
-    source,
-    filters,
-    $selectedTags,
-    $selectedTagsSet,
-  }: ParamsType
-): Promise<MsscTagGroupElemsPlusType[] | null> {
+export async function msscTagsCookAndSet({
+  tgroups,
+  source,
+  filters,
+  $selectedTags,
+  $selectedTagsSet,
+}: ParamsType): Promise<MsscTagGroupElemsPlusType[] | null> {
   if (tgroups && tgroups.length > 0) {
     const tagsTotal: MsscTagGroupElemsPlusType[] = [];
     for (const elTagGroup of tgroups) {
@@ -50,7 +48,9 @@ export async function msscTagsCookAndSet(
         if ($selectedTags.some((el) => el.id === elTag.id)) {
           elTag.checked = true;
         }
-        elTag.visibleText = MsscSquareBracketsCls.bracketsRemove(elTag.visibleText);
+        elTag.visibleText = MsscSquareBracketsCls.bracketsRemove(
+          elTag.visibleText
+        );
       });
       // ---
       const group: MsscTagGroupElemsPlusType = {
@@ -60,7 +60,9 @@ export async function msscTagsCookAndSet(
       };
       tagsTotal.push(group);
     }
-    $selectedTagsSet(tagsTotal); // TODO в дальнейшем это будет не нужно
+    if ($selectedTagsSet) { // TODO в дальнейшем это будет не нужно
+      $selectedTagsSet(tagsTotal);
+    }
     return tagsTotal;
   }
   return null;

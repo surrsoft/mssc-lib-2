@@ -145,9 +145,8 @@ export interface MsscSourceType<TModel> {
   /**
    * Получение ID всех элементов хранилища удовлетворяющих (1) и (2). Требуется только для random-режима
    * @param filters (1) -- пустой или не пустой массив
-   * @param sorts (2) --пустой или не пустой массив
    */
-  idsAll: (filters: MsscFilterType[], sorts: RsuvTxSort[]) => Promise<string[]>;
+  idsAll: (filters: MsscFilterType[]) => Promise<string[]>;
 
   /**
    * Должен вернуть теги (то есть значения поля (2) {@link umsscSOURCEu источника}) для виджета тегов, после

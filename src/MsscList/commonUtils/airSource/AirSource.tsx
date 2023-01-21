@@ -98,9 +98,9 @@ export class AirSource<T> implements MsscSourceType<T> {
     return await Promise.resolve(<div>no realised</div>)
   }
 
-  async idsAll(filters: MsscFilterType[], sorts: RsuvTxSort[]): Promise<string[]> {
+  async idsAll(filters: MsscFilterType[]): Promise<string[]> {
     // ---
-    const { filterVusc, sortArrObj } = this.fnFilterAndSort(filters, sorts);
+    const { filterVusc, sortArrObj } = this.fnFilterAndSort(filters, []);
     // ---
     const hoggOffset = new HoggOffsetCount(true);
     this.connector.sort(sortArrObj)

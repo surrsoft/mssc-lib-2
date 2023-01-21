@@ -1,5 +1,5 @@
-import _ from "lodash";
 import loIsEmpty from "lodash/isEmpty";
+import loShuffle from "lodash/shuffle";
 import React, { useEffect, useState } from "react";
 import {
   RsuvEnResultCrudSet,
@@ -17,7 +17,8 @@ import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
 import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
 import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
-import { useReqData } from "./hooks/useReqData";
+import { useFilters } from "./hooks/useFilters";
+import { useReqFirstData } from "./hooks/useReqFirstData";
 import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
 import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
 import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
@@ -140,18 +141,24 @@ const MsscListFCC = ({
     }, 2000);
   };
 
-  const reqResult = useReqData({
-    enabled: true,
+  const filters: MsscFilterType[] = useFilters({
     source,
+    tagGroupSelectedArr: $tagGroupSelectedArr,
     searchText: $searchText,
     isTagsExist: !loIsEmpty(tagsFieldNameArr),
+  });
+
+  const reqResult = useReqFirstData({
+    enabled: true,
+    source,
     tagGroupSelectedArr: $tagGroupSelectedArr,
     randomEnabled: $randomEnabled,
-    sortData,
     sortIdCurr: $sortIdCurr,
-    tagsFieldNameArr
+    tagsFieldNameArr,
+    filters
   });
-  console.log("!!-!!-!!  reqResult {230114121219}\n", reqResult); // del+
+  console.log("!!-!!-!! reqResult {230114121219}\n", reqResult); // del+
+  // const {countByFilter, countAll, pageCount, idsShuffled, tags} = reqResult.data;
 
   /**
    * получение всех основных данных
@@ -182,11 +189,10 @@ const MsscListFCC = ({
         source: sourcePrm,
         filters,
         randomEnabled: $randomEnabled,
-        sortData,
         sortIdCurr: $sortIdCurr,
       });
       if ($randomEnabled) {
-        const idsShuffled = _.shuffle(ids);
+        const idsShuffled = loShuffle(ids);
         $idsShuffledSet(idsShuffled);
       }
       // --- получение тегов
@@ -312,9 +318,7 @@ const MsscListFCC = ({
       $needUpdate1Set(!$needUpdate1);
     },
     /**
-     * Перезапрос данных страницы только.
-     *
-     * СМ. ТАКЖЕ {@link refreshes#whole}
+     * Только инициация перерендеринга
      */
     refreshPage: () => {
       $refreshSet(!$refresh);

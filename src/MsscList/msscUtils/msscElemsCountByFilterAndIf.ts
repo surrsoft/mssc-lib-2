@@ -1,18 +1,13 @@
 import { RsuvTxNumIntAB } from "rsuv-lib";
 
-import { BrSelectSortDataType } from "../commonUI/BrSelect/types";
 import { MsscSourceType } from "../types/MsscSourceType";
-import { MsscColumnNameType } from "../types/types/MsscColumnNameType";
 import { MsscElemsCountReturnType } from "../types/types/MsscElemsCountReturnType";
 import { MsscFilterType } from "../types/types/MsscFilterType";
-import { msscSortsCreate } from "./msscSortsCreate";
 
-/** входные параметры функции {@link msscElemsCountByFilterAndIf} */
 export interface ParamsType {
   source: MsscSourceType<any>,
   filters: MsscFilterType[],
   randomEnabled: boolean,
-  sortData?: BrSelectSortDataType<MsscColumnNameType>,
   sortIdCurr?: string,
 }
 
@@ -30,15 +25,13 @@ export async function msscElemsCountByFilterAndIf(
     source,
     filters,
     randomEnabled,
-    sortData,
     sortIdCurr,
   }: ParamsType
 ): Promise<MsscElemsCountReturnType> {
   let elemsCountByFilter: number = 0;
   let ids: string[] = []
   if (randomEnabled) {
-    const sorts = msscSortsCreate(sortData, sortIdCurr)
-    ids = await source?.idsAll(filters, sorts) // AWAIT
+    ids = await source?.idsAll(filters)
     if (ids) {
       elemsCountByFilter = ids.length
     }
