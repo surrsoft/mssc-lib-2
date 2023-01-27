@@ -18,7 +18,7 @@ import { BrSelectIdType } from "./commonUI/BrSelect/types";
 import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
 import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
 import { useFilters } from "./hooks/useFilters";
-import { useReqFirstData } from "./hooks/useReqFirstData";
+import { useGetData } from "./hooks/useGetData";
 import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
 import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
 import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
@@ -50,13 +50,13 @@ import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 const scrollTop = 0;
 
 const MsscListFCC = ({
-  source,
-  sortData,
-  children,
-  listElemStruct,
-  tagsFieldNameArr,
-  listAreaHeight = new MsscListAreaHeightCls(),
-}: MsscListPropsType): JSX.Element => {
+                       source,
+                       sortData,
+                       children,
+                       listElemStruct,
+                       tagsFieldNameArr,
+                       listAreaHeight = new MsscListAreaHeightCls(),
+                     }: MsscListPropsType): JSX.Element => {
   nxxTemp();
 
   // номер текущей страницы (пагинация)
@@ -79,12 +79,6 @@ const MsscListFCC = ({
   const [$isLoadingPage, $isLoadingPageSet] = useState(false);
   // показ спиннера для диалогов
   const [$loadingDialog, $loadingDialogSet] = useState(false);
-  // для того чтобы содержимое второго useEffect отрабатывало строго после содержимого первого
-  const [$fdone, $fdoneSet] = useState(false);
-  // для инициации полного перезапроса данных, например после удаления/добавления элемента(ов)
-  const [$needUpdate1, $needUpdate1Set] = useState(false);
-  // для инициации запроса данных при нажатии изменения страницы в пагинации
-  const [$needUpdate2, $needUpdate2Set] = useState(false);
   // для показа ошибки запроса данных
   const [$isError, $isErrorSet] = useState(false);
   // --- диалоги
@@ -108,8 +102,6 @@ const MsscListFCC = ({
   // текст введённый в поле поиска
   const [$searchText, $searchTextSet] = useState("");
   const [$randomEnabled, $randomEnabledSet] = useState(false);
-  // ids элементов в случайном порядке
-  const [$idsShuffled, $idsShuffledSet] = useState<string[]>([]);
   // --- теги (мультивыбор)
   // все *группы-тегов
   const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>(
@@ -122,17 +114,6 @@ const MsscListFCC = ({
 
   // ---
   const scrollFixFn = useScrollFix($isDialogCreateEditShowed);
-
-  const shuffleUtils = {
-    /**
-     * Получить ids из {@link $idsShuffled} начиная с (1) включительно по (2) исключительно
-     * @param ixStart (1) -- индекс
-     * @param ixEnd (2) -- индекс
-     */
-    elems(ixStart: number, ixEnd: number): MsscIdObjectType[] {
-      return $idsShuffled.slice(ixStart, ixEnd + 1).map((el) => ({ id: el }));
-    },
-  };
 
   const fnError = (): void => {
     $isErrorSet(true);
@@ -148,166 +129,51 @@ const MsscListFCC = ({
     isTagsExist: !loIsEmpty(tagsFieldNameArr),
   });
 
-  const reqResult = useReqFirstData({
+  const reqResult = useGetData({
     enabled: true,
     source,
     tagGroupSelectedArr: $tagGroupSelectedArr,
     randomEnabled: $randomEnabled,
     sortIdCurr: $sortIdCurr,
     tagsFieldNameArr,
-    filters
+    filters,
+    $sortIdCurr,
+    sortData,
+    $pageNumCurrent,
+    $randomEnabled,
   });
   console.log("!!-!!-!! reqResult {230114121219}\n", reqResult); // del+
-  // const {countByFilter, countAll, pageCount, idsShuffled, tags} = reqResult.data;
 
-  /**
-   * получение всех основных данных
-   * @param sourcePrm
-   */
-  const requestFirst = async (sourcePrm: MsscSourceType<any>): Promise<any> => {
-    try {
-      // --- общее кол-во элементов без учета фильтра
-      $elemsCountAllSet(-1);
-      sourcePrm
-        ?.elemsCountByFilter([])
-        .then((result: RsuvTxNumIntAB) => {
-          $elemsCountAllSet(result.val);
-        })
-        .catch((err) => {
-          console.log("!!-!!-!! err {220130133850}\n", err);
-        });
-      // --- готовка фильтров
-      $isLoadingInitialSet(true);
-      const filters: MsscFilterType[] = msscFiltersCreate({
-        source: sourcePrm,
-        tagGroupSelectedArr: $tagGroupSelectedArr,
-        searchText: $searchText,
-        isTagsExist: !loIsEmpty(tagsFieldNameArr),
-      });
-      // --- получение общего количества элементов с учетом фильтров; в random-режиме также получаем список всех ids
-      const { elemsCountByFilter, ids } = await msscElemsCountByFilterAndIf({
-        source: sourcePrm,
-        filters,
-        randomEnabled: $randomEnabled,
-        sortIdCurr: $sortIdCurr,
-      });
-      if ($randomEnabled) {
-        const idsShuffled = loShuffle(ids);
-        $idsShuffledSet(idsShuffled);
-      }
-      // --- получение тегов
-      await msscTagsCookAndSet({
-        source: sourcePrm,
-        filters,
-        $selectedTags: $tagGroupSelectedArr,
-        tgroups: tagsFieldNameArr,
-        $selectedTagsSet: $tagGroupArrSet,
-      });
-      // --- pagination - pageCountAll
-      const pagination = new RsuvPaginationGyth(
-        elemsCountByFilter,
-        MSSC_SETTINGS.elemsOnPage
-      );
-      // ---
-      $pageCountAllSet(pagination.pageCount);
-      $elemsCountByFilterSet(elemsCountByFilter);
-    } catch (err) {
-      console.log("!!-!!-!! err {220119120755}\n", err);
-      fnError();
-    } finally {
-      $isLoadingInitialSet(false);
-    }
-  };
+  const {
+    countByFilter,
+    countAll,
+    pageCount,
+    tags,
+    firstRefetch,
+    twoRefetch,
+    isDone,
+    elemsResult,
+    firstIsDone,
+    twoIsDone,
+  } = reqResult;
 
-  /**
-   * получение данных конкретной страницы
-   * @param source
-   */
-  const requestTwo = async (source: MsscSourceType<any>): Promise<any> => {
-    try {
-      $isLoadingPageSet(true);
-      // await fnWait(3000)
-      // --- pagination - ixStart, ixEnd
-      const pagination = new RsuvPaginationGyth(
-        $elemsCountByFilter,
-        MSSC_SETTINGS.elemsOnPage
-      );
-      if ($pageNumCurrent > pagination.pageCount) {
-        // если в результате удаления элементов, страниц стало меньше чем было раньше
-        $pageNumCurrentSet(pagination.pageCount);
-      }
-      const indexes = pagination.indexesByPageNum($pageNumCurrent);
-      const ixStart = indexes.indexStart;
-      const ixEnd = indexes.indexLast;
-      // --- --- получение элементов из source
-      // --- сортировка
-      const sorts: RsuvTxSort[] = msscSortsCreate(sortData, $sortIdCurr);
-      // --- filters
-      const filter0 = msscFiltersCreate({
-        source,
-        tagGroupSelectedArr: $tagGroupSelectedArr,
-        searchText: $searchText,
-        isTagsExist: !loIsEmpty(tagsFieldNameArr),
-      });
-      // ---
-      let elemsResult: MsscElemType[];
-      if (!$randomEnabled) {
-        elemsResult = await source.elems(
-          new RsuvTxNumIntDiap(
-            new RsuvTxNumIntAB(ixStart),
-            new RsuvTxNumIntAB(ixEnd)
-          ),
-          filter0,
-          sorts
-        );
-      } else {
-        const idObjs = shuffleUtils.elems(ixStart, ixEnd);
-        const res: any = await source?.elemsById(idObjs);
-        elemsResult = res?.filter(
-          (el: MsscElemType | null) => el !== null
-        ) as MsscElemType[];
-      }
-      // --- ---
-      $elemsCountOnCurrPageSet(elemsResult.length);
-      // ---
+  useEffect(() => {
+    if (isDone) {
+      $tagGroupArrSet(tags);
       $elemsSet(elemsResult);
-    } catch (err) {
-      console.log("!!-!!-!! err {220119120754}\n", err);
-      // возвращаем старый номер страницы
-      $pageNumCurrentSet($pageNumBeforChange);
-      fnError();
-    } finally {
-      $isLoadingPageSet(false);
+      $elemsCountAllSet(countAll);
+      $pageCountAllSet(pageCount);
+      $elemsCountByFilterSet(countByFilter);
+      $isLoadingInitialSet(!firstIsDone);
+      $isLoadingPageSet(!twoIsDone);
     }
-  };
-
-  // --- useEffect() 1
-
-  useEffect(() => {
-    $fdoneSet(false);
-    if (source !== null) {
-      (async () => {
-        await requestFirst(source);
-        $fdoneSet(true);
-      })();
-    }
-  }, [$needUpdate1]);
-
-  // --- useEffect() 2
-
-  useEffect(() => {
-    if (source !== null && $fdone) {
-      (async () => {
-        await requestTwo(source);
-      })();
-    }
-  }, [$fdone, $needUpdate2]);
+  }, [isDone]);
 
   // ---
 
   const refreshes: MsscRefreshesType = {
     pageDataRefresh: () => {
-      $needUpdate2Set(!$needUpdate2);
+      twoRefetch();
     },
     /**
      * Выполнение полного перезапроса всех данных
@@ -315,7 +181,7 @@ const MsscListFCC = ({
      * СМ, ТАКЖЕ {@link refresh}
      */
     whole: () => {
-      $needUpdate1Set(!$needUpdate1);
+      firstRefetch();
     },
     /**
      * Только инициация перерендеринга
@@ -481,7 +347,7 @@ const MsscListFCC = ({
           iconsConf={MSSC_SETTINGS.iconsConf}
         />
       ),
-      btnDice: <ButtonDiceLocalFCC />,
+      btnDice: <ButtonDiceLocalFCC/>,
     },
     sortJsx: (
       <MsscSort
@@ -540,7 +406,7 @@ const MsscListFCC = ({
       {/* // --- dialog create/edit */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
       {/* // --- spinner */}
-      <BrSpinner show={$isLoadingInitial || $loadingDialog} />
+      <BrSpinner show={$isLoadingInitial || $loadingDialog}/>
     </div>
   );
 };
