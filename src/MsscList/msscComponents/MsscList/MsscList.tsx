@@ -10,14 +10,14 @@ import { MsscListElemPropsBaseType } from "./types/MsscListElemPropsBaseType";
 export interface PropsType {
   scrollTop: number;
   listAreaHeight?: MsscListAreaHeightCls;
-  $isLoadingPage: boolean;
+  isLoadingPage: boolean;
   mainList: MsscListElemPropsBaseType;
 }
 
 export function MsscList({
   scrollTop,
   listAreaHeight,
-  $isLoadingPage,
+  isLoadingPage,
   mainList,
 }: PropsType) {
   const refDivScroll = useRef(null);
@@ -53,7 +53,7 @@ export function MsscList({
       style={Object.assign({}, { position: "relative" }, listAreaHeightCssObj)}
       onScroll={onScrollHandler}
     >
-      <BrSpinner show={$isLoadingPage} fullscreen={false} />
+      <BrSpinner show={isLoadingPage} fullscreen={false} />
       {mainList.elems.map((elObj: MsscElemType) => {
         return (
           <MsscListElem

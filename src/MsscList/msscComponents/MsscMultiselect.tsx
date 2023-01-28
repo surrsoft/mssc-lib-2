@@ -11,17 +11,17 @@ import { MsscTagsGroupIdType } from "../types/types/MsscTagsGroupIdType";
 export interface PropsType {
   tagsGroupId: MsscTagsGroupIdType;
   refreshes: MsscRefreshesType;
-  $tagGroupSelectedArr: MsscTagGroupElemsType[];
-  $tagGroupSelectedArrSet: any;
-  $tagGroupArr: MsscTagGroupElemsPlusType[];
+  tagGroupSelectedArr: MsscTagGroupElemsType[];
+  tagGroupSelectedArrSet: any;
+  tagGroupArr: MsscTagGroupElemsPlusType[];
 }
 
 export function MsscMultiselect({
   tagsGroupId,
   refreshes,
-  $tagGroupSelectedArr,
-  $tagGroupSelectedArrSet,
-  $tagGroupArr,
+  tagGroupSelectedArr,
+  tagGroupSelectedArrSet,
+  tagGroupArr,
 }: PropsType) {
   /**
    * Обработчик выбора тега
@@ -29,7 +29,7 @@ export function MsscMultiselect({
    * @param checkedElems
    */
   const onChangeHandle = (checkedElems: RsuvTxChecked[]) => {
-    const tagGroups = _.cloneDeep($tagGroupSelectedArr);
+    const tagGroups = _.cloneDeep(tagGroupSelectedArr);
     const group = tagGroups.find(
       (el: MsscTagGroupElemsType) => el.id === tagsGroupId
     );
@@ -42,14 +42,14 @@ export function MsscMultiselect({
       };
       tagGroups.push(newGroup);
     }
-    $tagGroupSelectedArrSet(tagGroups);
+    tagGroupSelectedArrSet(tagGroups);
     refreshes.whole();
   };
 
-  const tagGroups: MsscTagGroupElemsPlusType | undefined = $tagGroupArr.find(
+  const tagGroups: MsscTagGroupElemsPlusType | undefined = tagGroupArr.find(
     (ell: MsscTagGroupElemsPlusType) => ell.id === tagsGroupId
   );
-  const tagGroup = $tagGroupSelectedArr.find((el) => el.id === tagsGroupId);
+  const tagGroup = tagGroupSelectedArr.find((el) => el.id === tagsGroupId);
   tagGroups?.elems.forEach((el: RsuvTxChecked) => {
     const b1 = tagGroup?.elems.find((el0) => el0.id === el.id);
     if (b1) {

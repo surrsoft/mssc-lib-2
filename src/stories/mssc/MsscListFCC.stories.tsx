@@ -14,6 +14,7 @@ import { airSource } from "./sourceAir/sourceAir";
 import { jsonSource } from "./sourceJson/jsonSource";
 import { jsonTagsFieldNameArr } from "./sourceJson/jsonTagsFieldNameArr";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 // --- ---
 
@@ -35,6 +36,7 @@ export default exp;
 const Template: ComponentStory<typeof MsscListFCC> = (args) => (
   <QueryClientProvider client={queryClient}>
     <MsscListFCC {...args} />
+    <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
 );
 

@@ -3,6 +3,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 export interface RqQueryHandleReturnType {
   /** TRUE означает что запрос выполнился без "базовых" ошибок */
   isDone: boolean
+  isError: boolean;
 }
 
 // TODO add to lib
@@ -15,6 +16,7 @@ export function rqQueryHandle(result: UseQueryResult<unknown>) {
   const isDone = isFetched && !isFetching && !isPaused && !isError;
 
   return {
-    isDone
+    isDone,
+    isError
   }
 }

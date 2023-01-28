@@ -1,13 +1,5 @@
-import loIsEmpty from "lodash/isEmpty";
-import loShuffle from "lodash/shuffle";
 import React, { useEffect, useState } from "react";
-import {
-  RsuvEnResultCrudSet,
-  RsuvPaginationGyth,
-  RsuvTxNumIntAB,
-  RsuvTxNumIntDiap,
-  RsuvTxSort,
-} from "rsuv-lib";
+import { RsuvEnResultCrudSet } from "rsuv-lib";
 import { useScrollFix } from "ueur-lib";
 
 import "./msscListStyles.scss";
@@ -17,7 +9,6 @@ import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
 import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
 import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
-import { useFilters } from "./hooks/useFilters";
 import { useGetData } from "./hooks/useGetData";
 import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
 import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
@@ -30,53 +21,30 @@ import { MsscMultiselect } from "./msscComponents/MsscMultiselect";
 import { MsscPaginator } from "./msscComponents/MsscPaginator/MsscPaginator";
 import { MsscSearch } from "./msscComponents/MsscSearch";
 import { MsscSort } from "./msscComponents/MsscSort";
-import { msscElemsCountByFilterAndIf } from "./msscUtils/msscElemsCountByFilterAndIf";
-import { msscFiltersCreate } from "./msscUtils/msscFiltersCreate";
 import { MsscListAreaHeightCls } from "./msscUtils/MsscListAreaHeightCls";
-import { msscSortsCreate } from "./msscUtils/msscSortsCreate";
-import { msscTagsCookAndSet } from "./msscUtils/msscTagsCookAndSet";
 import { MSSC_SETTINGS } from "./settings";
-import { MsscSourceType } from "./types/MsscSourceType";
 import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreateEditCallbacksType";
-import { MsscElemType } from "./types/types/MsscElemType";
-import { MsscFilterType } from "./types/types/MsscFilterType";
-import { MsscIdObjectType } from "./types/types/MsscIdObjectType";
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
-import { MsscTagGroupElemsPlusType } from "./types/types/MsscTagGroupElemsPlusType";
 import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 
 const scrollTop = 0;
 
 const MsscListFCC = ({
-                       source,
-                       sortData,
-                       children,
-                       listElemStruct,
-                       tagsFieldNameArr,
-                       listAreaHeight = new MsscListAreaHeightCls(),
-                     }: MsscListPropsType): JSX.Element => {
+  source,
+  sortData,
+  children,
+  listElemStruct,
+  tagsFieldNameArr,
+  listAreaHeight = new MsscListAreaHeightCls(),
+}: MsscListPropsType): JSX.Element => {
   nxxTemp();
 
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
   // номер страницы который был перед тем как изменить его на новый
   const [$pageNumBeforChange, $pageNumBeforChangeSet] = useState(1);
-  // всего страниц
-  const [$pageCountAll, $pageCountAllSet] = useState(0);
-  // текущие элементы для отображения
-  const [$elems, $elemsSet] = useState<MsscElemType[]>([]);
-  // общее количество элементов хранилища (без учёта каких-либо фильтров)
-  const [$elemsCountAll, $elemsCountAllSet] = useState(-1);
-  // общее количество элементов хранилища по фильтру
-  const [$elemsCountByFilter, $elemsCountByFilterSet] = useState(0);
-  // сколько отображается элементов сейчас на текущей странице
-  const [$elemsCountOnCurrPage, $elemsCountOnCurrPageSet] = useState(0);
-  // для показа спиннера при первоначальной загрузке
-  const [$isLoadingInitial, $isLoadingInitialSet] = useState(false);
-  // для показа спиннера при запросе данных страницы (пагинация страниц)
-  const [$isLoadingPage, $isLoadingPageSet] = useState(false);
   // показ спиннера для диалогов
   const [$loadingDialog, $loadingDialogSet] = useState(false);
   // для показа ошибки запроса данных
@@ -94,19 +62,14 @@ const MsscListFCC = ({
     return new ListSelectingModelCls();
   });
   const [$refresh, $refreshSet] = useState(false);
-  // ---
   // id выбранной в настоящее время сортировки
   const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(
     sortData?.selectedId
   );
   // текст введённый в поле поиска
   const [$searchText, $searchTextSet] = useState("");
+  // вкл/выкл рандом-режим
   const [$randomEnabled, $randomEnabledSet] = useState(false);
-  // --- теги (мультивыбор)
-  // все *группы-тегов
-  const [$tagGroupArr, $tagGroupArrSet] = useState<MsscTagGroupElemsPlusType[]>(
-    []
-  );
   // информация о выбранных-тегах каждой *т-группы
   const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
     MsscTagGroupElemsType[]
@@ -122,27 +85,20 @@ const MsscListFCC = ({
     }, 2000);
   };
 
-  const filters: MsscFilterType[] = useFilters({
-    source,
-    tagGroupSelectedArr: $tagGroupSelectedArr,
-    searchText: $searchText,
-    isTagsExist: !loIsEmpty(tagsFieldNameArr),
-  });
-
-  const reqResult = useGetData({
+  const getDataResult = useGetData({
     enabled: true,
     source,
     tagGroupSelectedArr: $tagGroupSelectedArr,
     randomEnabled: $randomEnabled,
     sortIdCurr: $sortIdCurr,
     tagsFieldNameArr,
-    filters,
     $sortIdCurr,
     sortData,
-    $pageNumCurrent,
+    pageNumCurrent: $pageNumCurrent,
     $randomEnabled,
+    $searchText,
   });
-  console.log("!!-!!-!! reqResult {230114121219}\n", reqResult); // del+
+  console.log("!!-!!-!! getDataResult {230114121219}\n", getDataResult); // del+
 
   const {
     countByFilter,
@@ -150,31 +106,29 @@ const MsscListFCC = ({
     pageCount,
     tags,
     firstRefetch,
-    twoRefetch,
-    isDone,
     elemsResult,
     firstIsDone,
     twoIsDone,
-  } = reqResult;
+    twoIsError,
+    toDetailRefetch,
+  } = getDataResult;
 
   useEffect(() => {
-    if (isDone) {
-      $tagGroupArrSet(tags);
-      $elemsSet(elemsResult);
-      $elemsCountAllSet(countAll);
-      $pageCountAllSet(pageCount);
-      $elemsCountByFilterSet(countByFilter);
-      $isLoadingInitialSet(!firstIsDone);
-      $isLoadingPageSet(firstIsDone && !twoIsDone);
+    if (twoIsError) {
+      $pageNumBeforChangeSet($pageNumBeforChange);
     }
-  }, [isDone]);
+  }, [twoIsError]);
+
+  // для показа спиннера при полной загрузке
+  const isLoadingWhole = !firstIsDone;
+  // для показа спиннера при запросе данных страницы (пагинация страниц)
+  const isLoadingPage = firstIsDone && !twoIsDone;
+  // сколько отображается элементов сейчас на текущей странице
+  const elemsCountOnCurrPage = elemsResult.length;
 
   // ---
 
   const refreshes: MsscRefreshesType = {
-    pageDataRefresh: () => {
-      twoRefetch();
-    },
     /**
      * Выполнение полного перезапроса всех данных
      *
@@ -264,6 +218,7 @@ const MsscListFCC = ({
   };
 
   function ButtonDiceLocalFCC() {
+    // TODO вынести
     const fnColorsForRandom = () => {
       if (!$randomEnabled) {
         return new ColorsCls();
@@ -292,19 +247,19 @@ const MsscListFCC = ({
 
   const paginatorJsx = (
     <MsscPaginator
-      refreshes={refreshes}
-      $loadingPage={$isLoadingPage}
+      $loadingPage={isLoadingPage}
       $pageNumBeforChangeSet={$pageNumBeforChangeSet}
-      $pageCountAll={$pageCountAll}
+      $pageCountAll={pageCount}
       $pageNumCurrent={$pageNumCurrent}
       $pageNumCurrentSet={$pageNumCurrentSet}
+      toDetailRefetch={toDetailRefetch}
     />
   );
 
   const mainListObj: MsscListElemPropsBaseType = {
     listModel: $listModel,
     dialogDeleteShow: handleDialogDeleteShow,
-    elems: $elems,
+    elems: elemsResult,
     dialogCreateEditJsxSet: $dialogCreateEditJsxSet,
     dialogCreateOrEdit: source?.dialogCreateOrEdit,
     dialogCreateEditCallbacks,
@@ -316,9 +271,9 @@ const MsscListFCC = ({
   const childrenBlock: MsscJsxExternalType = {
     infosJsx: (
       <MsscInfos
-        $elemsCountByFilter={$elemsCountByFilter}
-        $elemsCountOnCurrPage={$elemsCountOnCurrPage}
-        elemsAll={$elemsCountAll === -1 ? "-" : `${$elemsCountAll}`}
+        $elemsCountByFilter={countByFilter}
+        $elemsCountOnCurrPage={elemsCountOnCurrPage}
+        elemsAll={countAll === -1 ? "-" : `${countAll}`}
         elemsCountSelected={$listModel.selectElemsCount()}
       />
     ),
@@ -347,7 +302,7 @@ const MsscListFCC = ({
           iconsConf={MSSC_SETTINGS.iconsConf}
         />
       ),
-      btnDice: <ButtonDiceLocalFCC/>,
+      btnDice: <ButtonDiceLocalFCC />,
     },
     sortJsx: (
       <MsscSort
@@ -368,7 +323,7 @@ const MsscListFCC = ({
       <MsscList
         scrollTop={scrollTop}
         listAreaHeight={listAreaHeight}
-        $isLoadingPage={$isLoadingPage}
+        isLoadingPage={isLoadingPage}
         mainList={mainListObj}
       />
     ),
@@ -376,9 +331,9 @@ const MsscListFCC = ({
       <MsscMultiselect
         key={elTagGroup.id}
         tagsGroupId={elTagGroup.id}
-        $tagGroupSelectedArr={$tagGroupSelectedArr}
-        $tagGroupSelectedArrSet={$tagGroupSelectedArrSet}
-        $tagGroupArr={$tagGroupArr}
+        tagGroupSelectedArr={$tagGroupSelectedArr}
+        tagGroupSelectedArrSet={$tagGroupSelectedArrSet}
+        tagGroupArr={tags}
         refreshes={refreshes}
       />
     )),
@@ -389,7 +344,7 @@ const MsscListFCC = ({
     <div className="mssc-base">
       {$isError ? <div className="mssc-base__error">ошибка</div> : null}
       {source ? "" : <div>MsscListFCC-info: source is empty</div>}
-      {!$isLoadingInitial && children?.(childrenBlock)}
+      {!isLoadingWhole && children?.(childrenBlock)}
       {/* // --- dialog delete */}
       <MsscDialogDelete
         listModel={$listModel}
@@ -406,7 +361,7 @@ const MsscListFCC = ({
       {/* // --- dialog create/edit */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
       {/* // --- spinner */}
-      <BrSpinner show={$isLoadingInitial || $loadingDialog}/>
+      <BrSpinner show={isLoadingWhole || $loadingDialog} />
     </div>
   );
 };

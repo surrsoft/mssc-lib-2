@@ -1,30 +1,30 @@
-import React from 'react';
+import React from "react";
 
-import { MsscRefreshesType } from '../../types/types/MsscRefreshesType';
-import MsscPaginatorSub from './components/MsscPaginatorSub';
+import { MsscDetailRefetchType } from "../../hooks/useGetData";
+import { MsscReqModeEnum } from "../../types/enums/MsscReqModeEnum";
+import MsscPaginatorSub from "./components/MsscPaginatorSub";
 
 export interface PropsType {
-  $pageNumBeforChangeSet: any
-  $pageNumCurrent: number
-  $pageNumCurrentSet: any
-  refreshes: MsscRefreshesType
-  $pageCountAll: number
-  $loadingPage: boolean
+  $pageNumBeforChangeSet: any;
+  $pageNumCurrent: number;
+  $pageNumCurrentSet: any;
+  $pageCountAll: number;
+  $loadingPage: boolean;
+  toDetailRefetch: ({ pageNumNew, reqMode }: MsscDetailRefetchType) => void;
 }
 
 export function MsscPaginator({
-                                    $pageNumBeforChangeSet,
-                                    $pageNumCurrent,
-                                    $pageNumCurrentSet,
-                                    refreshes,
-                                    $pageCountAll,
-                                    $loadingPage,
-                                  }: PropsType) {
-
+  $pageNumBeforChangeSet,
+  $pageNumCurrent,
+  $pageNumCurrentSet,
+  $pageCountAll,
+  $loadingPage,
+  toDetailRefetch,
+}: PropsType) {
   async function fnPaginationHandle(nextPage: number) {
-    $pageNumBeforChangeSet($pageNumCurrent)
-    $pageNumCurrentSet(nextPage)
-    refreshes.pageDataRefresh()
+    $pageNumBeforChangeSet($pageNumCurrent);
+    $pageNumCurrentSet(nextPage);
+    toDetailRefetch({ pageNumNew: nextPage, reqMode: MsscReqModeEnum.DETAIL });
   }
 
   return (
@@ -36,5 +36,5 @@ export function MsscPaginator({
         disabled={$loadingPage}
       />
     </div>
-  )
+  );
 }
