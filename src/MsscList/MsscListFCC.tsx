@@ -165,7 +165,7 @@ const MsscListFCC = ({
       $pageCountAllSet(pageCount);
       $elemsCountByFilterSet(countByFilter);
       $isLoadingInitialSet(!firstIsDone);
-      $isLoadingPageSet(!twoIsDone);
+      $isLoadingPageSet(firstIsDone && !twoIsDone);
     }
   }, [isDone]);
 
