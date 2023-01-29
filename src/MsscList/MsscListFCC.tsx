@@ -23,6 +23,7 @@ import { MsscSearch } from "./msscComponents/MsscSearch";
 import { MsscSort } from "./msscComponents/MsscSort";
 import { MsscListAreaHeightCls } from "./msscUtils/MsscListAreaHeightCls";
 import { MSSC_SETTINGS } from "./settings";
+import { MsscReqModeEnum } from "./types/enums/MsscReqModeEnum";
 import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreateEditCallbacksType";
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
@@ -61,7 +62,8 @@ const MsscListFCC = ({
   const [$listModel] = useState(() => {
     return new ListSelectingModelCls();
   });
-  const [$refresh, $refreshSet] = useState(false);
+  // триггер для инициации преерендера компонента
+  const [$toRerender, $toRerenderSet] = useState(false);
   // id выбранной в настоящее время сортировки
   const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(
     sortData?.selectedId
@@ -105,19 +107,22 @@ const MsscListFCC = ({
     countAll,
     pageCount,
     tags,
-    firstRefetch,
     elemsResult,
     firstIsDone,
     twoIsDone,
     twoIsError,
     toDetailRefetch,
+    toWholeRefetch,
+    reqMode,
   } = getDataResult;
+  console.log("!!-!!-!!  reqMode {230129103426}\n", reqMode); // del+
 
   useEffect(() => {
-    if (twoIsError) {
+    if (twoIsError && reqMode === MsscReqModeEnum.DETAIL) {
+      // если получить данные "деталки" не удалось, возвращаемся к последнему номеру страницы
       $pageNumBeforChangeSet($pageNumBeforChange);
     }
-  }, [twoIsError]);
+  }, [twoIsError, reqMode]);
 
   // для показа спиннера при полной загрузке
   const isLoadingWhole = !firstIsDone;
@@ -129,19 +134,13 @@ const MsscListFCC = ({
   // ---
 
   const refreshes: MsscRefreshesType = {
-    /**
-     * Выполнение полного перезапроса всех данных
-     *
-     * СМ, ТАКЖЕ {@link refresh}
-     */
+    /** Выполнение полного перезапроса всех данных */
     whole: () => {
-      firstRefetch();
+      toWholeRefetch({ reqMode: MsscReqModeEnum.WHOLE });
     },
-    /**
-     * Только инициация перерендеринга
-     */
-    refreshPage: () => {
-      $refreshSet(!$refresh);
+    /** Только инициация перерендеринга */
+    toRerenderPage: () => {
+      $toRerenderSet(!$toRerender);
     },
   };
 
@@ -247,11 +246,11 @@ const MsscListFCC = ({
 
   const paginatorJsx = (
     <MsscPaginator
-      $loadingPage={isLoadingPage}
-      $pageNumBeforChangeSet={$pageNumBeforChangeSet}
-      $pageCountAll={pageCount}
-      $pageNumCurrent={$pageNumCurrent}
-      $pageNumCurrentSet={$pageNumCurrentSet}
+      loadingPage={isLoadingPage}
+      pageNumBeforChangeSet={$pageNumBeforChangeSet}
+      pageCountAll={pageCount}
+      pageNumCurrent={$pageNumCurrent}
+      pageNumCurrentSet={$pageNumCurrentSet}
       toDetailRefetch={toDetailRefetch}
     />
   );

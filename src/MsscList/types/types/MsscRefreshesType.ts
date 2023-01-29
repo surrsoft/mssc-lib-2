@@ -1,4 +1,4 @@
 export interface MsscRefreshesType {
-  refreshPage: () => void;
+  toRerenderPage: () => void;
   whole: () => void
 }

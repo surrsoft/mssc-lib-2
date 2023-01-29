@@ -40,7 +40,7 @@ export function MsscListElem({
           listModel.selectElemsClear();
           listModel.selectElemsAdd([obj.idElem]);
           listModel.activeIdSet(obj.idElem);
-          refreshes.refreshPage();
+          refreshes.toRerenderPage();
         }
         dialogDeleteShow();
         break;
@@ -48,7 +48,7 @@ export function MsscListElem({
         if (obj.idElem) {
           listModel.selectElemsAdd([obj.idElem]);
           listModel.activeIdSet(obj.idElem);
-          refreshes.refreshPage();
+          refreshes.toRerenderPage();
         }
         break;
       case MsscMenuActionEnum.EDIT:
@@ -86,7 +86,7 @@ export function MsscListElem({
       listModel.selectElemsDelete([id]);
       listModel.activeIdSet(id);
     }
-    refreshes.refreshPage();
+    refreshes.toRerenderPage();
   };
 
   const containerCn = classNames("mssc-list-elem", {

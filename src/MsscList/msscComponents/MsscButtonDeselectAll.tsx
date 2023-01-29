@@ -18,7 +18,7 @@ export function MsscButtonDeselectAll({
 }: PropsType) {
   const deselectAllHandler = () => {
     listModel.selectElemsClear();
-    refreshes.refreshPage();
+    refreshes.toRerenderPage();
   };
   return (
     <button

@@ -1,21 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import loIsEmpty from "lodash/isEmpty";
 import loShuffle from "lodash/shuffle";
-import { useCallback } from "react";
-import {
-  RsuvPaginationGyth,
-  RsuvTxNumIntAB,
-  RsuvTxNumIntDiap,
-  RsuvTxSort,
-} from "rsuv-lib";
+import { useCallback, useState } from "react";
+import { RsuvPaginationGyth, RsuvTxNumIntAB, RsuvTxNumIntDiap, RsuvTxSort, } from "rsuv-lib";
 
 import { rqQueryHandle } from "../common/rqQueryHandle";
-import {
-  BrSelectIdType,
-  BrSelectSortDataType,
-} from "../commonUI/BrSelect/types";
+import { BrSelectIdType, BrSelectSortDataType, } from "../commonUI/BrSelect/types";
 import { hxhgQueryConfigs } from "../hxhg-lib/hxhgQueryConfigs";
 import { msscElemsCountByFilterAndIf } from "../msscUtils/msscElemsCountByFilterAndIf";
+import { LOG_TAG, msscLogger } from '../msscUtils/msscLogger';
 import { msscSortsCreate } from "../msscUtils/msscSortsCreate";
 import { msscTagsCookAndSet } from "../msscUtils/msscTagsCookAndSet";
 import { MSSC_SETTINGS } from "../settings";
@@ -50,10 +43,21 @@ const shuffleUtils = {
   },
 };
 
-export interface MsscDetailRefetchType {
+export interface MsscDetailRefetchParamsType {
   pageNumNew: number;
   reqMode: MsscReqModeEnum;
 }
+
+export type MsscDetailRefetchType = ({
+  pageNumNew,
+  reqMode,
+}: MsscDetailRefetchParamsType) => void;
+
+export interface MsscWholeRefetchParamsType {
+  reqMode: MsscReqModeEnum;
+}
+
+export type MsscWholeRefetchType = ({ reqMode }: MsscWholeRefetchParamsType) => void;
 
 interface FirstResultType {
   countAll: number;
@@ -65,8 +69,6 @@ interface FirstResultType {
 
 interface ResultMainType {
   isDone: boolean;
-  firstRefetch: any;
-  twoRefetch: any;
   elemsResult: MsscElemType[];
   /** общее кол-во элементов в хранилище, то есть без учёта каких-либо фильтров */
   countAll: number;
@@ -80,7 +82,8 @@ interface ResultMainType {
   firstIsError: boolean;
   twoIsError: boolean;
   reqMode: MsscReqModeEnum;
-  toDetailRefetch: ({ pageNumNew, reqMode }: MsscDetailRefetchType) => void;
+  toDetailRefetch: MsscDetailRefetchType;
+  toWholeRefetch: MsscWholeRefetchType;
 }
 
 interface ParamsType {
@@ -97,9 +100,6 @@ interface ParamsType {
   $searchText: string;
 }
 
-let reqModeCurr = MsscReqModeEnum.UNDEF;
-let pageNumCurr = 1;
-
 export function useGetData({
   enabled,
   source,
@@ -113,6 +113,9 @@ export function useGetData({
   $randomEnabled = false,
   $searchText,
 }: ParamsType): ResultMainType {
+  const [$reqMode, $reqModeSet] = useState<MsscReqModeEnum>(MsscReqModeEnum.UNDEF);
+  const [$pageNum, $pageNumSet] = useState(1);
+
   const filters: MsscFilterType[] = useFilters({
     source,
     tagGroupSelectedArr,
@@ -125,6 +128,7 @@ export function useGetData({
   const firstResult = useQuery<unknown, unknown, FirstResultType>(
     ["request-whole"],
     async () => {
+      msscLogger.info(LOG_TAG, 'whole request')
       // ---
       const countAllGetPromise = source?.elemsCountByFilter([]);
       // ---
@@ -217,9 +221,9 @@ export function useGetData({
   // --- --- req two
 
   const twoResult = useQuery(
-    ["request-detail", `pageNum=${pageNumCurr}`],
+    ["request-detail", `pageNum=[${$pageNum}]`],
     async ({ queryKey }) => {
-      console.log("!!-!!-!! 1155- queryKey {230128115706}\n", queryKey); // del+
+      msscLogger.info(LOG_TAG, `whole request; queryKey [${queryKey.toString()}]`)
       let elemsResult: MsscElemType[] = [];
       // --- pagination - ixStart, ixEnd
       const pagination = new RsuvPaginationGyth(
@@ -263,18 +267,23 @@ export function useGetData({
 
   // === === req two
 
-  const toDetailRefetch = useCallback(
-    ({ pageNumNew, reqMode }: MsscDetailRefetchType) => {
-      pageNumCurr = pageNumNew;
-      reqModeCurr = reqMode;
-      twoRefetch();
+  const toDetailRefetch: MsscDetailRefetchType = useCallback(
+    ({ pageNumNew, reqMode }: MsscDetailRefetchParamsType) => {
+      $reqModeSet(reqMode)
+      $pageNumSet(pageNumNew)
     },
-    [twoRefetch]
+    []
+  );
+
+  const toWholeRefetch: MsscWholeRefetchType = useCallback(
+    ({ reqMode }: MsscWholeRefetchParamsType) => {
+      $reqModeSet(reqMode)
+      firstRefetch();
+    },
+    [firstRefetch]
   );
 
   return {
-    firstRefetch,
-    twoRefetch,
     isDone: firstIsDone && twoIsDone,
     elemsResult,
     countAll,
@@ -285,7 +294,8 @@ export function useGetData({
     twoIsDone,
     firstIsError,
     twoIsError,
-    reqMode: reqModeCurr,
+    reqMode: $reqMode,
     toDetailRefetch,
+    toWholeRefetch
   };
 }
