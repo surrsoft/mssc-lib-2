@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RsuvEnResultCrudSet } from "rsuv-lib";
 import { useScrollFix } from "ueur-lib";
 
@@ -10,6 +10,7 @@ import { BrSelectIdType } from "./commonUI/BrSelect/types";
 import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
 import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
 import { useGetData } from "./hooks/useGetData";
+import { useDebounce } from "./libs/usehooks-ts/useDebounce";
 import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
 import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
 import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
@@ -33,18 +34,21 @@ import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 const scrollTop = 0;
 
 const MsscListFCC = ({
-                       source,
-                       sortData,
-                       children,
-                       listElemStruct,
-                       tagsFieldNameArr,
-                       listAreaHeight = new MsscListAreaHeightCls(),
-                     }: MsscListPropsType): JSX.Element => {
+  source,
+  sortData,
+  children,
+  listElemStruct,
+  tagsFieldNameArr,
+  listAreaHeight = new MsscListAreaHeightCls(),
+}: MsscListPropsType): JSX.Element => {
   nxxTemp();
 
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
-  const [$reqMode, $reqModeSet] = useState<MsscReqModeEnum>(MsscReqModeEnum.UNDEF);
+  //
+  const [$reqMode, $reqModeSet] = useState<MsscReqModeEnum>(
+    MsscReqModeEnum.UNDEF
+  );
   // номер страницы который был перед тем как изменить его на новый
   const [$pageNumBeforChange, $pageNumBeforChangeSet] = useState(1);
   // показ спиннера для диалогов
@@ -63,7 +67,7 @@ const MsscListFCC = ({
   const [$listModel] = useState(() => {
     return new ListSelectingModelCls();
   });
-  // триггер для инициации преерендера компонента
+  // триггер для инициации пререндера компонента
   const [$toRerender, $toRerenderSet] = useState(false);
   // id выбранной в настоящее время сортировки
   const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(
@@ -95,10 +99,8 @@ const MsscListFCC = ({
     randomEnabled: $randomEnabled,
     sortIdCurr: $sortIdCurr,
     tagsFieldNameArr,
-    $sortIdCurr,
     sortData,
     pageNumCurrent: $pageNumCurrent,
-    $randomEnabled,
     $searchText,
   });
   console.log("!!-!!-!! getDataResult {230114121219}\n", getDataResult); // del+
@@ -134,7 +136,8 @@ const MsscListFCC = ({
   const refreshes: MsscRefreshesType = {
     /** Выполнение полного перезапроса всех данных */
     whole: () => {
-      toWholeRefetch({ reqMode: MsscReqModeEnum.WHOLE });
+      $reqModeSet(MsscReqModeEnum.WHOLE);
+      toWholeRefetch();
     },
     /** Только инициация перерендеринга */
     toRerenderPage: () => {
@@ -244,7 +247,7 @@ const MsscListFCC = ({
 
   const paginatorJsx = (
     <MsscPaginator
-      loadingPage={isLoadingPage}
+      isDisable={isLoadingPage}
       pageCountAll={pageCount}
       pageNumCurrent={$pageNumCurrent}
       pageNumBeforChangeSet={$pageNumBeforChangeSet}
@@ -299,7 +302,7 @@ const MsscListFCC = ({
           iconsConf={MSSC_SETTINGS.iconsConf}
         />
       ),
-      btnDice: <ButtonDiceLocalFCC/>,
+      btnDice: <ButtonDiceLocalFCC />,
     },
     sortJsx: (
       <MsscSort
@@ -358,7 +361,7 @@ const MsscListFCC = ({
       {/* // --- dialog create/edit */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
       {/* // --- spinner */}
-      <BrSpinner show={isLoadingWhole || $loadingDialog}/>
+      <BrSpinner show={isLoadingWhole || $loadingDialog} />
     </div>
   );
 };

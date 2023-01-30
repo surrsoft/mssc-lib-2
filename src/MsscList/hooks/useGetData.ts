@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import loIsEmpty from "lodash/isEmpty";
 import loShuffle from "lodash/shuffle";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { RsuvPaginationGyth, RsuvTxNumIntAB, RsuvTxNumIntDiap, RsuvTxSort, } from "rsuv-lib";
 
 import { rqQueryHandle } from "../common/rqQueryHandle";
 import { BrSelectIdType, BrSelectSortDataType, } from "../commonUI/BrSelect/types";
-import { hxhgQueryConfigs } from "../hxhg-lib/hxhgQueryConfigs";
+import { hxhgQueryConfigs } from "../libs/hxhg-lib/hxhgQueryConfigs";
+import { hxhgWaitMin } from '../libs/hxhg-lib/hxhgWaitMin';
 import { msscElemsCountByFilterAndIf } from "../msscUtils/msscElemsCountByFilterAndIf";
-import { LOG_TAG, msscLogger } from '../msscUtils/msscLogger';
+import { LOG_TAG, msscLogger } from "../msscUtils/msscLogger";
 import { msscSortsCreate } from "../msscUtils/msscSortsCreate";
 import { msscTagsCookAndSet } from "../msscUtils/msscTagsCookAndSet";
 import { MSSC_SETTINGS } from "../settings";
@@ -43,22 +44,6 @@ const shuffleUtils = {
   },
 };
 
-export interface MsscDetailRefetchParamsType {
-  pageNumNew: number;
-  reqMode: MsscReqModeEnum;
-}
-
-export type MsscDetailRefetchType = ({
-                                       pageNumNew,
-                                       reqMode,
-                                     }: MsscDetailRefetchParamsType) => void;
-
-export interface MsscWholeRefetchParamsType {
-  reqMode: MsscReqModeEnum;
-}
-
-export type MsscWholeRefetchType = ({ reqMode }: MsscWholeRefetchParamsType) => void;
-
 interface FirstResultType {
   countAll: number;
   countByFilter: number;
@@ -81,7 +66,7 @@ interface ResultMainType {
   twoIsDone: boolean;
   firstIsError: boolean;
   twoIsError: boolean;
-  toWholeRefetch: MsscWholeRefetchType;
+  toWholeRefetch: () => void;
 }
 
 interface ParamsType {
@@ -93,25 +78,20 @@ interface ParamsType {
   tagsFieldNameArr?: MsscTagGroupType[];
   pageNumCurrent: number;
   sortData?: BrSelectSortDataType<MsscColumnNameType>;
-  $sortIdCurr?: BrSelectIdType;
-  $randomEnabled?: boolean;
   $searchText: string;
 }
 
 export function useGetData({
-                             enabled,
-                             source,
-                             tagGroupSelectedArr,
-                             randomEnabled = false,
-                             sortIdCurr,
-                             tagsFieldNameArr,
-                             pageNumCurrent,
-                             sortData,
-                             $sortIdCurr,
-                             $randomEnabled = false,
-                             $searchText,
-                           }: ParamsType): ResultMainType {
-
+  enabled,
+  source,
+  tagGroupSelectedArr,
+  randomEnabled = false,
+  sortIdCurr,
+  tagsFieldNameArr,
+  pageNumCurrent,
+  sortData,
+  $searchText,
+}: ParamsType): ResultMainType {
   const filters: MsscFilterType[] = useFilters({
     source,
     tagGroupSelectedArr,
@@ -124,7 +104,7 @@ export function useGetData({
   const firstResult = useQuery<unknown, unknown, FirstResultType>(
     ["request-whole"],
     async () => {
-      msscLogger.info(LOG_TAG, 'whole request')
+      msscLogger.info(LOG_TAG, "whole request");
       // ---
       const countAllGetPromise = source?.elemsCountByFilter([]);
       // ---
@@ -165,7 +145,7 @@ export function useGetData({
       const result = (await Promise.all(promises)) as [
         RsuvTxNumIntAB,
         MsscElemsCountReturnType,
-          MsscTagGroupElemsPlusType[] | null
+        MsscTagGroupElemsPlusType[] | null
       ];
       console.log("!!-!!-!!  result {230121120932}\n", result); // del+
       // ---
@@ -219,7 +199,11 @@ export function useGetData({
   const twoResult = useQuery(
     ["request-detail", `pageNum=[${pageNumCurrent}]`],
     async ({ queryKey }) => {
-      msscLogger.info(LOG_TAG, `whole request; queryKey [${queryKey.toString()}]`)
+      const timeStart = Date.now();
+      msscLogger.info(
+        LOG_TAG,
+        `whole request; queryKey [${queryKey.toString()}]`
+      );
       let elemsResult: MsscElemType[] = [];
       // --- pagination - ixStart, ixEnd
       const pagination = new RsuvPaginationGyth(
@@ -235,8 +219,8 @@ export function useGetData({
       const ixStart = indexes.indexStart;
       const ixEnd = indexes.indexLast;
       // сортировка
-      const sorts: RsuvTxSort[] = msscSortsCreate(sortData, $sortIdCurr);
-      if (!$randomEnabled) {
+      const sorts: RsuvTxSort[] = msscSortsCreate(sortData, sortIdCurr);
+      if (!randomEnabled) {
         elemsResult =
           (await source?.elems(
             new RsuvTxNumIntDiap(
@@ -254,21 +238,20 @@ export function useGetData({
           (el: MsscElemType | null) => el !== null
         ) as MsscElemType[];
       }
+      await hxhgWaitMin(500, timeStart)
       return elemsResult;
     },
     { enabled: firstIsDone, ...hxhgQueryConfigs }
   );
   const { data: elemsResult = [] } = twoResult;
-  const { isDone: twoIsDone, isError: twoIsError } = rqQueryHandle(firstResult);
+  const { isDone: twoIsDone, isError: twoIsError } = rqQueryHandle(twoResult);
 
+  console.log('!!-!!-!!  twoIsDone {230130212727}\n', twoIsDone); // del+
   // === === req two
 
-  const toWholeRefetch: MsscWholeRefetchType = useCallback(
-    ({ reqMode }: MsscWholeRefetchParamsType) => {
-      wholeRefetch();
-    },
-    [wholeRefetch]
-  );
+  const toWholeRefetch = useCallback(() => {
+    wholeRefetch();
+  }, [wholeRefetch]);
 
   return {
     isDone: firstIsDone && twoIsDone,
@@ -281,6 +264,6 @@ export function useGetData({
     twoIsDone,
     firstIsError,
     twoIsError,
-    toWholeRefetch
+    toWholeRefetch,
   };
 }

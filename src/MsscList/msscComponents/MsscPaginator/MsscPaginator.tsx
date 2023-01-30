@@ -8,21 +8,21 @@ export interface PropsType {
   pageNumCurrent: number;
   pageNumCurrentSet: any;
   pageCountAll: number;
-  loadingPage: boolean;
+  isDisable: boolean;
   reqModeSet: Dispatch<SetStateAction<MsscReqModeEnum>>;
 }
 
 export function MsscPaginator({
-                                pageNumBeforChangeSet,
-                                pageNumCurrent,
-                                pageNumCurrentSet,
-                                pageCountAll,
-                                loadingPage,
-                                reqModeSet
-                              }: PropsType) {
+  pageNumBeforChangeSet,
+  pageNumCurrent,
+  pageNumCurrentSet,
+  pageCountAll,
+  isDisable,
+  reqModeSet,
+}: PropsType) {
   async function fnPaginationHandle(nextPage: number) {
     pageNumBeforChangeSet(pageNumCurrent);
-    reqModeSet(MsscReqModeEnum.DETAIL)
+    reqModeSet(MsscReqModeEnum.DETAIL);
     pageNumCurrentSet(nextPage);
   }
 
@@ -32,7 +32,7 @@ export function MsscPaginator({
         pageCurrNum={pageNumCurrent}
         pageAllCountNum={pageCountAll}
         cbChange={fnPaginationHandle}
-        disabled={loadingPage}
+        disabled={isDisable}
       />
     </div>
   );
