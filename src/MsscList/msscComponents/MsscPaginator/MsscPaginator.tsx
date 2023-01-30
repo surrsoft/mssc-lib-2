@@ -1,6 +1,5 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
-import { MsscDetailRefetchType } from "../../hooks/useGetData";
 import { MsscReqModeEnum } from "../../types/enums/MsscReqModeEnum";
 import MsscPaginatorSub from "./components/MsscPaginatorSub";
 
@@ -10,21 +9,21 @@ export interface PropsType {
   pageNumCurrentSet: any;
   pageCountAll: number;
   loadingPage: boolean;
-  toDetailRefetch: MsscDetailRefetchType;
+  reqModeSet: Dispatch<SetStateAction<MsscReqModeEnum>>;
 }
 
 export function MsscPaginator({
-  pageNumBeforChangeSet,
-  pageNumCurrent,
-  pageNumCurrentSet,
-  pageCountAll,
-  loadingPage,
-  toDetailRefetch,
-}: PropsType) {
+                                pageNumBeforChangeSet,
+                                pageNumCurrent,
+                                pageNumCurrentSet,
+                                pageCountAll,
+                                loadingPage,
+                                reqModeSet
+                              }: PropsType) {
   async function fnPaginationHandle(nextPage: number) {
     pageNumBeforChangeSet(pageNumCurrent);
+    reqModeSet(MsscReqModeEnum.DETAIL)
     pageNumCurrentSet(nextPage);
-    toDetailRefetch({ pageNumNew: nextPage, reqMode: MsscReqModeEnum.DETAIL });
   }
 
   return (

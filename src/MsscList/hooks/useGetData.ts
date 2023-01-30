@@ -49,9 +49,9 @@ export interface MsscDetailRefetchParamsType {
 }
 
 export type MsscDetailRefetchType = ({
-  pageNumNew,
-  reqMode,
-}: MsscDetailRefetchParamsType) => void;
+                                       pageNumNew,
+                                       reqMode,
+                                     }: MsscDetailRefetchParamsType) => void;
 
 export interface MsscWholeRefetchParamsType {
   reqMode: MsscReqModeEnum;
@@ -81,8 +81,6 @@ interface ResultMainType {
   twoIsDone: boolean;
   firstIsError: boolean;
   twoIsError: boolean;
-  reqMode: MsscReqModeEnum;
-  toDetailRefetch: MsscDetailRefetchType;
   toWholeRefetch: MsscWholeRefetchType;
 }
 
@@ -101,20 +99,18 @@ interface ParamsType {
 }
 
 export function useGetData({
-  enabled,
-  source,
-  tagGroupSelectedArr,
-  randomEnabled = false,
-  sortIdCurr,
-  tagsFieldNameArr,
-  pageNumCurrent,
-  sortData,
-  $sortIdCurr,
-  $randomEnabled = false,
-  $searchText,
-}: ParamsType): ResultMainType {
-  const [$reqMode, $reqModeSet] = useState<MsscReqModeEnum>(MsscReqModeEnum.UNDEF);
-  const [$pageNum, $pageNumSet] = useState(1);
+                             enabled,
+                             source,
+                             tagGroupSelectedArr,
+                             randomEnabled = false,
+                             sortIdCurr,
+                             tagsFieldNameArr,
+                             pageNumCurrent,
+                             sortData,
+                             $sortIdCurr,
+                             $randomEnabled = false,
+                             $searchText,
+                           }: ParamsType): ResultMainType {
 
   const filters: MsscFilterType[] = useFilters({
     source,
@@ -169,7 +165,7 @@ export function useGetData({
       const result = (await Promise.all(promises)) as [
         RsuvTxNumIntAB,
         MsscElemsCountReturnType,
-        MsscTagGroupElemsPlusType[] | null
+          MsscTagGroupElemsPlusType[] | null
       ];
       console.log("!!-!!-!!  result {230121120932}\n", result); // del+
       // ---
@@ -214,14 +210,14 @@ export function useGetData({
   const idsShiffled = firstResult.data?.idsShuffled ?? [];
   const pageCount = firstResult.data?.pageCount ?? 0;
 
-  const { refetch: firstRefetch } = firstResult;
+  const { refetch: wholeRefetch } = firstResult;
 
   // === === req first
 
   // --- --- req two
 
   const twoResult = useQuery(
-    ["request-detail", `pageNum=[${$pageNum}]`],
+    ["request-detail", `pageNum=[${pageNumCurrent}]`],
     async ({ queryKey }) => {
       msscLogger.info(LOG_TAG, `whole request; queryKey [${queryKey.toString()}]`)
       let elemsResult: MsscElemType[] = [];
@@ -262,25 +258,16 @@ export function useGetData({
     },
     { enabled: firstIsDone, ...hxhgQueryConfigs }
   );
-  const { refetch: twoRefetch, data: elemsResult = [] } = twoResult;
+  const { data: elemsResult = [] } = twoResult;
   const { isDone: twoIsDone, isError: twoIsError } = rqQueryHandle(firstResult);
 
   // === === req two
 
-  const toDetailRefetch: MsscDetailRefetchType = useCallback(
-    ({ pageNumNew, reqMode }: MsscDetailRefetchParamsType) => {
-      $reqModeSet(reqMode)
-      $pageNumSet(pageNumNew)
-    },
-    []
-  );
-
   const toWholeRefetch: MsscWholeRefetchType = useCallback(
     ({ reqMode }: MsscWholeRefetchParamsType) => {
-      $reqModeSet(reqMode)
-      firstRefetch();
+      wholeRefetch();
     },
-    [firstRefetch]
+    [wholeRefetch]
   );
 
   return {
@@ -294,8 +281,6 @@ export function useGetData({
     twoIsDone,
     firstIsError,
     twoIsError,
-    reqMode: $reqMode,
-    toDetailRefetch,
     toWholeRefetch
   };
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { RsuvEnResultCrudSet } from "rsuv-lib";
 import { useScrollFix } from "ueur-lib";
 
@@ -33,17 +33,18 @@ import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 const scrollTop = 0;
 
 const MsscListFCC = ({
-  source,
-  sortData,
-  children,
-  listElemStruct,
-  tagsFieldNameArr,
-  listAreaHeight = new MsscListAreaHeightCls(),
-}: MsscListPropsType): JSX.Element => {
+                       source,
+                       sortData,
+                       children,
+                       listElemStruct,
+                       tagsFieldNameArr,
+                       listAreaHeight = new MsscListAreaHeightCls(),
+                     }: MsscListPropsType): JSX.Element => {
   nxxTemp();
 
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
+  const [$reqMode, $reqModeSet] = useState<MsscReqModeEnum>(MsscReqModeEnum.UNDEF);
   // номер страницы который был перед тем как изменить его на новый
   const [$pageNumBeforChange, $pageNumBeforChangeSet] = useState(1);
   // показ спиннера для диалогов
@@ -111,18 +112,15 @@ const MsscListFCC = ({
     firstIsDone,
     twoIsDone,
     twoIsError,
-    toDetailRefetch,
     toWholeRefetch,
-    reqMode,
   } = getDataResult;
-  console.log("!!-!!-!!  reqMode {230129103426}\n", reqMode); // del+
 
   useEffect(() => {
-    if (twoIsError && reqMode === MsscReqModeEnum.DETAIL) {
+    if (twoIsError && $reqMode === MsscReqModeEnum.DETAIL) {
       // если получить данные "деталки" не удалось, возвращаемся к последнему номеру страницы
       $pageNumBeforChangeSet($pageNumBeforChange);
     }
-  }, [twoIsError, reqMode]);
+  }, [twoIsError, $reqMode]);
 
   // для показа спиннера при полной загрузке
   const isLoadingWhole = !firstIsDone;
@@ -247,11 +245,11 @@ const MsscListFCC = ({
   const paginatorJsx = (
     <MsscPaginator
       loadingPage={isLoadingPage}
-      pageNumBeforChangeSet={$pageNumBeforChangeSet}
       pageCountAll={pageCount}
       pageNumCurrent={$pageNumCurrent}
+      pageNumBeforChangeSet={$pageNumBeforChangeSet}
       pageNumCurrentSet={$pageNumCurrentSet}
-      toDetailRefetch={toDetailRefetch}
+      reqModeSet={$reqModeSet}
     />
   );
 
@@ -301,7 +299,7 @@ const MsscListFCC = ({
           iconsConf={MSSC_SETTINGS.iconsConf}
         />
       ),
-      btnDice: <ButtonDiceLocalFCC />,
+      btnDice: <ButtonDiceLocalFCC/>,
     },
     sortJsx: (
       <MsscSort
@@ -360,7 +358,7 @@ const MsscListFCC = ({
       {/* // --- dialog create/edit */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
       {/* // --- spinner */}
-      <BrSpinner show={isLoadingWhole || $loadingDialog} />
+      <BrSpinner show={isLoadingWhole || $loadingDialog}/>
     </div>
   );
 };
