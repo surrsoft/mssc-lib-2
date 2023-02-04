@@ -9,8 +9,6 @@ import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
 import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
 import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
-import { useGetData } from "./hooks/useGetData";
-import { useDebounce } from "./libs/usehooks-ts/useDebounce";
 import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
 import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
 import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
@@ -22,6 +20,7 @@ import { MsscMultiselect } from "./msscComponents/MsscMultiselect";
 import { MsscPaginator } from "./msscComponents/MsscPaginator/MsscPaginator";
 import { MsscSearch } from "./msscComponents/MsscSearch";
 import { MsscSort } from "./msscComponents/MsscSort";
+import { useMsscGetData } from "./msscHooks/useMsscGetData/useMsscGetData";
 import { MsscListAreaHeightCls } from "./msscUtils/MsscListAreaHeightCls";
 import { MSSC_SETTINGS } from "./settings";
 import { MsscReqModeEnum } from "./types/enums/MsscReqModeEnum";
@@ -46,9 +45,7 @@ const MsscListFCC = ({
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
   //
-  const [$reqMode, $reqModeSet] = useState<MsscReqModeEnum>(
-    MsscReqModeEnum.UNDEF
-  );
+  const [$reqMode, $reqModeSet] = useState<MsscReqModeEnum>(MsscReqModeEnum.UNDEF);
   // номер страницы который был перед тем как изменить его на новый
   const [$pageNumBeforChange, $pageNumBeforChangeSet] = useState(1);
   // показ спиннера для диалогов
@@ -59,10 +56,8 @@ const MsscListFCC = ({
   const [$isDialogDeleteShowed, $isDialogDeleteShowedSet] = useState(false);
   const [$dialogTitle, $dialogTitleSet] = useState("");
   const [$dialogBody, $dialogBodySet] = useState("");
-  const [$dialogCreateEditJsx, $dialogCreateEditJsxSet] =
-    useState<JSX.Element | null>(null);
-  const [$isDialogCreateEditShowed, $isDialogCreateEditShowedSet] =
-    useState(false);
+  const [$dialogCreateEditJsx, $dialogCreateEditJsxSet] = useState<JSX.Element | null>(null);
+  const [$isDialogCreateEditShowed, $isDialogCreateEditShowedSet] = useState(false);
   // ---
   const [$listModel] = useState(() => {
     return new ListSelectingModelCls();
@@ -70,17 +65,13 @@ const MsscListFCC = ({
   // триггер для инициации пререндера компонента
   const [$toRerender, $toRerenderSet] = useState(false);
   // id выбранной в настоящее время сортировки
-  const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(
-    sortData?.selectedId
-  );
+  const [$sortIdCurr, $sortIdCurrSet] = useState<BrSelectIdType | undefined>(sortData?.selectedId);
   // текст введённый в поле поиска
   const [$searchText, $searchTextSet] = useState("");
   // вкл/выкл рандом-режим
   const [$randomEnabled, $randomEnabledSet] = useState(false);
   // информация о выбранных-тегах каждой *т-группы
-  const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<
-    MsscTagGroupElemsType[]
-  >([]);
+  const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<MsscTagGroupElemsType[]>([]);
 
   // ---
   const scrollFixFn = useScrollFix($isDialogCreateEditShowed);
@@ -92,7 +83,7 @@ const MsscListFCC = ({
     }, 2000);
   };
 
-  const getDataResult = useGetData({
+  const getDataResult = useMsscGetData({
     enabled: true,
     source,
     tagGroupSelectedArr: $tagGroupSelectedArr,
@@ -238,7 +229,10 @@ const MsscListFCC = ({
     return (
       <button onClick={diceHandler} title="random">
         <SvgIconDice
-          svgProps={{ width: "20px", height: "20px" }}
+          svgProps={{
+            width: "20px",
+            height: "20px",
+          }}
           colors={fnColorsForRandom()}
         />
       </button>
@@ -313,11 +307,7 @@ const MsscListFCC = ({
       />
     ),
     searchJsx: (
-      <MsscSearch
-        searchText={$searchText}
-        searchTextSet={$searchTextSet}
-        refreshes={refreshes}
-      />
+      <MsscSearch searchText={$searchText} searchTextSet={$searchTextSet} refreshes={refreshes} />
     ),
     listJsx: (
       <MsscList

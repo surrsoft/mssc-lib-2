@@ -1,7 +1,7 @@
-import { msscFiltersCreate } from "../msscUtils/msscFiltersCreate";
-import { MsscSourceType } from "../types/MsscSourceType";
-import { MsscFilterType } from "../types/types/MsscFilterType";
-import { MsscTagGroupElemsType } from "../types/types/MsscTagGroupElemsType";
+import { msscFiltersCreate } from "../../../msscUtils/msscFiltersCreate";
+import { MsscSourceType } from "../../../types/MsscSourceType";
+import { MsscFilterType } from "../../../types/types/MsscFilterType";
+import { MsscTagGroupElemsType } from "../../../types/types/MsscTagGroupElemsType";
 
 interface ParamsType {
   source: MsscSourceType<any> | null;
@@ -10,7 +10,7 @@ interface ParamsType {
   tagGroupSelectedArr: MsscTagGroupElemsType[];
 }
 
-export function useFilters({
+export function useMsscFilters({
   source,
   tagGroupSelectedArr,
   searchText = "",

@@ -1,4 +1,4 @@
-/** режимы для хука {@link useGetData} */
+/** режимы для хука {@link useMsscGetData} */
 export enum MsscReqModeEnum {
   /** это в режим в котором сначала выполняется 'whole' useQuery() и следом 'detail' useQuery() */
   WHOLE = "WHOLE",
