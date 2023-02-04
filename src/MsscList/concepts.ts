@@ -9,7 +9,7 @@ export const umsscLIBu = "библиотека";
 export const umsscCOMPONENTu = "компонент";
 
 /**
- * *интерфейс - это ключевой интерфейс *библиотеки - {@link MsscSourceType}
+ * *интерфейс - это ключевой интерфейс *библиотеки - вот он {@link MsscSourceType}
  */
 export const umsscINTERFu = "интерфейс";
 
@@ -33,6 +33,8 @@ export const umsscCLIENTu = "клиент";
  * `Airtable API key` в переменной окружения `REACT_APP_AIRTABLE_KEY` вашего проекта,
  * например `REACT_APP_AIRTABLE_KEY=keyzbjKNgs51lb9D4` в вашем файле `.env.local`
  * - `AirSource` принимает в конструктор тип `AirSourceParams`
+ *
+ * ID [[230204200401]]
  */
 export const umsscSOURCEu = "источник";
 
@@ -47,3 +49,12 @@ export const umsscSOURCEu = "источник";
  * описывается типом {@link MsscTagGroupType}
  */
 export const umsscTAGGROUPu = "группа-тегов";
+
+/**
+ *
+ * ПОЛУЧЕНИЕ ДАННЫХ
+ * -- данные мы получаем с помощью хука {@link useMsscGetData}
+ *
+ *
+ */
+export const umsscREADMEu = 'readme';

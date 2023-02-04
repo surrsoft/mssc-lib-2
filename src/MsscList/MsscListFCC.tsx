@@ -83,15 +83,16 @@ const MsscListFCC = ({
     }, 2000);
   };
 
+  // --- получение данных
+
   const getDataResult = useMsscGetData({
-    enabled: true,
+    pageNumCurrent: $pageNumCurrent,
     source,
     tagGroupSelectedArr: $tagGroupSelectedArr,
     randomEnabled: $randomEnabled,
     sortIdCurr: $sortIdCurr,
     tagsFieldNameArr,
     sortData,
-    pageNumCurrent: $pageNumCurrent,
     $searchText,
   });
   console.log("!!-!!-!! getDataResult {230114121219}\n", getDataResult); // del+

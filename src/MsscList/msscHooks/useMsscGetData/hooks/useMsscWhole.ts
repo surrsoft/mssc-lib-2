@@ -45,7 +45,6 @@ interface ReturnWholeType {
 }
 
 interface ParamsType {
-  enabled: boolean;
   source: MsscSourceType<any> | null;
   tagGroupSelectedArr: MsscTagGroupElemsType[];
   randomEnabled?: boolean;
@@ -68,7 +67,6 @@ interface ParamsType {
  * @param filters
  */
 export function useMsscWhole({
-  enabled,
   source,
   tagGroupSelectedArr,
   randomEnabled = false,
@@ -155,7 +153,7 @@ export function useMsscWhole({
       };
       return ret;
     },
-    { enabled, ...hxhgQueryConfigs }
+    { ...hxhgQueryConfigs }
   );
 
   const { isDone: firstIsDone, isError: firstIsError } = rqQueryHandle(firstResult);

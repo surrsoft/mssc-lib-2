@@ -30,7 +30,6 @@ interface ResultMainType {
 }
 
 interface ParamsType {
-  enabled: boolean;
   source: MsscSourceType<any> | null;
   tagGroupSelectedArr: MsscTagGroupElemsType[];
   randomEnabled?: boolean;
@@ -42,13 +41,12 @@ interface ParamsType {
 }
 
 export function useMsscGetData({
-  enabled,
+  pageNumCurrent,
   source,
   tagGroupSelectedArr,
   randomEnabled = false,
   sortIdCurr,
   tagsFieldNameArr,
-  pageNumCurrent,
   sortData,
   $searchText,
 }: ParamsType): ResultMainType {
@@ -73,7 +71,6 @@ export function useMsscGetData({
     wrFirstIsError: firstIsError,
     wrToWholeRefetch: wholeRefetch,
   } = useMsscWhole({
-    enabled,
     source,
     $searchText,
     randomEnabled,
