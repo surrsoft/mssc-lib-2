@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { RsuvEnResultCrudSet } from "rsuv-lib";
 import { useScrollFix } from "ueur-lib";
 
@@ -28,6 +28,7 @@ import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreat
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
+import { MsscSourceElemsDeleteType } from "./types/types/MsscSourceElemsDeleteType";
 import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 
 const scrollTop = 0;
@@ -330,6 +331,12 @@ const MsscListFCC = ({
     )),
   };
 
+  const elemsDelete = useMemo(() => {
+    if (source) {
+      return source.elemsDelete.bind(source);
+    }
+  }, [source]);
+
   // ---
   return (
     <div className="mssc-base">
@@ -340,7 +347,7 @@ const MsscListFCC = ({
       <MsscDialogDelete
         listModel={$listModel}
         refreshes={refreshes}
-        elemsDelete={source?.elemsDelete}
+        elemsDelete={elemsDelete}
         dialogBody={$dialogBody}
         isDialogDeleteShowed={$isDialogDeleteShowed}
         isDialogDeleteShowedSet={$isDialogDeleteShowedSet}

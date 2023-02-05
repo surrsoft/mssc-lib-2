@@ -1,71 +1,77 @@
-import React from 'react';
+import React from "react";
 
-import { ListSelectingElemIdType, ListSelectingModelCls } from '../commonUtils/ListSelectingModelCls';
-import { MsscIdObjectType } from '../types/types/MsscIdObjectType';
-import { MsscRefreshesType } from '../types/types/MsscRefreshesType';
-import { MsscSourceElemsDeleteType } from '../types/types/MsscSourceElemsDeleteType';
-import MsscDialog from './MsscDialog/MsscDialog';
+import {
+  ListSelectingElemIdType,
+  ListSelectingModelCls,
+} from "../commonUtils/ListSelectingModelCls";
+import { MsscSourceType } from "../types/MsscSourceType";
+import { MsscIdObjectType } from "../types/types/MsscIdObjectType";
+import { MsscRefreshesType } from "../types/types/MsscRefreshesType";
+import { MsscSourceElemsDeleteType } from "../types/types/MsscSourceElemsDeleteType";
+import MsscDialog from "./MsscDialog/MsscDialog";
 
 export interface PropsType {
-  listModel: ListSelectingModelCls
-  isDialogDeleteShowedSet: any
-  loadingDialogSet: any
-  elemsDelete?: MsscSourceElemsDeleteType
-  fnError: () => void
-  refreshes: MsscRefreshesType
-  scrollFixFn: (isFix: boolean) => void
-  isDialogDeleteShowed: boolean
-  dialogTitle: string
-  dialogBody: string
+  listModel: ListSelectingModelCls;
+  isDialogDeleteShowedSet: any;
+  loadingDialogSet: any;
+  elemsDelete?: MsscSourceElemsDeleteType; // del+
+  fnError: () => void;
+  refreshes: MsscRefreshesType;
+  scrollFixFn: (isFix: boolean) => void;
+  isDialogDeleteShowed: boolean;
+  dialogTitle: string;
+  dialogBody: string;
 }
 
 export function MsscDialogDelete({
-                                       listModel,
-                                       isDialogDeleteShowedSet,
-                                       loadingDialogSet,
-                                       elemsDelete,
-                                       fnError,
-                                       refreshes,
-                                       scrollFixFn,
-                                       isDialogDeleteShowed,
-                                       dialogTitle,
-                                       dialogBody,
-                                     }: PropsType) {
+  listModel,
+  isDialogDeleteShowedSet,
+  loadingDialogSet,
+  elemsDelete,
+  fnError,
+  refreshes,
+  scrollFixFn,
+  isDialogDeleteShowed,
+  dialogTitle,
+  dialogBody,
+}: PropsType) {
   /**
    * [[220128215639]]
    */
   const dialogDeleteHandlers = {
     cancel: () => {
-      listModel.selectElemsClear()
-      isDialogDeleteShowedSet(false)
+      listModel.selectElemsClear();
+      isDialogDeleteShowedSet(false);
     },
     ok: async () => {
       if (listModel.selectElemsCount() > 0) {
-        const ids: MsscIdObjectType[] = listModel.selectElems().map((el: ListSelectingElemIdType) => ({id: el}))
+        const ids: MsscIdObjectType[] = listModel
+          .selectElems()
+          .map((el: ListSelectingElemIdType) => ({ id: el }));
         try {
-          loadingDialogSet(true)
+          loadingDialogSet(true);
           // --- deleting
-          const noDeletedElems = await elemsDelete?.(ids)
+          const noDeletedElems = await elemsDelete?.(ids);
           // ---
           if (noDeletedElems) {
             if (noDeletedElems.length === 0) {
-              listModel.selectElemsClear()
-              scrollFixFn(false)
-              isDialogDeleteShowedSet(false)
-              refreshes.whole()
+              listModel.selectElemsClear();
+              scrollFixFn(false);
+              isDialogDeleteShowedSet(false);
+              refreshes.whole();
             } else {
-              console.warn(`[${noDeletedElems.length}] elems not deleted`)
-              fnError()
+              console.warn(`[${noDeletedElems.length}] elems not deleted`);
+              fnError();
             }
           }
         } catch (err) {
-          console.log('!!-!!-!! err {220128215806}\n', err)
+          console.log("!!-!!-!! err {220128215806}\n", err);
         } finally {
-          loadingDialogSet(false)
+          loadingDialogSet(false);
         }
       }
-    }
-  }
+    },
+  };
 
   return (
     <MsscDialog
@@ -75,5 +81,5 @@ export function MsscDialogDelete({
       cbCancel={dialogDeleteHandlers.cancel}
       cbOk={dialogDeleteHandlers.ok}
     />
-  )
+  );
 }

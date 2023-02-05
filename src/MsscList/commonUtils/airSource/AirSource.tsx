@@ -192,7 +192,7 @@ export class AirSource<T> implements MsscSourceType<T> {
   }
 
   async elemsDelete(elems: MsscIdObjectType[]): Promise<MsscIdObjectType[]> {
-    const promises = elems.map(async (el: any) => {
+    const promises = elems.map(async (el: MsscIdObjectType) => {
       return await this.connector.delete([el.id || ''])
     })
     const pResults = await Promise.allSettled(promises)
