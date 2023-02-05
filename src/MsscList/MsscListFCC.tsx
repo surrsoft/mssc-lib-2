@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { RsuvEnResultCrudSet } from "rsuv-lib";
 import { useScrollFix } from "ueur-lib";
 
 import "./msscListStyles.scss";
-import { nxxTemp } from "../temp-collection-typing/temp";
 import { SvgIconDice } from "./commonIcons/SvgIcons/SvgIconDice";
 import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
@@ -28,7 +27,6 @@ import { MsscDialogCreateEditCallbacksType } from "./types/types/MsscDialogCreat
 import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
-import { MsscSourceElemsDeleteType } from "./types/types/MsscSourceElemsDeleteType";
 import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 
 const scrollTop = 0;
@@ -41,7 +39,8 @@ const MsscListFCC = ({
   tagsFieldNameArr,
   listAreaHeight = new MsscListAreaHeightCls(),
 }: MsscListPropsType): JSX.Element => {
-  nxxTemp();
+
+  // --- стейты
 
   // номер текущей страницы (пагинация)
   const [$pageNumCurrent, $pageNumCurrentSet] = useState(1);
@@ -75,7 +74,24 @@ const MsscListFCC = ({
   const [$tagGroupSelectedArr, $tagGroupSelectedArrSet] = useState<MsscTagGroupElemsType[]>([]);
 
   // ---
+
   const scrollFixFn = useScrollFix($isDialogCreateEditShowed);
+
+  // --- байндим методы source
+
+  const sourceElemsDelete = useMemo(() => {
+    if (source) {
+      return source.elemsDelete.bind(source);
+    }
+  }, [source]);
+
+  const sourceDialogCreateOrEdit = useMemo(() => {
+    if (source) {
+      return source.dialogCreateOrEdit.bind(source);
+    }
+  }, [source]);
+
+  // ---
 
   const fnError = (): void => {
     $isErrorSet(true);
@@ -117,7 +133,7 @@ const MsscListFCC = ({
     }
   }, [twoIsError, $reqMode]);
 
-  // для показа спиннера при полной загрузке
+  // для показа спиннера при whole-загрузке
   const isLoadingWhole = !firstIsDone;
   // для показа спиннера при запросе данных страницы (пагинация страниц)
   const isLoadingPage = firstIsDone && !twoIsDone;
@@ -257,7 +273,7 @@ const MsscListFCC = ({
     dialogDeleteShow: handleDialogDeleteShow,
     elems: elemsResult,
     dialogCreateEditJsxSet: $dialogCreateEditJsxSet,
-    dialogCreateOrEdit: source?.dialogCreateOrEdit,
+    dialogCreateOrEdit: sourceDialogCreateOrEdit,
     dialogCreateEditCallbacks,
     refreshes,
     listElemStruct,
@@ -285,7 +301,7 @@ const MsscListFCC = ({
       ),
       btnCreate: (
         <ButtonCreateLocal
-          sourceDialogCreateOrEdit={source?.dialogCreateOrEdit}
+          sourceDialogCreateOrEdit={sourceDialogCreateOrEdit}
           dialogCreateEditCallbacks={dialogCreateEditCallbacks}
           $dialogCreateEditJsxSet={$dialogCreateEditJsxSet}
           $isDialogCreateEditShowedSet={$isDialogCreateEditShowedSet}
@@ -331,12 +347,6 @@ const MsscListFCC = ({
     )),
   };
 
-  const elemsDelete = useMemo(() => {
-    if (source) {
-      return source.elemsDelete.bind(source);
-    }
-  }, [source]);
-
   // ---
   return (
     <div className="mssc-base">
@@ -347,7 +357,7 @@ const MsscListFCC = ({
       <MsscDialogDelete
         listModel={$listModel}
         refreshes={refreshes}
-        elemsDelete={elemsDelete}
+        elemsDelete={sourceElemsDelete}
         dialogBody={$dialogBody}
         isDialogDeleteShowed={$isDialogDeleteShowed}
         isDialogDeleteShowedSet={$isDialogDeleteShowedSet}
