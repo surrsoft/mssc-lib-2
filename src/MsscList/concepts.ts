@@ -9,7 +9,7 @@ export const umsscLIBu = "библиотека";
 export const umsscCOMPONENTu = "компонент";
 
 /**
- * *интерфейс - это ключевой интерфейс *библиотеки - вот он {@link MsscSourceType}
+ * *интерфейс - это ключевой интерфейс *библиотеки - {@link MsscSourceType}
  */
 export const umsscINTERFu = "интерфейс";
 
@@ -51,7 +51,38 @@ export const umsscSOURCEu = "источник";
 export const umsscTAGGROUPu = "группа-тегов";
 
 /**
+ * Получение данных.
+ * Состоит из двух частей - {@link umsscPGETTINGu п-получение} и {@link umsscDGETTINGu д-получение}.
+ */
+export const umsscGETTINGu = "получение";
+
+/**
+ * Составная часть {@link umsscGETTINGu получения}.
  *
+ */
+export const umsscPGETTINGu = "п-получение";
+
+/**
+ * Составная часть {@link umsscGETTINGu получения}.
+ */
+export const umsscDGETTINGu = "д-получение";
+
+/**
+ * Режим обновления данных, в котором выполняется {@link umsscPGETTINGu п-получение} и затем
+ * {@link umsscDGETTINGu д-получение}
+ *
+ * СМ. ТАКЖЕ: {@link umsscDGETTINGu д-получение}
+ */
+export const umsscWHOLEMODEu = "а-режим";
+
+/**
+ * Режим обновления данных в котором выполняется только {@link umsscDGETTINGu д-получение}
+ *
+ * СМ. ТАКЖЕ: {@link umsscPGETTINGu п-получение}
+ */
+export const umsscDETAILMODEu = "д-режим";
+
+/**
  * ПОЛУЧЕНИЕ ДАННЫХ
  * -- данные мы получаем с помощью хука {@link useMsscGetData}
  *
