@@ -11,6 +11,7 @@
 REACT_APP_AIRTABLE_KEY=<value>
 REACT_APP_VNCZ_ENABLED=true
 ```
+- свой Airtable API KEY можно узнать здесь https://airtable.com/create/apikey
 
 # Публикация
 - выполняем билд и публикацию с помощью `npm run rollup && npm publish`
