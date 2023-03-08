@@ -46,7 +46,9 @@ interface ParamsType {
 }
 
 /**
- * Получение детальной информации о конкретной странице
+ * Выполняет *д-получение ([asau206])
+ *
+ * ID [[230308174626]]
  *
  * @param source
  * @param randomEnabled

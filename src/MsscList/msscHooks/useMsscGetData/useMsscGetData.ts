@@ -1,16 +1,16 @@
-import loIsEmpty from "lodash/isEmpty";
+import loIsEmpty from 'lodash/isEmpty';
 
-import { BrSelectIdType, BrSelectSortDataType } from "../../commonUI/BrSelect/types";
-import { MsscSourceType } from "../../types/MsscSourceType";
-import { MsscColumnNameType } from "../../types/types/MsscColumnNameType";
-import { MsscElemType } from "../../types/types/MsscElemType";
-import { MsscFilterType } from "../../types/types/MsscFilterType";
-import { MsscTagGroupElemsPlusType } from "../../types/types/MsscTagGroupElemsPlusType";
-import { MsscTagGroupElemsType } from "../../types/types/MsscTagGroupElemsType";
-import { MsscTagGroupType } from "../../types/types/MsscTagGroupType";
-import { useMsscDetails } from "./hooks/useMsscDetails";
-import { useMsscFilters } from "./hooks/useMsscFilters";
-import { useMsscWhole } from "./hooks/useMsscWhole";
+import { BrSelectIdType, BrSelectSortDataType } from '../../commonUI/BrSelect/types';
+import { MsscSourceType } from '../../types/MsscSourceType';
+import { MsscColumnNameType } from '../../types/types/MsscColumnNameType';
+import { MsscElemType } from '../../types/types/MsscElemType';
+import { MsscFilterType } from '../../types/types/MsscFilterType';
+import { MsscTagGroupElemsPlusType } from '../../types/types/MsscTagGroupElemsPlusType';
+import { MsscTagGroupElemsType } from '../../types/types/MsscTagGroupElemsType';
+import { MsscTagGroupType } from '../../types/types/MsscTagGroupType';
+import { useMsscDetails } from './hooks/useMsscDetails';
+import { useMsscFilters } from './hooks/useMsscFilters';
+import { useMsscWhole } from './hooks/useMsscWhole';
 
 interface ResultMainType {
   isDone: boolean;
@@ -40,16 +40,33 @@ interface ParamsType {
   $searchText: string;
 }
 
-export function useMsscGetData({
-                                 pageNumCurrent,
-                                 source,
-                                 tagGroupSelectedArr,
-                                 randomEnabled = false,
-                                 sortIdCurr,
-                                 tagsFieldNameArr,
-                                 sortData,
-                                 $searchText,
-                               }: ParamsType): ResultMainType {
+/**
+ * Хук для выполнения *получения ([asau208])
+ *
+ * ID [[230308174355]]
+ *
+ * @param pageNumCurrent
+ * @param source
+ * @param tagGroupSelectedArr
+ * @param randomEnabled
+ * @param sortIdCurr
+ * @param tagsFieldNameArr
+ * @param sortData
+ * @param $searchText
+ */
+export function useMsscGetData(
+  {
+    source,
+    tagGroupSelectedArr,
+    randomEnabled = false,
+    sortIdCurr,
+    tagsFieldNameArr,
+    sortData,
+    pageNumCurrent,
+    $searchText,
+  }: ParamsType,
+): ResultMainType {
+
   // --- filters
 
   const filters: MsscFilterType[] = useMsscFilters({
@@ -59,7 +76,7 @@ export function useMsscGetData({
     isTagsExist: !loIsEmpty(tagsFieldNameArr),
   });
 
-  // --- req first
+  // --- *п-получение ([asau207])
 
   const {
     wrCountByFilter: countByFilter,
@@ -80,7 +97,7 @@ export function useMsscGetData({
     filters,
   });
 
-  // --- req two
+  // --- *д-получение ([asau206])
 
   const { twoIsDone, elemsResult, twoIsError } = useMsscDetails({
     enabled: firstIsDone,
@@ -94,7 +111,7 @@ export function useMsscGetData({
     filters,
   });
 
-  console.log("!!-!!-!!  twoIsDone {230130212727}\n", twoIsDone); // del+
+  console.log('!!-!!-!!  twoIsDone {230130212727}\n', twoIsDone); // del+
 
   // ---
 

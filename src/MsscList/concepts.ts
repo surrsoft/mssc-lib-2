@@ -57,13 +57,13 @@ export const umsscTAGGROUPu = "группа-тегов";
 export const umsscGETTINGu = "получение";
 
 /**
- * Составная часть {@link umsscGETTINGu получения}.
+ * Составная часть {@link umsscGETTINGu получения}. Это получение с бэка общей информации от текущем состоянии "списка"
  *
  */
 export const umsscPGETTINGu = "п-получение";
 
 /**
- * Составная часть {@link umsscGETTINGu получения}.
+ * Составная часть {@link umsscGETTINGu получения}. Это получение деталей конкретной "страницы"
  */
 export const umsscDGETTINGu = "д-получение";
 
