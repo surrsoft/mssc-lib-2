@@ -23,9 +23,9 @@ interface ResultMainType {
   tags: MsscTagGroupElemsPlusType[];
   pageCount: number;
   firstIsDone: boolean;
-  twoIsDone: boolean;
+  detailsIsDone: boolean;
   firstIsError: boolean;
-  twoIsError: boolean;
+  detailsIsError: boolean;
   toWholeRefetch: () => void;
 }
 
@@ -41,15 +41,15 @@ interface ParamsType {
 }
 
 export function useMsscGetData({
-  pageNumCurrent,
-  source,
-  tagGroupSelectedArr,
-  randomEnabled = false,
-  sortIdCurr,
-  tagsFieldNameArr,
-  sortData,
-  $searchText,
-}: ParamsType): ResultMainType {
+                                 pageNumCurrent,
+                                 source,
+                                 tagGroupSelectedArr,
+                                 randomEnabled = false,
+                                 sortIdCurr,
+                                 tagsFieldNameArr,
+                                 sortData,
+                                 $searchText,
+                               }: ParamsType): ResultMainType {
   // --- filters
 
   const filters: MsscFilterType[] = useMsscFilters({
@@ -106,9 +106,9 @@ export function useMsscGetData({
     tags,
     pageCount,
     firstIsDone,
-    twoIsDone,
+    detailsIsDone: twoIsDone,
     firstIsError,
-    twoIsError,
+    detailsIsError: twoIsError,
     toWholeRefetch: wholeRefetch,
   };
 }

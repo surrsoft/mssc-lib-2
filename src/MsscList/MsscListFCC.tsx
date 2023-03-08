@@ -32,13 +32,13 @@ import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
 const scrollTop = 0;
 
 const MsscListFCC = ({
-  source,
-  sortData,
-  children,
-  listElemStruct,
-  tagsFieldNameArr,
-  listAreaHeight = new MsscListAreaHeightCls(),
-}: MsscListPropsType): JSX.Element => {
+                       source,
+                       sortData,
+                       children,
+                       listElemStruct,
+                       tagsFieldNameArr,
+                       listAreaHeight = new MsscListAreaHeightCls(),
+                     }: MsscListPropsType): JSX.Element => {
 
   // --- стейты
 
@@ -121,22 +121,22 @@ const MsscListFCC = ({
     tags,
     elemsResult,
     firstIsDone,
-    twoIsDone,
-    twoIsError,
+    detailsIsDone,
+    detailsIsError,
     toWholeRefetch,
   } = getDataResult;
 
   useEffect(() => {
-    if (twoIsError && $reqMode === MsscReqModeEnum.DETAIL) {
-      // если получить данные "деталки" не удалось, возвращаемся к последнему номеру страницы
+    if (detailsIsError && $reqMode === MsscReqModeEnum.DETAIL) {
+      // если получить данные "деталки" не удалось, возвращаемся к последнему "успешному" номеру страницы
       $pageNumBeforChangeSet($pageNumBeforChange);
     }
-  }, [twoIsError, $reqMode]);
+  }, [detailsIsError, $reqMode]);
 
   // для показа спиннера при whole-загрузке
   const isLoadingWhole = !firstIsDone;
-  // для показа спиннера при запросе данных страницы (пагинация страниц)
-  const isLoadingPage = firstIsDone && !twoIsDone;
+  // для показа спиннера при запросе данных деталки
+  const isLoadingPage = firstIsDone && !detailsIsDone;
   // сколько отображается элементов сейчас на текущей странице
   const elemsCountOnCurrPage = elemsResult.length;
 
@@ -155,7 +155,7 @@ const MsscListFCC = ({
   };
 
   const handleDialogDeleteShow = (): void => {
-    $dialogTitleSet("удаление");
+    $dialogTitleSet("удаление"); // TODO сделать locale
     $dialogBodySet(`удалить элемент(ы) ? ${$listModel.selectElemsCount()} шт.`);
     $isDialogDeleteShowedSet(true);
   };
@@ -218,7 +218,7 @@ const MsscListFCC = ({
       }
     },
     /**
-     * для вызова при нажатии Cancel в диалоге создания/редатирования нового элемента
+     * для вызова при нажатии Cancel в диалоге создания/редактирования нового элемента
      */
     cancel: async () => {
       $isDialogCreateEditShowedSet(false);
@@ -226,8 +226,8 @@ const MsscListFCC = ({
     },
   };
 
+  // TODO вынести
   function ButtonDiceLocalFCC() {
-    // TODO вынести
     const fnColorsForRandom = () => {
       if (!$randomEnabled) {
         return new ColorsCls();
@@ -314,7 +314,7 @@ const MsscListFCC = ({
           iconsConf={MSSC_SETTINGS.iconsConf}
         />
       ),
-      btnDice: <ButtonDiceLocalFCC />,
+      btnDice: <ButtonDiceLocalFCC/>,
     },
     sortJsx: (
       <MsscSort
@@ -325,7 +325,7 @@ const MsscListFCC = ({
       />
     ),
     searchJsx: (
-      <MsscSearch searchText={$searchText} searchTextSet={$searchTextSet} refreshes={refreshes} />
+      <MsscSearch searchText={$searchText} searchTextSet={$searchTextSet} refreshes={refreshes}/>
     ),
     listJsx: (
       <MsscList
@@ -369,7 +369,7 @@ const MsscListFCC = ({
       {/* // --- dialog create/edit */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
       {/* // --- spinner */}
-      <BrSpinner show={isLoadingWhole || $loadingDialog} />
+      <BrSpinner show={isLoadingWhole || $loadingDialog}/>
     </div>
   );
 };
