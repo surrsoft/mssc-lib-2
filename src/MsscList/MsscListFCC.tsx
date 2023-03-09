@@ -3,14 +3,13 @@ import { RsuvEnResultCrudSet } from "rsuv-lib";
 import { useScrollFix } from "ueur-lib";
 
 import "./msscListStyles.scss";
-import { SvgIconDice } from "./commonIcons/SvgIcons/SvgIconDice";
-import { ColorsCls } from "./commonIcons/SvgIcons/utils/ColorsCls";
 import { BrSelectIdType } from "./commonUI/BrSelect/types";
 import { BrSpinner } from "./commonUI/BrSpinner/BrSpinner";
 import { ListSelectingModelCls } from "./commonUtils/ListSelectingModelCls";
-import { ButtonCreateLocal } from "./msscComponents/ButtonCreateLocal";
+import { MsscButtonCreate } from "./msscComponents/MsscButtonCreate";
 import { MsscButtonDelete } from "./msscComponents/MsscButtonDelete";
 import { MsscButtonDeselectAll } from "./msscComponents/MsscButtonDeselectAll";
+import { MsscButtonDice } from './msscComponents/MsscButtonDice';
 import { MsscDialogDelete } from "./msscComponents/MsscDialogDelete";
 import { MsscInfos } from "./msscComponents/MsscInfos";
 import { MsscList } from "./msscComponents/MsscList/MsscList";
@@ -49,7 +48,7 @@ const MsscListFCC = ({
   // номер страницы который был перед тем как изменить его на новый
   const [$pageNumBeforChange, $pageNumBeforChangeSet] = useState(1);
   // показ спиннера для диалогов
-  const [$loadingDialog, $loadingDialogSet] = useState(false);
+  const [$isDialogLoading, $isDialogLoadingSet] = useState(false);
   // для показа ошибки запроса данных
   const [$isError, $isErrorSet] = useState(false);
   // --- диалоги
@@ -95,9 +94,7 @@ const MsscListFCC = ({
 
   const fnError = (): void => {
     $isErrorSet(true);
-    setTimeout(() => {
-      $isErrorSet(false);
-    }, 2000);
+    setTimeout(() => $isErrorSet(false), 2000);
   };
 
   // --- получение данных
@@ -112,7 +109,6 @@ const MsscListFCC = ({
     sortData,
     $searchText,
   });
-  console.log("!!-!!-!! getDataResult {230114121219}\n", getDataResult); // del+
 
   const {
     countByFilter,
@@ -170,7 +166,7 @@ const MsscListFCC = ({
     ok: async (model: any) => {
       let success = false;
       try {
-        $loadingDialogSet(true);
+        $isDialogLoadingSet(true);
         if (!model?.id) {
           // ^ создание нового элемента
           const result = await source?.elemsAdd([model]);
@@ -207,7 +203,7 @@ const MsscListFCC = ({
       } catch (err) {
         console.log("!!-!!-!! err {220126221404}\n", err);
       } finally {
-        $loadingDialogSet(false);
+        $isDialogLoadingSet(false);
         scrollFixFn(false);
         if (success) {
           $isDialogCreateEditShowedSet(false);
@@ -225,37 +221,6 @@ const MsscListFCC = ({
       scrollFixFn(false);
     },
   };
-
-  // TODO вынести
-  function ButtonDiceLocalFCC() {
-    const fnColorsForRandom = () => {
-      if (!$randomEnabled) {
-        return new ColorsCls();
-      }
-      return new ColorsCls().buNormal("#71fc22").buHover("#71fc22");
-    };
-
-    /**
-     * [[220130202338]]
-     */
-    function diceHandler() {
-      $randomEnabledSet(!$randomEnabled);
-      refreshes.whole();
-    }
-
-    // [[220130202258]] random button
-    return (
-      <button onClick={diceHandler} title="random">
-        <SvgIconDice
-          svgProps={{
-            width: "20px",
-            height: "20px",
-          }}
-          colors={fnColorsForRandom()}
-        />
-      </button>
-    );
-  }
 
   const paginatorJsx = (
     <MsscPaginator
@@ -300,7 +265,7 @@ const MsscListFCC = ({
         />
       ),
       btnCreate: (
-        <ButtonCreateLocal
+        <MsscButtonCreate
           sourceDialogCreateOrEdit={sourceDialogCreateOrEdit}
           dialogCreateEditCallbacks={dialogCreateEditCallbacks}
           $dialogCreateEditJsxSet={$dialogCreateEditJsxSet}
@@ -314,7 +279,11 @@ const MsscListFCC = ({
           iconsConf={MSSC_SETTINGS.iconsConf}
         />
       ),
-      btnDice: <ButtonDiceLocalFCC/>,
+      btnDice: <MsscButtonDice
+        refreshes={refreshes}
+        randomEnabled={$randomEnabled}
+        randomEnabledSet={$randomEnabledSet}
+      />,
     },
     sortJsx: (
       <MsscSort
@@ -363,13 +332,13 @@ const MsscListFCC = ({
         isDialogDeleteShowedSet={$isDialogDeleteShowedSet}
         dialogTitle={$dialogTitle}
         scrollFixFn={scrollFixFn}
-        loadingDialogSet={$loadingDialogSet}
+        loadingDialogSet={$isDialogLoadingSet}
         fnError={fnError}
       />
       {/* // --- dialog create/edit */}
       {$isDialogCreateEditShowed && $dialogCreateEditJsx}
       {/* // --- spinner */}
-      <BrSpinner show={isLoadingWhole || $loadingDialog}/>
+      <BrSpinner show={isLoadingWhole || $isDialogLoading}/>
     </div>
   );
 };

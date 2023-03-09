@@ -12,12 +12,12 @@ interface PropsType<T> {
   sourceDialogCreateOrEdit?: MsscSourceDialogCreateOrEditType<T>;
 }
 
-export function ButtonCreateLocal<T>({
-  sourceDialogCreateOrEdit,
-  dialogCreateEditCallbacks,
-  $dialogCreateEditJsxSet,
-  $isDialogCreateEditShowedSet,
-}: PropsType<T>) {
+export function MsscButtonCreate<T>({
+                                      sourceDialogCreateOrEdit,
+                                      dialogCreateEditCallbacks,
+                                      $dialogCreateEditJsxSet,
+                                      $isDialogCreateEditShowedSet,
+                                    }: PropsType<T>) {
   const createHandler = async () => {
     const jsxCreate = await sourceDialogCreateOrEdit?.(
       dialogCreateEditCallbacks.ok,
