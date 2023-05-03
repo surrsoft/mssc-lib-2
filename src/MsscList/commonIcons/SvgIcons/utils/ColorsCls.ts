@@ -1,10 +1,11 @@
 /**
  * Представляет 4 цвета для кнопок и т.п.
+ * Вид программной сущности - [asau224].
+ *
  * id [[asau61]]
  */
-import { AnimateCls } from "./AnimateCls";
+import { AnimateType } from "./AnimateType";
 
-// noinspection JSUnusedGlobalSymbols
 export class ColorsCls {
   /**
    * цвет в нормальном состоянии
@@ -28,7 +29,7 @@ export class ColorsCls {
    * @param cssClassName (1) --
    * @param colors (2) --
    */
-  static cssCreate(cssClassName: string, colors: ColorsCls) {
+  static cssCreate(cssClassName: string, colors: ColorsCls): string {
     if (!cssClassName || cssClassName.length < 1 || !colors) {
       return "";
     }
@@ -56,8 +57,8 @@ export class ColorsCls {
     cn = "CN",
     uniqueId: string = "",
     colors: ColorsCls = new ColorsCls(),
-    animate?: AnimateCls
-  ) {
+    animate?: AnimateType
+  ): string {
     return `
           .${cn}_svg${uniqueId} {
               --colorNormal: ${colors?.normal};

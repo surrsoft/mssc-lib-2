@@ -1,10 +1,10 @@
-import { AnimateCls } from "./AnimateCls";
+import { AnimateType } from "./AnimateType";
 import { ColorsCls } from "./ColorsCls";
 
 /**
  * ID [[asau72]]
  */
-export interface SvgPropsCls {
+export interface SvgPropsType {
   /**
    * указанные здесь пропсы будут переопределять/добавляться к корневому svg
    */
@@ -21,7 +21,7 @@ export interface SvgPropsCls {
    * [[xx1]] если {enabled: true, ...} то в состоянии 'disabled' будет проигрываться анимация меняющая цвет с normal к
    * disable и обратно
    */
-  animate?: AnimateCls;
+  animate?: AnimateType;
   /**
    * Текст который будет добавлен к идентификаторам CSS; может быть полезно для идентификации отдельных экземпляров.
    * Вообще лучше всега прописывать уникальный идентификатор здесь, т.к. иначе могут быть проблемы с анимациями -

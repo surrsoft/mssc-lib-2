@@ -1,13 +1,13 @@
 import React from "react";
 
 import { ColorsCls } from "./utils/ColorsCls";
-import { SvgPropsCls } from "./utils/SvgPropsCls";
+import { SvgPropsType } from "./utils/SvgPropsType";
 
 // [[asau70]]
 
 /**
  *
- * @param svgProps {SvgPropsCls}
+ * @param svgProps {SvgPropsType}
  * @param colors
  * @param angle
  * @param animate
@@ -20,7 +20,7 @@ const SvgIconChevron = ({
   angle = 180,
   animate,
   uniqueId = `${Date.now()}`,
-}: SvgPropsCls) => {
+}: SvgPropsType) => {
   const cfg = {
     clsName: "asau70", // NEED UNIQUE
     w: 24,

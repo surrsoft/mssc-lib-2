@@ -1,11 +1,11 @@
 import React from "react";
 
 import { ColorsCls } from "./utils/ColorsCls";
-import { SvgPropsCls } from "./utils/SvgPropsCls";
+import { SvgPropsType } from "./utils/SvgPropsType";
 
 /**
  *
- * @param svgProps {SvgPropsCls}
+ * @param svgProps {SvgPropsType}
  * @param colors
  * @param angle
  * @param animate
@@ -18,7 +18,7 @@ const SvgIconChevron = ({
   angle = 180,
   animate,
   uniqueId = `${Date.now()}`,
-}: SvgPropsCls) => {
+}: SvgPropsType) => {
   const cfg = {
     clsName: "asau53",
     w: 24,
