@@ -27,6 +27,7 @@ import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
 import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
+import { SvgButton } from './common/SvgButton/SvgButton';
 
 const scrollTop = 0;
 
@@ -319,6 +320,7 @@ const MsscListFCC = ({
   // ---
   return (
     <div className="mssc-base">
+      <SvgButton />
       {$isError ? <div className="mssc-base__error">ошибка</div> : null}
       {source ? "" : <div>MsscListFCC-info: source is empty</div>}
       {!isLoadingWhole && children?.(childrenBlock)}
