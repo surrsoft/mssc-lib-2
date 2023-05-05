@@ -5,22 +5,12 @@ type ColorType = string;
 /** размер ширины и высоты в пикселях */
 type SizesPxType = number;
 
-interface ButtonColorsType {
+export interface ButtonColorsType {
   normal?: ColorType;
   hover?: ColorType;
   disabled?: ColorType;
   click?: ColorType;
 }
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-`;
 
 export const SvgButtonBaseStyled = css<{
   colors?: ButtonColorsType,
