@@ -37,7 +37,7 @@
     "@storybook/preset-scss": "^1.0.3",
     "@storybook/react": "^6.5.10",
     "@storybook/testing-library": "0.0.11",
-    "@svgr/webpack": "^7.0.0",
+    "@svgr/webpack": "^5.5.0",
     "@types/jest": "^29.2.5",
     "@types/react": "^18.0.1",
     "@typescript-eslint/eslint-plugin": "^5.46.0",
@@ -80,8 +80,10 @@
     "@tanstack/react-query": "^4.10.3",
     "@tanstack/react-query-devtools": "^4.23.0",
     "@types/node": "^18.11.13",
+    "@types/styled-components": "^5.1.26",
     "logt": "^1.4.5",
-    "postcss": "^8.4.12"
+    "postcss": "^8.4.12",
+    "styled-components": "^5.3.10"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/surrsoft"
