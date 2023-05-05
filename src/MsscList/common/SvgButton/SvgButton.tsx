@@ -10,8 +10,8 @@ const SvgButtonStyled = styled.button`
   border: 1px silver solid;
   border-radius: 8px;
   background-color: transparent;
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
 `;
 
 export function SvgButton() {
@@ -26,7 +26,7 @@ export function SvgButton() {
     <SvgButtonStyled
       disabled={isLoading}
       colors={{ normal: 'blue', hover: 'red', disabled: 'silver' }}
-      svgSizesPx={32}
+      svgSizesPx={24}
       onClick={handleClick}
       isLoading={isLoading}
     >
