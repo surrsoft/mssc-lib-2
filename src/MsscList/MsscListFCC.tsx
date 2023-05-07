@@ -27,7 +27,7 @@ import { MsscJsxExternalType } from "./types/types/MsscJsxExternalType";
 import { MsscListPropsType } from "./types/types/MsscListPropsType";
 import { MsscRefreshesType } from "./types/types/MsscRefreshesType";
 import { MsscTagGroupElemsType } from "./types/types/MsscTagGroupElemsType";
-import { SvgButton } from './common/SvgButton/SvgButton';
+import { SvgButton } from '../stories/SvgButton/SvgButton/SvgButton';
 
 const scrollTop = 0;
 

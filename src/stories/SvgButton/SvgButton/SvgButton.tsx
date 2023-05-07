@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { ButtonColorsType } from '../types/L2/ButtonColorsType';
-import { SvgButtonBaseStyled } from '../utils/SvgButtonBaseStyled';
+import { ButtonColorsType } from '../../../MsscList/common/types/L2/ButtonColorsType';
+import { SvgButtonBaseStyled } from '../../../MsscList/common/components/SvgButtonBaseStyled';
 import { ReactComponent as SvgIconCheck } from './IconCheck.svg';
 import { ReactComponent as SvgIconEdit } from './IconEdit.svg';
 
