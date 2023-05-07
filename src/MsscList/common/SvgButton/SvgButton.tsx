@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { ButtonColorsType } from '../types/L2/ButtonColorsType';
+import { SvgButtonBaseStyled } from '../utils/SvgButtonBaseStyled';
 import { ReactComponent as SvgIconCheck } from './IconCheck.svg';
 import { ReactComponent as SvgIconEdit } from './IconEdit.svg';
-import { SvgButtonBaseStyled } from '../utils/SvgButtonBaseStyled';
-import { ButtonColorsType } from '../types/L2/ButtonColorsType';
 
 const SvgButtonStyled = styled.button`
   ${SvgButtonBaseStyled};
