@@ -1,17 +1,16 @@
-import { CSSProperties, css, keyframes } from 'styled-components';
+import { CSSProperties, css } from 'styled-components';
 
-/** цвет в формате принятом в JS и CSS, например: '#000000', 'red' */
-type ColorType = string;
-/** размер ширины и высоты в пикселях */
-type SizesPxType = number;
+import { SizesPxType, sizesPxInterprete } from '../types/L1/SizesPxType';
+import { ButtonColorsType } from '../types/L2/ButtonColorsType';
 
-export interface ButtonColorsType {
-  normal?: ColorType;
-  hover?: ColorType;
-  disabled?: ColorType;
-  click?: ColorType;
-}
-
+/**
+ * Стилизатор для <svg> внутри <button. Меняет цвет svg для состояний normal, hover, disabled, click. Есть опция 
+ * isLoading - если TRUE то к svg добавляется бесконечная анимация (циклически меняется прозрачность)
+ * 
+ * Зависимости: hxhg-[230507102921], hxhg-[230507102054], ...
+ * 
+ * ID hxhg-[[230507110019]] rev 1 1.0.0 2023-05-07
+ */
 export const SvgButtonBaseStyled = css<{
   colors?: ButtonColorsType,
   svgSizesPx?: SizesPxType,
@@ -22,12 +21,10 @@ export const SvgButtonBaseStyled = css<{
   border-radius: 0;
   padding: 0;
   cursor: pointer;
-  width: ${({ css }) => (css?.width ?? 'unset')};
-  height: ${({ css }) => (css?.height ?? 'unset')};
 
   svg {
-    width: ${({ svgSizesPx }) => `${svgSizesPx ?? 42}px`};
-    height: ${({ svgSizesPx }) => `${svgSizesPx ?? 42}px`};
+    width: ${({ svgSizesPx }) => `${sizesPxInterprete(svgSizesPx).wPx}px`};
+    height: ${({ svgSizesPx }) => `${sizesPxInterprete(svgSizesPx).hPx}px`};
     fill: ${({ colors }) => (colors?.normal ?? 'unset')};;
   }
 

@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 import { ReactComponent as SvgIconCheck } from './IconCheck.svg';
 import { ReactComponent as SvgIconEdit } from './IconEdit.svg';
-import { ButtonColorsType, SvgButtonBaseStyled } from './SvgButtonBaseStyled';
+import { SvgButtonBaseStyled } from '../utils/SvgButtonBaseStyled';
+import { ButtonColorsType } from '../types/L2/ButtonColorsType';
 
 const SvgButtonStyled = styled.button`
   ${SvgButtonBaseStyled};
@@ -15,7 +16,7 @@ const SvgButtonStyled = styled.button`
   height: 42px;
 `;
 
-const colors: ButtonColorsType = { normal: 'magenta', hover: 'orange', disabled: 'silver', click: 'green' }
+const colors: ButtonColorsType = { normal: 'black', hover: 'orange', disabled: 'silver', click: 'green' };
 
 export function SvgButton() {
 
@@ -26,20 +27,10 @@ export function SvgButton() {
 
   return <div>
     <div>SvgButton</div>
-    <SvgButtonStyled
-      disabled={isLoading}
-      colors={colors}
-      svgSizesPx={32}
-      isLoading={isLoading}
-    >
+    <SvgButtonStyled disabled={isLoading} colors={colors} svgSizesPx={{ whPx: 32 }} isLoading={isLoading}>
       <SvgIconEdit />
     </SvgButtonStyled>
-    <SvgButtonStyled
-      disabled={isLoading}
-      colors={colors}
-      svgSizesPx={32}
-      isLoading={isLoading}
-    >
+    <SvgButtonStyled disabled={isLoading} colors={colors} svgSizesPx={{ whPx: 32 }} isLoading={isLoading}>
       <SvgIconCheck />
     </SvgButtonStyled>
     <button onClick={handleClick}>{isLoading ? 'isLoading: true' : 'isLoading: false'}</button>
