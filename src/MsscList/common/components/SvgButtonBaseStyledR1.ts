@@ -1,7 +1,7 @@
-import { CSSProperties, css } from 'styled-components';
+import { css } from 'styled-components';
 
 import { SizesPxType, sizesPxInterprete } from '../types/L1/SizesPxType';
-import { ButtonColorsType } from '../types/L2/ButtonColorsType';
+import { ButtonColorsTypeR1 } from '../types/L2/ButtonColorsTypeR1';
 
 /**
  * Стилизатор для <svg> внутри <button. Меняет цвет svg для состояний normal, hover, disabled, click. Есть опция 
@@ -11,10 +11,9 @@ import { ButtonColorsType } from '../types/L2/ButtonColorsType';
  * 
  * ID hxhg-[[230507110019]] rev 1 1.0.0 2023-05-07
  */
-export const SvgButtonBaseStyled = css<{
-  colors?: ButtonColorsType,
+export const SvgButtonBaseStyledR1 = css<{
+  colors?: ButtonColorsTypeR1,
   svgSizesPx?: SizesPxType,
-  css?: CSSProperties,
   isLoading?: boolean
 }>`
   border: 0;

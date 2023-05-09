@@ -1,19 +1,29 @@
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import { SvgButton } from './SvgButton/SvgButton/SvgButton';
+import { SvgButtonStyledStory } from './SvgButton/SvgButton/SvgButtonStyledStory';
 
-const meta: Meta<typeof SvgButton> = {
-  title: 'Example/SvgButton',
-  component: SvgButton,
+const meta: Meta<typeof SvgButtonStyledStory> = {
+  title: 'Example/SvgButtonStyledStory',
+  component: SvgButtonStyledStory,
 };
 
 export default meta;
 
 // ---
 
-type Story = StoryObj<typeof SvgButton>;
+type Story = StoryObj<typeof SvgButtonStyledStory>;
 
 export const Primary: Story = {
-  render: () => <SvgButton />,
+  render: (args) => {
+    return <SvgButtonStyledStory {...args} />;
+  },
+  args: {
+    whPx: {
+      control: {
+        type: 'number',
+        default: 32
+      }
+    }
+  }
 };
